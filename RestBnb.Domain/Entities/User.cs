@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RestBnb.Core.Entities
+﻿namespace RestBnb.Core.Entities
 {
     public class User : BaseEntity
     {
