@@ -4,17 +4,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RestBnb.API.Extensions;
 using RestBnb.API.Installers;
-using RestBnb.API.Options;
 
 namespace RestBnb
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -33,13 +30,7 @@ namespace RestBnb
 
             app.UseAuthentication();
 
-            var swaggerOptions = new SwaggerOptions();
-            Configuration
-                .GetSection(nameof(SwaggerOptions))
-                .Bind(swaggerOptions);
-
-            app.UseSwagger(options => options.RouteTemplate = swaggerOptions.JsonRoute);
-            app.UseSwaggerUI(options => options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
+            app.UseSwagger(Configuration);
 
             app.UseHttpsRedirection();
             app.UseRouting();

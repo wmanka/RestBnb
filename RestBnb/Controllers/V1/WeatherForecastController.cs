@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RestBnb.Controllers
+namespace RestBnb.API.Controllers.V1
 {
     [ApiController]
     [Route("[controller]")]
