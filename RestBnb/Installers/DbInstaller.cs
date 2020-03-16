@@ -5,7 +5,7 @@ using RestBnb.Infrastructure;
 
 namespace RestBnb.API.Installers
 {
-    public class DataInstaller : IInstaller
+    public class DbInstaller : IInstaller
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {

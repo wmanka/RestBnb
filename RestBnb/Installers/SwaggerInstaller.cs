@@ -23,6 +23,7 @@ namespace RestBnb.API.Installers
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
+
                 x.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {new OpenApiSecurityScheme{Reference = new OpenApiReference
