@@ -59,9 +59,9 @@ namespace RestBnb.API.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.Auth.Refresh)]
-        public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+        public async Task<IActionResult> Refresh(RefreshTokenRequest request)
         {
-            AuthenticationResult authResponse = await _authService.RefreshTokenAsync(request.Token, request.RefreshToken);
+            var authResponse = await _authService.RefreshTokenAsync(request.Token, request.RefreshToken);
 
             if (!authResponse.Success)
             {

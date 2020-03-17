@@ -54,12 +54,12 @@ namespace RestBnb.API.Services
 
             var newUser = new User
             {
-                Created = DateTime.Now,
                 Email = email,
-                IsDeleted = false,
-                Modified = DateTime.Now,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                Created = DateTime.UtcNow,
+                Modified = DateTime.UtcNow,
+                IsDeleted = false
             };
 
             var created = await _userService.CreateUserAsync(newUser);
@@ -98,7 +98,7 @@ namespace RestBnb.API.Services
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[] { "User/password combination is wrong" }
+                    Errors = new[] { "Username or password is incorrect" }
                 };
             }
 
@@ -116,11 +116,13 @@ namespace RestBnb.API.Services
 
             if (validatedToken == null)
             {
-                return new AuthenticationResult { Errors = new[] { "Invalid Token" } };
+                return new AuthenticationResult { Errors = new[] { "This token is invalid" } };
             }
 
-            var expiryDateUnix =
-                long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix = long.Parse(validatedToken
+                .Claims
+                .Single(x => x.Type == JwtRegisteredClaimNames.Exp)
+                .Value);
 
             var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
@@ -134,29 +136,13 @@ namespace RestBnb.API.Services
 
             var storedRefreshToken = await _dataContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
 
-            if (storedRefreshToken == null)
+            if (storedRefreshToken == null
+                || DateTime.UtcNow > storedRefreshToken.ExpiryDate
+                || storedRefreshToken.Invalidated
+                || storedRefreshToken.Used
+                || storedRefreshToken.JwtId != jti)
             {
-                return new AuthenticationResult { Errors = new[] { "This refresh token does not exist" } };
-            }
-
-            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
-            {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has expired" } };
-            }
-
-            if (storedRefreshToken.Invalidated)
-            {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has been invalidated" } };
-            }
-
-            if (storedRefreshToken.Used)
-            {
-                return new AuthenticationResult { Errors = new[] { "This refresh token has been used" } };
-            }
-
-            if (storedRefreshToken.JwtId != jti)
-            {
-                return new AuthenticationResult { Errors = new[] { "This refresh token does not match this JWT" } };
+                return new AuthenticationResult { Errors = new[] { "This refresh token is not valid" } };
             }
 
             storedRefreshToken.Used = true;
@@ -164,6 +150,7 @@ namespace RestBnb.API.Services
             await _dataContext.SaveChangesAsync();
 
             var user = await _userService.GetUserByIdAsync(int.Parse(validatedToken.Claims.Single(x => x.Type == "id").Value));
+
             return await GetAuthenticationResultAsync(user);
         }
 
