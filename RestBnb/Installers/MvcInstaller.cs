@@ -1,6 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using RestBnb.API.Filters;
+using RestBnb.API.Options;
+using RestBnb.API.Services;
+using System.Text;
 
 namespace RestBnb.API.Installers
 {
@@ -8,7 +16,46 @@ namespace RestBnb.API.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            var jwtSettings = new JwtSettings();
+            configuration.Bind(nameof(JwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
+
+            services.AddMvc(mvcOptions => mvcOptions.Filters.Add<ValidationFilter>())
+                .AddFluentValidation(fluentValidationConfiguration =>
+                {
+                    fluentValidationConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    ValidatorOptions.LanguageManager.Enabled = false;
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddTransient<IUserService, UserService>();
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = true
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = tokenValidationParameters;
+                });
         }
     }
 }
