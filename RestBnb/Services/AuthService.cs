@@ -33,6 +33,11 @@ namespace RestBnb.API.Services
             _jwtSettings = jwtSettings;
         }
 
+        /// <summary>
+        /// Registers new user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         public async Task<AuthenticationResult> RegisterAsync(string email, string password)
         {
             var existingUser = await _userService.GetUserByEmailAsync(email);
@@ -45,18 +50,17 @@ namespace RestBnb.API.Services
                 };
             }
 
+            PasswordHasherHelper.GeneratePasswordHashAndSalt(password, out byte[] passwordHash, out byte[] passwordSalt);
+
             var newUser = new User
             {
                 Created = DateTime.Now,
                 Email = email,
                 IsDeleted = false,
-                Modified = DateTime.Now
+                Modified = DateTime.Now,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
             };
-
-            PasswordHasherHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            newUser.PasswordHash = passwordHash;
-            newUser.PasswordSalt = passwordSalt;
 
             var created = await _userService.CreateUserAsync(newUser);
 
@@ -71,6 +75,11 @@ namespace RestBnb.API.Services
             return await GetAuthenticationResultAsync(newUser);
         }
 
+        /// <summary>
+        /// Can be used to login user and return validation token
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
             var user = await _userService.GetUserByEmailAsync(email);
@@ -96,6 +105,11 @@ namespace RestBnb.API.Services
             return await GetAuthenticationResultAsync(user);
         }
 
+        /// <summary>
+        /// Refreshes JWT validation token when the previous one expires
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="refreshToken"></param>
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
             var validatedToken = GetPrincipalFromToken(token);
@@ -158,14 +172,12 @@ namespace RestBnb.API.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
-            var userFromDb = await _userService.GetUserByEmailAsync(user.Email);
-
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", userFromDb.Id.ToString())
+                new Claim("id", user.Id.ToString())
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -181,7 +193,7 @@ namespace RestBnb.API.Services
             var refreshToken = new RefreshToken
             {
                 JwtId = token.Id,
-                UserId = userFromDb.Id,
+                UserId = user.Id,
                 CreationDate = DateTime.UtcNow,
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
@@ -206,12 +218,8 @@ namespace RestBnb.API.Services
                 var tokenValidationParameters = _tokenValidationParameters.Clone();
                 tokenValidationParameters.ValidateLifetime = false;
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
-                if (!IsJwtWithValidSecurityAlgorithm(validatedToken))
-                {
-                    return null;
-                }
 
-                return principal;
+                return (!IsJwtWithValidSecurityAlgorithm(validatedToken)) ? null : principal;
             }
             catch
             {

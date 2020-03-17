@@ -5,7 +5,10 @@ namespace RestBnb.API.Helpers
 {
     public static class PasswordHasherHelper
     {
-        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public static void GeneratePasswordHashAndSalt(
+            string password,
+            out byte[] passwordHash,
+            out byte[] passwordSalt)
         {
             using var hmac = new HMACSHA512();
             passwordSalt = hmac.Key;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +19,13 @@ namespace RestBnb.API.Installers
             configuration.Bind(nameof(JwtSettings), jwtSettings);
             services.AddSingleton(jwtSettings);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc()
+                .AddFluentValidation(conf =>
+                {
+                    conf.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    ValidatorOptions.LanguageManager.Enabled = false;
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
