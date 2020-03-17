@@ -12,8 +12,8 @@ namespace RestBnb.API.Validators
                 .EmailAddress();
 
             RuleFor(x => x.Password)
-                .NotEmpty()
-                .MinimumLength(8);
+                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})")
+                .WithMessage("Password must be at leats 8 characters long and include at least one number, upper case letter and special character");
         }
     }
 }

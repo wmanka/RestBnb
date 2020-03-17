@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using RestBnb.API.Filters;
 using RestBnb.API.Options;
 using RestBnb.API.Services;
 using System.Text;
@@ -19,13 +20,15 @@ namespace RestBnb.API.Installers
             configuration.Bind(nameof(JwtSettings), jwtSettings);
             services.AddSingleton(jwtSettings);
 
-            services.AddMvc()
-                .AddFluentValidation(conf =>
+            services.AddMvc(mvcOptions => mvcOptions.Filters.Add<ValidationFilter>())
+                .AddFluentValidation(fluentValidationConfiguration =>
                 {
-                    conf.RegisterValidatorsFromAssemblyContaining<Startup>();
+                    fluentValidationConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>();
                     ValidatorOptions.LanguageManager.Enabled = false;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
