@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RestBnb.API.Helpers;
 using RestBnb.API.Options;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
@@ -49,10 +50,13 @@ namespace RestBnb.API.Services
                 Created = DateTime.Now,
                 Email = email,
                 IsDeleted = false,
-                Modified = DateTime.Now,
-                //PasswordHash = HashPassword(password)
-                PasswordHash = "hash"
+                Modified = DateTime.Now
             };
+
+            PasswordHasherHelper.CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            newUser.PasswordHash = passwordHash;
+            newUser.PasswordSalt = passwordSalt;
 
             var created = await _userService.CreateUserAsync(newUser);
 
@@ -79,7 +83,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            var userHasValidPassword = await _userService.CheckPasswordAsync(user, password);
+            var userHasValidPassword = await _userService.CheckPasswordAsync(email, password);
 
             if (!userHasValidPassword)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RestBnb.API.Helpers;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
 using System.Collections.Generic;
@@ -59,11 +60,11 @@ namespace RestBnb.API.Services
             return updated > 0;
         }
 
-        public async Task<bool> CheckPasswordAsync(User user, string password)
+        public async Task<bool> CheckPasswordAsync(string email, string password)
         {
-            var userFromDb = await GetUserByIdAsync(user.Id);
+            var user = await GetUserByEmailAsync(email);
 
-            return true;
+            return PasswordHasherHelper.IsPasswordHashCorrect(password, user.PasswordHash, user.PasswordSalt);
         }
     }
 }

@@ -18,6 +18,6 @@ namespace RestBnb.API.Services
 
         Task<bool> DeleteUserAsync(int userId);
 
-        Task<bool> CheckPasswordAsync(User user, string password);
+        Task<bool> CheckPasswordAsync(string user, string password);
     }
 }
