@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RestBnb.Infrastructure;
+using RestBnb.API.Extensions;
 using System.Threading.Tasks;
 
 namespace RestBnb
@@ -13,18 +11,17 @@ namespace RestBnb
         {
             var host = CreateHostBuilder(args).Build();
 
-            using (var serviceScope = host.Services.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
-
-                await dbContext.Database.MigrateAsync();
-            }
+            await host.ApplyDatabaseMigrationsAsync();
+            await host.EnsureRolesAreCreatedAsync();
 
             await host.RunAsync();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host
+                .CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+        }
     }
 }

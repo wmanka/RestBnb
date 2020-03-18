@@ -2,7 +2,7 @@
 using RestBnb.API.Contracts.V1;
 using RestBnb.API.Contracts.V1.Requests;
 using RestBnb.API.Contracts.V1.Responses;
-using RestBnb.API.Services;
+using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
 using System.Threading.Tasks;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RestBnb.API.Services
+namespace RestBnb.API.Services.Interfaces
 {
     public interface IUserService
     {
@@ -19,5 +19,9 @@ namespace RestBnb.API.Services
         Task<bool> DeleteUserAsync(int userId);
 
         Task<bool> CheckPasswordAsync(string user, string password);
+
+        Task<bool> AddToRoleAsync(User user, string roleName);
+
+        Task<IEnumerable<Role>> GetRolesAsync(User user);
     }
 }

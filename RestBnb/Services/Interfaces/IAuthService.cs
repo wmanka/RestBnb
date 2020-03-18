@@ -1,7 +1,7 @@
 ﻿using RestBnb.Core.Entities;
 using System.Threading.Tasks;
 
-namespace RestBnb.API.Services
+namespace RestBnb.API.Services.Interfaces
 {
     public interface IAuthService
     {
