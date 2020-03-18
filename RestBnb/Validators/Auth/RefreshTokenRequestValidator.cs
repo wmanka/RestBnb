@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using RestBnb.API.Contracts.V1.Requests;
 
-namespace RestBnb.API.Validators
+namespace RestBnb.API.Validators.Auth
 {
     public class RefreshTokenRequestValidator : AbstractValidator<RefreshTokenRequest>
     {

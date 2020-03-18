@@ -70,7 +70,8 @@ namespace RestBnb.API.Services
         {
             var user = await GetUserByEmailAsync(email);
 
-            return PasswordHasherHelper.IsPasswordHashCorrect(password, user.PasswordHash, user.PasswordSalt);
+            return StringHasherHelper.DoesGivenStringMatchHashedString(
+                password, user.PasswordHash, user.PasswordSalt);
         }
 
         public async Task<IEnumerable<Role>> GetRolesAsync(User user)

@@ -5,7 +5,7 @@ using RestBnb.API.Options;
 
 namespace RestBnb.API.Extensions
 {
-    public static class SwaggerConfigurationExtension
+    public static class SwaggerConfigurationExtensions
     {
         /// <summary>
         /// Adds middleware for creating documentation using Swagger

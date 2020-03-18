@@ -18,6 +18,7 @@ namespace RestBnb
         public void ConfigureServices(IServiceCollection services)
         {
             services.InstallServicesInAssembly(Configuration);
+
             services.AddAutoMapper(typeof(Startup));
         }
 
@@ -29,9 +30,7 @@ namespace RestBnb
             }
 
             app.UseAuthentication();
-
             app.UseSwagger(Configuration);
-
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

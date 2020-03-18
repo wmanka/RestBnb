@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using RestBnb.API.Contracts.V1;
 using RestBnb.API.Helpers;
 using RestBnb.API.Options;
 using RestBnb.API.Services.Interfaces;
@@ -51,13 +52,13 @@ namespace RestBnb.API.Services
                 };
             }
 
-            PasswordHasherHelper.GeneratePasswordHashAndSalt(password, out byte[] passwordHash, out byte[] passwordSalt);
+            var (hash, salt) = StringHasherHelper.HashStringWithHMACAndSalt(password);
 
             var newUser = new User
             {
                 Email = email,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
+                PasswordHash = hash,
+                PasswordSalt = salt,
                 Created = DateTime.UtcNow,
                 Modified = DateTime.UtcNow,
                 IsDeleted = false
@@ -70,6 +71,16 @@ namespace RestBnb.API.Services
                 return new AuthenticationResult
                 {
                     Errors = new[] { "Could not create user." }
+                };
+            }
+
+            var assignedToRole = await _userService.AddToRoleAsync(newUser, ApiRoles.User);
+
+            if (!assignedToRole)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Could not assign user to default role." }
                 };
             }
 
