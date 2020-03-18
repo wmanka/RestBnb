@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using RestBnb.API.Filters;
 using RestBnb.API.Options;
 using RestBnb.API.Services;
+using RestBnb.API.Services.Interfaces;
 using System.Text;
 
 namespace RestBnb.API.Installers
@@ -32,6 +33,7 @@ namespace RestBnb.API.Installers
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRolesService, RolesService>();
 
             var tokenValidationParameters = new TokenValidationParameters
             {

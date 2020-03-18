@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using RestBnb.API.Helpers;
 using RestBnb.API.Options;
+using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
 using System;
@@ -166,6 +167,15 @@ namespace RestBnb.API.Services
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("id", user.Id.ToString())
             };
+
+            var userRoles = await _userService.GetRolesAsync(user);
+            if (userRoles != null)
+            {
+                foreach (var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
+                }
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
