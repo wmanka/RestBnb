@@ -3,7 +3,6 @@ using RestBnb.API.Contracts.V1;
 using RestBnb.API.Contracts.V1.Requests;
 using RestBnb.API.Contracts.V1.Responses;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Entities;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
@@ -13,10 +12,7 @@ namespace RestBnb.API.Controllers.V1
     {
         private readonly IAuthService _authService;
 
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+        public AuthController(IAuthService authService) => _authService = authService;
 
         [HttpPost(ApiRoutes.Auth.Register)]
         public async Task<IActionResult> Register(UserRegistrationRequest request)
@@ -41,7 +37,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpPost(ApiRoutes.Auth.Login)]
         public async Task<IActionResult> Login(UserLoginRequest request)
         {
-            AuthenticationResult authResponse = await _authService.LoginAsync(request.Email, request.Password);
+            var authResponse = await _authService.LoginAsync(request.Email, request.Password);
 
             if (!authResponse.Success)
             {

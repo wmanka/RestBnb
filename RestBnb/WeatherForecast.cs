@@ -1,6 +1,6 @@
 using System;
 
-namespace RestBnb
+namespace RestBnb.API
 {
     public class WeatherForecast
     {

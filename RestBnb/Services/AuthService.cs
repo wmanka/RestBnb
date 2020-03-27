@@ -52,7 +52,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            var (hash, salt) = StringHasherHelper.HashStringWithHMACAndSalt(password);
+            var (hash, salt) = StringHasherHelper.HashStringWithHmacAndSalt(password);
 
             var newUser = new User
             {
@@ -182,10 +182,7 @@ namespace RestBnb.API.Services
             var userRoles = await _userService.GetRolesAsync(user);
             if (userRoles != null)
             {
-                foreach (var role in userRoles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role.Name));
-                }
+                claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role.Name)));
             }
 
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -235,7 +232,7 @@ namespace RestBnb.API.Services
             }
         }
 
-        private bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
+        private static bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
         {
             return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
                    jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,

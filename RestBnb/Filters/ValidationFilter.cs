@@ -21,13 +21,13 @@ namespace RestBnb.API.Filters
 
                 var errorResponse = new ErrorResponse();
 
-                foreach (var error in errorsInModelState)
+                foreach (var (fieldName, error) in errorsInModelState)
                 {
-                    foreach (var subError in error.Value)
+                    foreach (var subError in error)
                     {
                         errorResponse.Errors.Add(new ErrorModel
                         {
-                            FieldName = error.Key,
+                            FieldName = fieldName,
                             Message = subError
                         });
                     }

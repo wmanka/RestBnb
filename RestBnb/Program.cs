@@ -1,9 +1,9 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using RestBnb.API.Extensions;
-using System.Threading.Tasks;
 
-namespace RestBnb
+namespace RestBnb.API
 {
     public static class Program
     {

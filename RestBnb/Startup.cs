@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using RestBnb.API.Extensions;
 using RestBnb.API.Installers;
 
-namespace RestBnb
+namespace RestBnb.API
 {
     public class Startup
     {
