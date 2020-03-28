@@ -67,6 +67,21 @@ namespace RestBnb.API.Services
                 properties = properties.Where(x => x.PricePerNight <= filter.MaxPricePerNight);
             }
 
+            if (filter?.MinPricePerNight > 0)
+            {
+                properties = properties.Where(x => x.PricePerNight >= filter.MinPricePerNight);
+            }
+
+            if (filter?.AccommodatesNumber > 0)
+            {
+                properties = properties.Where(x => x.AccommodatesNumber >= filter.AccommodatesNumber);
+            }
+
+            if (filter?.UserId > 0)
+            {
+                properties = properties.Where(x => x.UserId >= filter.UserId);
+            }
+
             return properties;
         }
     }

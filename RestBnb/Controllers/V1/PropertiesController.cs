@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Contracts.V1;
 using RestBnb.API.Contracts.V1.Requests;
@@ -15,8 +14,8 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
-    [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [ApiController]
     public class PropertiesController : ControllerBase
     {
         private readonly IMapper _mapper;
