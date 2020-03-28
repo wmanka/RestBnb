@@ -9,7 +9,10 @@ using RestBnb.API.Filters;
 using RestBnb.API.Options;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
+using System.Linq;
+using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace RestBnb.API.Installers
 {
@@ -32,8 +35,9 @@ namespace RestBnb.API.Installers
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
             services.AddScoped<IAuthService, AuthService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
+            services.AddTransient<IPropertiesService, PropertiesService>();
 
             var tokenValidationParameters = new TokenValidationParameters
             {

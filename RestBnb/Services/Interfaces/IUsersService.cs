@@ -1,12 +1,12 @@
-﻿using RestBnb.Core.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Services.Interfaces
 {
-    public interface IUserService
+    public interface IUsersService
     {
-        Task<List<User>> GetUsersAsync();
+        Task<IEnumerable<User>> GetUsersAsync();
 
         Task<bool> CreateUserAsync(User user);
 

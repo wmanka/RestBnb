@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Services
 {
-    public class UserService : IUserService
+    public class UsersService : IUsersService
     {
         private readonly DataContext _dataContext;
-        private readonly IRolesService rolesService;
+        private readonly IRolesService _rolesService;
 
-        public UserService(
+        public UsersService(
             DataContext dataContext,
             IRolesService rolesService)
         {
             _dataContext = dataContext;
-            this.rolesService = rolesService;
+            _rolesService = rolesService;
         }
 
         public async Task<bool> CreateUserAsync(User user)
@@ -53,7 +53,7 @@ namespace RestBnb.API.Services
             return await _dataContext.Users.SingleOrDefaultAsync(x => x.Email == email);
         }
 
-        public async Task<List<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _dataContext.Users.ToListAsync();
         }
@@ -85,12 +85,9 @@ namespace RestBnb.API.Services
 
         public async Task<bool> AddToRoleAsync(User user, string roleName)
         {
-            var roleInDatabase = await rolesService.GetRoleByNameAsync(roleName);
+            var roleInDatabase = await _rolesService.GetRoleByNameAsync(roleName);
 
-            if (roleInDatabase == null)
-            {
-                return false;
-            }
+            if (roleInDatabase == null) return false;
 
             var userInDatabase = await GetUserByIdAsync(user.Id);
             if (userInDatabase == null)

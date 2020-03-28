@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.Core.Entities;
+using System.Linq;
 
 namespace RestBnb.Infrastructure
 {
     /// <summary>
-    /// Represent a session with the database and can be used to query and save instances of entities
+    ///     Represent a session with the database and can be used to query and save instances of entities
     /// </summary>
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
+        public DataContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -16,10 +17,17 @@ namespace RestBnb.Infrastructure
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Property> Properties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRole>().ToTable("UserRoles");
+            modelBuilder.Entity<Property>().ToTable("Properties");
+
+            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(decimal)))
+            {
+                property.SetColumnType("decimal(6, 2)");
+            }
 
             modelBuilder.Entity<UserRole>()
             .HasKey(t => new { t.UserId, t.RoleId });
