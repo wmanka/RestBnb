@@ -9,10 +9,7 @@ using RestBnb.API.Filters;
 using RestBnb.API.Options;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
-using System.Linq;
-using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace RestBnb.API.Installers
 {
@@ -20,10 +17,6 @@ namespace RestBnb.API.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = new JwtSettings();
-            configuration.Bind(nameof(JwtSettings), jwtSettings);
-            services.AddSingleton(jwtSettings);
-
             services.AddMvc(mvcOptions => mvcOptions.Filters.Add<ValidationFilter>())
                 .AddFluentValidation(fluentValidationConfiguration =>
                 {
@@ -38,6 +31,10 @@ namespace RestBnb.API.Installers
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IPropertiesService, PropertiesService>();
+
+            var jwtSettings = new JwtSettings();
+            configuration.Bind(nameof(JwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
 
             var tokenValidationParameters = new TokenValidationParameters
             {

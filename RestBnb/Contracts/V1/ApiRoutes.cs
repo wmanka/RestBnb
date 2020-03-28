@@ -16,8 +16,8 @@
         public static class Properties
         {
             public const string GetAll = Base + "/properties";
-            public const string Get = Base + "/properties/{propertyId}";
             public const string Create = Base + "/properties";
+            public const string Get = Base + "/properties/{propertyId}";
             public const string Update = Base + "/properties/{propertyId}";
             public const string Delete = Base + "/properties/{propertyId}";
         }
