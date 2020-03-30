@@ -53,6 +53,20 @@ namespace RestBnb.API.Controllers.V1
         [HttpDelete(ApiRoutes.Properties.Delete)]
         public async Task<IActionResult> Delete(int propertyId)
         {
+            var userOwnsProperty =
+                await _propertiesService.DoesUserOwnProperty(HttpContext.GetCurrentUserId(), propertyId);
+
+            if (!userOwnsProperty)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "You do not own this post"}
+                    }
+                });
+            }
+
             var deleted = await _propertiesService.DeletePropertyAsync(propertyId);
 
             if (deleted)

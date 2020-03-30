@@ -7,12 +7,9 @@ namespace RestBnb.API.Extensions
     {
         public static int GetCurrentUserId(this HttpContext httpContext)
         {
-            if (httpContext.User == null)
-            {
-                return default;
-            }
-
-            return int.Parse(httpContext.User.Claims.Single(x => x.Type == "id").Value);
+            return httpContext.User == null
+                ? default
+                : int.Parse(httpContext.User.Claims.Single(x => x.Type == "id").Value);
         }
     }
 }

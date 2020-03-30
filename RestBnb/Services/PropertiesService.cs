@@ -60,6 +60,15 @@ namespace RestBnb.API.Services
             return removed > 0;
         }
 
+        public async Task<bool> DoesUserOwnProperty(int userId, int propertyId)
+        {
+            var property = await _dataContext.Properties
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == propertyId);
+
+            return property != null && property.UserId == userId;
+        }
+
         private static IQueryable<Property> AddFiltersOnQuery(GetAllPropertiesFilter filter, IQueryable<Property> properties)
         {
             if (filter?.MaxPricePerNight > 0)

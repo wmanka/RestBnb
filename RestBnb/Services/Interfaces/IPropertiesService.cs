@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using RestBnb.Core.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Services.Interfaces
 {
@@ -15,5 +15,6 @@ namespace RestBnb.API.Services.Interfaces
         Task<bool> UpdatePropertyAsync(Property propertyToUpdate);
 
         Task<bool> DeletePropertyAsync(int propertyId);
+        Task<bool> DoesUserOwnProperty(int userId, int propertyId);
     }
 }
