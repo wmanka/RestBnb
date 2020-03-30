@@ -13,59 +13,43 @@ namespace RestBnb.API.Extensions
 {
     public static class HostExtensions
     {
-        /// <summary>
-        /// Applies any pending migrations to the database
-        /// </summary>
-        /// <param name="host"></param>
-        public static async Task ApplyDatabaseMigrationsAsync(this IHost host)
+        public static async Task<IHost> SeedAsync(this IHost host)
         {
             using var serviceScope = host.Services.CreateScope();
 
-            var dataContext = serviceScope
-                            .ServiceProvider
-                            .GetRequiredService<DataContext>();
+            var dataContext = serviceScope.ServiceProvider.GetRequiredService<DataContext>();
 
             await dataContext.Database.MigrateAsync();
+
+            await EnsureRolesAreCreatedAsync(serviceScope);
+
+            await EnsureCountriesAreCreatedAsync(dataContext, serviceScope);
+
+            return host;
         }
 
-        /// <summary>
-        /// Ensures user roles are created in the database
-        /// </summary>
-        /// <param name="host"></param>
-        public static async Task EnsureRolesAreCreatedAsync(this IHost host)
+        private static async Task EnsureCountriesAreCreatedAsync(DataContext dataContext, IServiceScope serviceScope)
         {
-            using var serviceScope = host.Services.CreateScope();
+            if (!dataContext.Countries.Any())
+            {
+                var jsonConverterService = serviceScope.ServiceProvider.GetRequiredService<IJsonConverterService>();
 
+                await jsonConverterService.CreateCountriesWithStatesAndCitiesFromJsonAndAddThemToDatabase();
+            }
+        }
+
+        private static async Task EnsureRolesAreCreatedAsync(IServiceScope serviceScope)
+        {
             var roleService = serviceScope.ServiceProvider.GetRequiredService<IRolesService>();
 
             var roles = await roleService.GetRolesAsync();
+
             if (!roles.Any())
             {
                 foreach (var role in typeof(ApiRoles).GetFields().Select(x => x.Name).ToList())
                 {
                     await roleService.CreateRoleAsync(new Role { Name = role });
                 }
-            }
-        }
-
-        /// <summary>
-        /// Ensures countries, states and cities table contain all required elements
-        /// </summary>
-        /// <param name="host"></param>
-        /// <returns></returns>
-        public static async Task EnsureCountriesAreCreatedAsync(this IHost host)
-        {
-            using var serviceScope = host.Services.CreateScope();
-
-            var dataContext = serviceScope
-                .ServiceProvider
-                .GetRequiredService<DataContext>();
-
-            if (!dataContext.Countries.Any())
-            {
-                var jsonConverterHelper = serviceScope.ServiceProvider.GetRequiredService<IJsonConverterHelper>();
-
-                await jsonConverterHelper.GetAsListOfObjectsAndAddToDatabase();
             }
         }
     }

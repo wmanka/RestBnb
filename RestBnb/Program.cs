@@ -9,11 +9,7 @@ namespace RestBnb.API
     {
         public static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
-
-            await host.ApplyDatabaseMigrationsAsync();
-            await host.EnsureRolesAreCreatedAsync();
-            await host.EnsureCountriesAreCreatedAsync();
+            var host = await CreateHostBuilder(args).Build().SeedAsync();
 
             await host.RunAsync();
         }
