@@ -27,9 +27,5 @@
     <ProjectReference Include="..\RestBnb.Infrastructure\RestBnb.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Mapping\" />
-  </ItemGroup>
-
 
 </Project>

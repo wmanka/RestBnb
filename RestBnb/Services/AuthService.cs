@@ -18,13 +18,13 @@ namespace RestBnb.API.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _dataContext;
 
         public AuthService(
-            IUserService userService,
+            IUsersService userService,
             DataContext context,
             TokenValidationParameters tokenValidationParameters,
             JwtSettings jwtSettings)

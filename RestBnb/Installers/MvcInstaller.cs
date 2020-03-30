@@ -10,6 +10,7 @@ using RestBnb.API.Options;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
 using System.Text;
+using RestBnb.API.Resources;
 
 namespace RestBnb.API.Installers
 {
@@ -17,10 +18,6 @@ namespace RestBnb.API.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            var jwtSettings = new JwtSettings();
-            configuration.Bind(nameof(JwtSettings), jwtSettings);
-            services.AddSingleton(jwtSettings);
-
             services.AddMvc(mvcOptions => mvcOptions.Filters.Add<ValidationFilter>())
                 .AddFluentValidation(fluentValidationConfiguration =>
                 {
@@ -32,8 +29,16 @@ namespace RestBnb.API.Installers
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
             services.AddScoped<IAuthService, AuthService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
+            services.AddTransient<IPropertiesService, PropertiesService>();
+            services.AddTransient<ICountriesService, CountriesService>();
+
+            services.AddTransient<IJsonConverterService, JsonConverterService>();
+
+            var jwtSettings = new JwtSettings();
+            configuration.Bind(nameof(JwtSettings), jwtSettings);
+            services.AddSingleton(jwtSettings);
 
             var tokenValidationParameters = new TokenValidationParameters
             {
