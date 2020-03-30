@@ -49,5 +49,16 @@ namespace RestBnb.API.Controllers.V1
 
             return Ok(_mapper.Map<IEnumerable<PropertyResponse>>(properties));
         }
+
+        [HttpDelete(ApiRoutes.Properties.Delete)]
+        public async Task<IActionResult> Delete(int propertyId)
+        {
+            var deleted = await _propertiesService.DeletePropertyAsync(propertyId);
+
+            if (deleted)
+                return NoContent();
+
+            return NotFound();
+        }
     }
 }
