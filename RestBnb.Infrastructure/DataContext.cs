@@ -18,13 +18,21 @@ namespace RestBnb.Infrastructure
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserRole>().ToTable("UserRoles");
             modelBuilder.Entity<Property>().ToTable("Properties");
+            modelBuilder.Entity<Country>().ToTable("Countries");
+            modelBuilder.Entity<State>().ToTable("States");
+            modelBuilder.Entity<City>().ToTable("Cities");
 
-            foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(decimal)))
+            foreach (var property in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal)))
             {
                 property.SetColumnType("decimal(6, 2)");
             }

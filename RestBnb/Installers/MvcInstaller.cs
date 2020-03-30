@@ -10,6 +10,7 @@ using RestBnb.API.Options;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
 using System.Text;
+using RestBnb.API.Resources;
 
 namespace RestBnb.API.Installers
 {
@@ -31,6 +32,9 @@ namespace RestBnb.API.Installers
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IPropertiesService, PropertiesService>();
+            services.AddTransient<ICountriesService, CountriesService>();
+
+            services.AddTransient<IJsonConverterHelper, JsonConverterHelper>();
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(JwtSettings), jwtSettings);

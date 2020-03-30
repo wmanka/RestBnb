@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestBnb.API.Contracts.V1;
+using RestBnb.API.Resources;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
@@ -42,8 +43,29 @@ namespace RestBnb.API.Extensions
             {
                 foreach (var role in typeof(ApiRoles).GetFields().Select(x => x.Name).ToList())
                 {
-                    await roleService.CreateRoleAsync(new Role {Name = role});
+                    await roleService.CreateRoleAsync(new Role { Name = role });
                 }
+            }
+        }
+
+        /// <summary>
+        /// Ensures countries, states and cities table contain all required elements
+        /// </summary>
+        /// <param name="host"></param>
+        /// <returns></returns>
+        public static async Task EnsureCountriesAreCreatedAsync(this IHost host)
+        {
+            using var serviceScope = host.Services.CreateScope();
+
+            var dataContext = serviceScope
+                .ServiceProvider
+                .GetRequiredService<DataContext>();
+
+            if (!dataContext.Countries.Any())
+            {
+                var jsonConverterHelper = serviceScope.ServiceProvider.GetRequiredService<IJsonConverterHelper>();
+
+                await jsonConverterHelper.GetAsListOfObjectsAndAddToDatabase();
             }
         }
     }
