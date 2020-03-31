@@ -8,11 +8,11 @@ namespace RestBnb.API.Validators.Auth
         public UserLoginRequestValidator()
         {
             RuleFor(x => x.Email)
-               .NotEmpty()
-               .EmailAddress();
+                .NotEmpty()
+                .EmailAddress();
 
             RuleFor(x => x.Password)
-                .Matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\\$%\\^&\\*])(?=.{8,})")
+                .Matches(RegexPatterns.User.Password)
                 .WithMessage("Password must be at least 8 characters long and include at least one number, upper case letter and special character");
         }
     }

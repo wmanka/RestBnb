@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.Core.Entities;
+using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RestBnb.Infrastructure
 {
@@ -50,7 +53,51 @@ namespace RestBnb.Infrastructure
                 .WithMany(t => t.UserRoles)
                 .HasForeignKey(pt => pt.RoleId);
 
+            modelBuilder.Entity<User>().HasQueryFilter(p => !p.IsDeleted);
+            modelBuilder.Entity<Property>().HasQueryFilter(p => !p.IsDeleted);
+            // .IgnoreQueryFilters() to disable
+
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            OnBeforeSaving();
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public override int SaveChanges()
+        {
+            OnBeforeSaving();
+
+            return base.SaveChanges();
+        }
+
+        private void OnBeforeSaving()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is BaseEntity)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entry.CurrentValues["Created"] = DateTime.UtcNow;
+                            entry.CurrentValues["Modified"] = DateTime.UtcNow;
+                            entry.CurrentValues["IsDeleted"] = false;
+                            break;
+                        case EntityState.Deleted:
+                            entry.State = EntityState.Modified;
+                            entry.CurrentValues["IsDeleted"] = true;
+                            entry.CurrentValues["Modified"] = DateTime.UtcNow;
+                            break;
+                        case EntityState.Modified:
+                            entry.CurrentValues["Modified"] = DateTime.UtcNow;
+                            break;
+                    }
+                }
+            }
         }
     }
 }

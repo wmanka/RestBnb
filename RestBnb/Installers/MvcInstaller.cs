@@ -7,10 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestBnb.API.Filters;
 using RestBnb.API.Options;
+using RestBnb.API.Resources;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
 using System.Text;
-using RestBnb.API.Resources;
 
 namespace RestBnb.API.Installers
 {
@@ -25,6 +25,10 @@ namespace RestBnb.API.Installers
                     ValidatorOptions.LanguageManager.Enabled = false;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services
+                .AddControllersWithViews()
+                .AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 

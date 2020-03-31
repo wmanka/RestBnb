@@ -2,7 +2,7 @@
 
 namespace RestBnb.API.Contracts.V1.Requests
 {
-    public class CreatePropertyRequest
+    public class PropertyRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,5 +15,8 @@ namespace RestBnb.API.Contracts.V1.Requests
         public DateTime EndDate { get; set; }
         public DateTime CheckInTime { get; set; }
         public DateTime CheckOutTime { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public int CityId { get; set; }
     }
 }
