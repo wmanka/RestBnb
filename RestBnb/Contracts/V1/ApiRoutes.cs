@@ -18,7 +18,8 @@
             public const string GetAll = Base + "/properties";
             public const string Create = Base + "/properties";
             public const string Get = Base + "/properties/{propertyId}";
-            public const string Update = Base + "/properties/{propertyId}";
+            public const string Put = Base + "/properties/{propertyId}";
+            public const string Patch = Base + "/properties/{propertyId}";
             public const string Delete = Base + "/properties/{propertyId}";
         }
     }

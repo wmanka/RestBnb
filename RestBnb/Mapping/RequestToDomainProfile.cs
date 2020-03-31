@@ -11,7 +11,7 @@ namespace RestBnb.API.Mapping
         {
             CreateMap<GetAllPropertiesQuery, GetAllPropertiesFilter>();
 
-            CreateMap<CreatePropertyRequest, Property>();
+            CreateMap<PropertyRequest, Property>();
         }
     }
 }

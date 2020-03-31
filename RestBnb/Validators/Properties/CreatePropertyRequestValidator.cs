@@ -4,7 +4,7 @@ using System;
 
 namespace RestBnb.API.Validators.Properties
 {
-    public class CreatePropertyRequestValidator : AbstractValidator<CreatePropertyRequest>
+    public class CreatePropertyRequestValidator : AbstractValidator<PropertyRequest>
     {
         public CreatePropertyRequestValidator()
         {

@@ -2,7 +2,7 @@
 
 namespace RestBnb.API.Contracts.V1.Requests
 {
-    public class CreatePropertyRequest
+    public class PropertyRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }

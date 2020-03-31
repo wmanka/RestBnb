@@ -60,7 +60,7 @@ namespace RestBnb.API.Services
             return removed > 0;
         }
 
-        public async Task<bool> DoesUserOwnProperty(int userId, int propertyId)
+        public async Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId)
         {
             var property = await _dataContext.Properties
                 .AsNoTracking()
