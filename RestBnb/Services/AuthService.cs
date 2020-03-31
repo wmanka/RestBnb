@@ -58,10 +58,7 @@ namespace RestBnb.API.Services
             {
                 Email = email,
                 PasswordHash = hash,
-                PasswordSalt = salt,
-                Created = DateTime.UtcNow,
-                Modified = DateTime.UtcNow,
-                IsDeleted = false
+                PasswordSalt = salt
             };
 
             var created = await _userService.CreateUserAsync(newUser);
@@ -224,7 +221,7 @@ namespace RestBnb.API.Services
                 tokenValidationParameters.ValidateLifetime = false;
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
 
-                return (!IsJwtWithValidSecurityAlgorithm(validatedToken)) ? null : principal;
+                return !IsJwtWithValidSecurityAlgorithm(validatedToken) ? null : principal;
             }
             catch
             {
@@ -234,7 +231,7 @@ namespace RestBnb.API.Services
 
         private static bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
         {
-            return (validatedToken is JwtSecurityToken jwtSecurityToken) &&
+            return validatedToken is JwtSecurityToken jwtSecurityToken &&
                    jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                        StringComparison.InvariantCultureIgnoreCase);
         }
