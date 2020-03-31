@@ -4,9 +4,9 @@ using System;
 
 namespace RestBnb.API.Validators.Properties
 {
-    public class CreatePropertyRequestValidator : AbstractValidator<PropertyRequest>
+    public class PropertyRequestValidator : AbstractValidator<PropertyRequest>
     {
-        public CreatePropertyRequestValidator()
+        public PropertyRequestValidator()
         {
             RuleFor(x => x.AccommodatesNumber).GreaterThan(0);
             RuleFor(x => x.BathroomNumber).GreaterThan(0);
