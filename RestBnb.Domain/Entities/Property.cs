@@ -16,9 +16,16 @@ namespace RestBnb.Core.Entities
         public DateTime EndDate { get; set; }
         public DateTime CheckInTime { get; set; }
         public DateTime CheckOutTime { get; set; }
-        public User User { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
 
-        [ForeignKey(nameof(UserId))]
+        public int CityId { get; set; }
+
+        [ForeignKey(nameof(CityId))]
+        public City City { get; set; }
+
         public int UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User User { get; set; }
     }
 }

@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20200318105324_AddRolesTable.Designer.cs" />
     <Compile Remove="Migrations\20200328161950_AddPropertiesTable.cs" />
     <Compile Remove="Migrations\20200328161950_AddPropertiesTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.cs" />
+    <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

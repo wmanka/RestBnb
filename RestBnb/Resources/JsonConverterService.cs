@@ -31,7 +31,8 @@ namespace RestBnb.API.Resources
             using var streamReader = new StreamReader(Directory.GetCurrentDirectory() + "\\Resources\\countries.json");
             var json = streamReader.ReadToEnd();
 
-            return JsonConvert.DeserializeObject<IEnumerable<JsonCountryModel>>(json, Converter.Settings).ToList();
+            // TODO: Remove take statement
+            return JsonConvert.DeserializeObject<IEnumerable<JsonCountryModel>>(json, Converter.Settings).ToList().Take(10);
         }
 
         private async Task CreateAndAddCountriesWithStatesAndCitiesToDatabase(IEnumerable<JsonCountryModel> countriesFromJson)
