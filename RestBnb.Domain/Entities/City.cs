@@ -9,9 +9,9 @@ namespace RestBnb.Core.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-
-        [ForeignKey(nameof(State))]
         public int StateId { get; set; }
+
+        [ForeignKey(nameof(StateId))]
         public State State { get; set; }
 
         public IEnumerable<Property> Properties { get; set; }

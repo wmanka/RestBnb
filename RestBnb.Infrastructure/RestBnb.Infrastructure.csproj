@@ -13,6 +13,14 @@
     <Compile Remove="Migrations\20200328161950_AddPropertiesTable.Designer.cs" />
     <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.cs" />
     <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331131411_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331131411_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331140924_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331140924_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331141052_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331141052_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.cs" />
+    <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

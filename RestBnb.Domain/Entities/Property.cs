@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestBnb.Core.Entities
@@ -20,12 +21,14 @@ namespace RestBnb.Core.Entities
         public string Longitude { get; set; }
 
         public int CityId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey(nameof(CityId))]
         public City City { get; set; }
 
-        public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
+
+        public IEnumerable<Booking> Bookings { get; set; }
     }
 }
