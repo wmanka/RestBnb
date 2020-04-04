@@ -11,6 +11,9 @@ namespace RestBnb.API.Mapping
         {
             CreateMap<Property, PropertyResponse>();
             CreateMap<Property, PropertyRequest>();
+
+            CreateMap<Booking, BookingResponse>();
+            CreateMap<Booking, BookingRequest>();
         }
     }
 }

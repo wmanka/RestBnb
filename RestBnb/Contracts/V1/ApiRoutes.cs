@@ -22,5 +22,15 @@
             public const string Patch = Base + "/properties/{propertyId}";
             public const string Delete = Base + "/properties/{propertyId}";
         }
+
+        public static class Bookings
+        {
+            public const string GetAll = Base + "/bookings";
+            public const string Create = Base + "/bookings";
+            public const string Get = Base + "/bookings/{bookingId}";
+            public const string Put = Base + "/bookings/{bookingId}";
+            public const string Patch = Base + "/bookings/{bookingId}";
+            public const string Delete = Base + "/bookings/{bookingId}";
+        }
     }
 }
