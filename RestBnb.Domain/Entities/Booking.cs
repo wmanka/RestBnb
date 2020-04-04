@@ -11,6 +11,7 @@ namespace RestBnb.Core.Entities
         public decimal PricePerNight { get; set; }
         public decimal TotalPrice { get; set; }
         public BookingState BookingState { get; set; }
+        public DateTime? CancellationDate { get; set; }
         public int UserId { get; set; }
         public int PropertyId { get; set; }
 

@@ -21,6 +21,8 @@
     <Compile Remove="Migrations\20200331141052_AddBookingsTable.Designer.cs" />
     <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.cs" />
     <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200404110729_AddCancellationDateToBookingsTable.cs" />
+    <Compile Remove="Migrations\20200404110729_AddCancellationDateToBookingsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.3.1" />
   </ItemGroup>
 
   <ItemGroup>

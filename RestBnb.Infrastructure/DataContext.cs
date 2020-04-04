@@ -71,7 +71,7 @@ namespace RestBnb.Infrastructure
             // .IgnoreQueryFilters() to disable
             modelBuilder.Entity<User>().HasQueryFilter(p => !p.IsDeleted);
             modelBuilder.Entity<Property>().HasQueryFilter(p => !p.IsDeleted);
-            modelBuilder.Entity<Booking>().HasQueryFilter(p => !p.IsDeleted);
+            //modelBuilder.Entity<Booking>().HasQueryFilter(p => !p.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }

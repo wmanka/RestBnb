@@ -32,6 +32,8 @@ namespace RestBnb.API.Installers
 
                 x.AddSecurityRequirement(securityRequirement);
             });
+
+            services.AddSwaggerGenNewtonsoftSupport();
         }
     }
 }

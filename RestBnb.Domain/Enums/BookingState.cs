@@ -3,7 +3,6 @@
     public enum BookingState
     {
         Pending = 0,
-        Accepted = 1,
-        Cancelled = 2
+        Accepted = 1
     }
 }

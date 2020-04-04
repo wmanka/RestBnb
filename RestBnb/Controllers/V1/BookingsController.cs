@@ -36,6 +36,33 @@ namespace RestBnb.API.Controllers.V1
             var booking = _mapper.Map<Booking>(bookingRequest);
             booking.UserId = HttpContext.GetCurrentUserId();
 
+            if ((booking.CheckOutDate - booking.CheckInDate).Days < 1)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The booking must last for at least one day."}
+                    }
+                });
+            }
+
+            var isPropertyAvailable = await _bookingsService
+                .IsPropertyAvailableWithinGivenTimePeriod(booking.Id, booking.PropertyId, booking.CheckInDate, booking.CheckOutDate);
+
+            if (!isPropertyAvailable)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The property is not available during given time period."}
+                    }
+                });
+            }
+
+            booking.TotalPrice = (booking.CheckOutDate - booking.CheckInDate).Days * booking.PricePerNight;
+
             await _bookingsService.CreateBookingAsync(booking);
 
             return Created(
@@ -69,11 +96,30 @@ namespace RestBnb.API.Controllers.V1
 
             if (!userOwnsBooking)
             {
+                var userOwnProperty =
+                    await _bookingsService.DoesUserOwnProperty(HttpContext.GetCurrentUserId(), bookingId);
+
+                if (!userOwnProperty)
+                {
+                    return BadRequest(new ErrorResponse
+                    {
+                        Errors = new List<ErrorModel>
+                        {
+                            new ErrorModel {Message = "You do not own this booking or property"}
+                        }
+                    });
+                }
+            }
+
+            var isBookingInProgress = await _bookingsService.IsBookingInProgress(bookingId);
+
+            if (isBookingInProgress)
+            {
                 return BadRequest(new ErrorResponse
                 {
                     Errors = new List<ErrorModel>
                     {
-                        new ErrorModel{ Message = "You do not own this booking"}
+                        new ErrorModel{ Message = "You can't cancel booking after it has started"}
                     }
                 });
             }
@@ -103,10 +149,37 @@ namespace RestBnb.API.Controllers.V1
                 });
             }
 
+            if ((bookingRequest.CheckOutDate - bookingRequest.CheckInDate).Days < 1)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The booking must last for at least one day."}
+                    }
+                });
+            }
+
+            var isPropertyAvailable = await _bookingsService
+                .IsPropertyAvailableWithinGivenTimePeriod(bookingId, bookingRequest.PropertyId, bookingRequest.CheckInDate, bookingRequest.CheckOutDate);
+
+            if (!isPropertyAvailable)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The property is not available during given time period."}
+                    }
+                });
+            }
+
             var bookingFromDb = await _bookingsService.GetBookingByIdAsync(bookingId);
 
             if (bookingFromDb == null)
                 return NotFound();
+
+            bookingFromDb.TotalPrice = (bookingRequest.CheckOutDate - bookingRequest.CheckInDate).Days * bookingRequest.PricePerNight;
 
             _mapper.Map(bookingRequest, bookingFromDb);
 
@@ -138,7 +211,35 @@ namespace RestBnb.API.Controllers.V1
             var bookingFromDbDto = _mapper.Map<Booking, BookingRequest>(bookingFromDb);
 
             bookingRequestPatchModel.ApplyTo(bookingFromDbDto);
+
+            if ((bookingFromDbDto.CheckOutDate - bookingFromDbDto.CheckInDate).Days < 1)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The booking must last for at least one day."}
+                    }
+                });
+            }
+
+            var isPropertyAvailable = await _bookingsService
+                .IsPropertyAvailableWithinGivenTimePeriod(bookingId, bookingFromDbDto.PropertyId, bookingFromDbDto.CheckInDate, bookingFromDbDto.CheckOutDate);
+
+            if (!isPropertyAvailable)
+            {
+                return BadRequest(new ErrorResponse
+                {
+                    Errors = new List<ErrorModel>
+                    {
+                        new ErrorModel{ Message = "The property is not available during given time period."}
+                    }
+                });
+            }
+
             _mapper.Map(bookingFromDbDto, bookingFromDb);
+
+            bookingFromDb.TotalPrice = (bookingFromDb.CheckOutDate - bookingFromDb.CheckInDate).Days * bookingFromDb.PricePerNight;
 
             await _bookingsService.UpdateBookingAsync(bookingFromDb);
 

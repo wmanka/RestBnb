@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Converters;
 using RestBnb.API.Filters;
 using RestBnb.API.Options;
 using RestBnb.API.Resources;
@@ -28,7 +29,7 @@ namespace RestBnb.API.Installers
 
             services
                 .AddControllersWithViews()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
 
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 

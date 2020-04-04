@@ -2,6 +2,7 @@
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace RestBnb.API.Services
             if (booking == null)
                 return false;
 
+            booking.CancellationDate = DateTime.UtcNow;
+
             _dataContext.Bookings.Remove(booking);
             var removed = await _dataContext.SaveChangesAsync();
 
@@ -69,13 +72,61 @@ namespace RestBnb.API.Services
             return booking != null && booking.UserId == userId;
         }
 
+        public async Task<bool> DoesUserOwnProperty(int userId, int bookingId)
+        {
+            var booking = await _dataContext.Bookings
+                .Include(x => x.Property)
+                .SingleAsync(x => x.Id == bookingId);
+
+            return booking.Property.UserId == userId;
+        }
+
+        public async Task<bool> IsPropertyAvailableWithinGivenTimePeriod(
+            int bookingId,
+            int propertyId,
+            DateTime checkInDate,
+            DateTime checkOutDate)
+        {
+
+            return !await _dataContext.Bookings
+                .AsNoTracking()
+                .Where(x =>
+                    x.PropertyId == propertyId
+                    && x.CheckInDate.Date < checkOutDate.Date
+                    && checkInDate.Date < x.CheckOutDate.Date
+                    && x.Id != bookingId)
+                .AnyAsync();
+        }
+
+        public async Task<bool> IsBookingInProgress(int bookingId)
+        {
+            var booking = await _dataContext.Bookings.SingleAsync(x => x.Id == bookingId);
+
+            return DateTime.UtcNow > booking.CheckInDate && DateTime.UtcNow < booking.CheckOutDate;
+        }
+
         private static IQueryable<Booking> AddFiltersOnQuery(GetAllBookingsFilter filter, IQueryable<Booking> bookings)
         {
-            //if (filter?.MaxPricePerNight > 0)
-            //{
-            //    bookings = bookings.Where(x => x.PricePerNight <= filter.MaxPricePerNight);
-            //}
-
+            if (filter?.PropertyId > 0)
+            {
+                bookings = bookings.Where(x => x.PropertyId == filter.PropertyId);
+            }
+            if (filter?.UserId > 0)
+            {
+                bookings = bookings.Where(x => x.UserId == filter.UserId);
+            }
+            if (filter?.BookingState != null)
+            {
+                bookings = bookings.Where(x => x.BookingState == filter.BookingState);
+            }
+            if (filter?.CheckInDate != null)
+            {
+                bookings = bookings.Where(x => x.CheckInDate >= filter.CheckInDate);
+            }
+            if (filter?.CheckOutDate != null)
+            {
+                bookings = bookings.Where(x => x.CheckOutDate <= filter.CheckOutDate);
+            }
 
             return bookings;
         }
