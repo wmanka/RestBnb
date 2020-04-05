@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Contracts.V1;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Bookings;
 using RestBnb.Core.Contracts.V1.Requests.Queries;
 using RestBnb.Core.Contracts.V1.Responses;
 using RestBnb.Core.Entities;
@@ -95,7 +95,9 @@ namespace RestBnb.API.Controllers.V1
         public async Task<IActionResult> Patch(int bookingId, JsonPatchDocument<BookingUpdateRequest> patchRequest)
         {
             var booking = await _bookingsService.GetBookingByIdAsync(bookingId);
-            if (booking == null) return NotFound();
+
+            if (booking == null)
+                return NotFound();
 
             var bookingMappedToRequest = _mapper.Map<Booking, BookingUpdateRequest>(booking);
 

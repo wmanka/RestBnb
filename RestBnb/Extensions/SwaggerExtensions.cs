@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using RestBnb.API.Options;
+using RestBnb.Core.Options;
 
 namespace RestBnb.API.Extensions
 {
-    public static class SwaggerConfigurationExtensions
+    public static class SwaggerExtensions
     {
         /// <summary>
         /// Adds middleware for creating documentation using Swagger

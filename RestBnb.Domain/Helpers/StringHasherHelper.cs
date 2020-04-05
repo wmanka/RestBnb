@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RestBnb.API.Helpers
+namespace RestBnb.Core.Helpers
 {
     public static class StringHasherHelper
     {
@@ -14,7 +14,7 @@ namespace RestBnb.API.Helpers
         {
             using var hmac = new HMACSHA512();
 
-            return (hash: hmac.ComputeHash(Encoding.UTF8.GetBytes(stringToHash)) , salt: hmac.Key);
+            return (hash: hmac.ComputeHash(Encoding.UTF8.GetBytes(stringToHash)), salt: hmac.Key);
         }
 
         /// <summary>

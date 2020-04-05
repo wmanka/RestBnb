@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestBnb.API.Options
+namespace RestBnb.Core.Options
 {
     public class JwtSettings
     {

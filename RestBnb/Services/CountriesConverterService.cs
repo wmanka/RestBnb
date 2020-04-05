@@ -8,13 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestBnb.API.Resources
+namespace RestBnb.API.Services
 {
-    public class JsonConverterService : IJsonConverterService
+    public class CountriesConverterService : ICountriesConverterService
     {
         private readonly ICountriesService _countriesService;
 
-        public JsonConverterService(ICountriesService countriesService)
+        public CountriesConverterService(ICountriesService countriesService)
         {
             _countriesService = countriesService;
         }
@@ -26,28 +26,30 @@ namespace RestBnb.API.Resources
             await CreateAndAddCountriesWithStatesAndCitiesToDatabase(countries);
         }
 
-        private static IEnumerable<JsonCountryModel> GetCountriesWithCorrespondingStatesAndCitiesFromJson()
+        private static IEnumerable<CountryFromJson> GetCountriesWithCorrespondingStatesAndCitiesFromJson()
         {
-            using var streamReader = new StreamReader(Directory.GetCurrentDirectory() + "\\Resources\\countries.json");
+            using var streamReader = new StreamReader(
+                Directory.GetParent(Directory.GetCurrentDirectory()).Parent?.FullName + "\\RestBnb\\RestBnb.Domain\\Resources\\countries.json");
+
             var json = streamReader.ReadToEnd();
 
             // TODO: Remove take statement
-            return JsonConvert.DeserializeObject<IEnumerable<JsonCountryModel>>(json, Converter.Settings).ToList().Take(10);
+            return JsonConvert.DeserializeObject<IEnumerable<CountryFromJson>>(json, Converter.Settings).ToList().Take(10);
         }
 
-        private async Task CreateAndAddCountriesWithStatesAndCitiesToDatabase(IEnumerable<JsonCountryModel> countriesFromJson)
+        private async Task CreateAndAddCountriesWithStatesAndCitiesToDatabase(IEnumerable<CountryFromJson> countriesFromJson)
         {
             var countries = ConvertJsonCountryModelsToListOfCountries(countriesFromJson);
 
             await _countriesService.CreateCountriesRangeAsync(countries);
         }
 
-        private static IEnumerable<Country> ConvertJsonCountryModelsToListOfCountries(IEnumerable<JsonCountryModel> countriesFromJson)
+        private static IEnumerable<Country> ConvertJsonCountryModelsToListOfCountries(IEnumerable<CountryFromJson> countriesFromJson)
         {
             return CreateListOfCountries(countriesFromJson);
         }
 
-        private static IEnumerable<Country> CreateListOfCountries(IEnumerable<JsonCountryModel> countriesFromJson)
+        private static IEnumerable<Country> CreateListOfCountries(IEnumerable<CountryFromJson> countriesFromJson)
         {
             return countriesFromJson.Select(country => new Country
             {
@@ -57,7 +59,7 @@ namespace RestBnb.API.Resources
             }).ToList();
         }
 
-        private static IEnumerable<State> CreateListOfStatesPerCountry(JsonCountryModel country)
+        private static IEnumerable<State> CreateListOfStatesPerCountry(CountryFromJson country)
         {
             return country?.States?.Select(citiesPerState => new State
             {

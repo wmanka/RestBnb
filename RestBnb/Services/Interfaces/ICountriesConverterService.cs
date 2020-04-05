@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace RestBnb.API.Resources
+namespace RestBnb.API.Services.Interfaces
 {
-    public interface IJsonConverterService
+    public interface ICountriesConverterService
     {
         Task CreateCountriesWithStatesAndCitiesFromJsonAndAddThemToDatabase();
     }

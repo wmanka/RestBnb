@@ -7,10 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
 using RestBnb.API.Filters;
-using RestBnb.API.Options;
-using RestBnb.API.Resources;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
+using RestBnb.Core.Options;
 using System.Text;
 
 namespace RestBnb.API.Installers
@@ -41,7 +40,7 @@ namespace RestBnb.API.Installers
             services.AddTransient<IBookingsService, BookingsService>();
 
             services.AddTransient<UserResolverService>();
-            services.AddTransient<IJsonConverterService, JsonConverterService>();
+            services.AddTransient<ICountriesConverterService, CountriesConverterService>();
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(JwtSettings), jwtSettings);

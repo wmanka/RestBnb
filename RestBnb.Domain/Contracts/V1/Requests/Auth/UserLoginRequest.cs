@@ -1,6 +1,6 @@
-﻿namespace RestBnb.Core.Contracts.V1.Requests
+﻿namespace RestBnb.Core.Contracts.V1.Requests.Auth
 {
-    public class UserRegistrationRequest
+    public class UserLoginRequest
     {
         public string Email { get; set; }
         public string Password { get; set; }

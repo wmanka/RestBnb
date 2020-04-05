@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace RestBnb.API.Resources
+namespace RestBnb.Core.Entities
 {
-    public class JsonCountryModel
+    public class CountryFromJson
     {
         [JsonProperty("id")]
         public long Id { get; set; }

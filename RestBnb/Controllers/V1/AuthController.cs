@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Contracts.V1;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Auth;
 using RestBnb.Core.Contracts.V1.Responses;
 using System.Threading.Tasks;
 

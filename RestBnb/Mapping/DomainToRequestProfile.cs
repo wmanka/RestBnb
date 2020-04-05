@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Bookings;
 using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Mapping

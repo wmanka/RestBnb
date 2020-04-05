@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 
-namespace RestBnb.API.Extensions
+namespace RestBnb.Core.Extensions
 {
     public static class GeneralExtensions
     {

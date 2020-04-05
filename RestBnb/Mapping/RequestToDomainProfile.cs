@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Bookings;
+using RestBnb.Core.Contracts.V1.Requests.Properties;
 using RestBnb.Core.Contracts.V1.Requests.Queries;
 using RestBnb.Core.Entities;
 

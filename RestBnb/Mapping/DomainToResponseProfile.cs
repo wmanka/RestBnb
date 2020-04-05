@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Properties;
 using RestBnb.Core.Contracts.V1.Responses;
 using RestBnb.Core.Entities;
 

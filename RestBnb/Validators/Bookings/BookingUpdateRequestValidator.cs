@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Bookings;
 using System;
 
 namespace RestBnb.API.Validators.Bookings
