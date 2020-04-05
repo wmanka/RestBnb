@@ -1,7 +1,7 @@
 ﻿using RestBnb.Core.Enums;
 using System;
 
-namespace RestBnb.API.Contracts.V1.Requests.Queries
+namespace RestBnb.Core.Contracts.V1.Requests.Queries
 {
     public class GetAllBookingsQuery
     {

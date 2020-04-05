@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RestBnb.API.Contracts.V1.Requests
+namespace RestBnb.Core.Contracts.V1.Requests
 {
     public class PropertyRequest
     {

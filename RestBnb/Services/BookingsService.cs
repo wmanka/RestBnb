@@ -12,10 +12,12 @@ namespace RestBnb.API.Services
     public class BookingsService : IBookingsService
     {
         private readonly DataContext _dataContext;
+        private readonly UserResolverService _userResolverService;
 
-        public BookingsService(DataContext dataContext)
+        public BookingsService(DataContext dataContext, UserResolverService userResolverService)
         {
             _dataContext = dataContext;
+            _userResolverService = userResolverService;
         }
 
         public async Task<IEnumerable<Booking>> GetAllBookingsAsync(GetAllBookingsFilter filter)
@@ -29,6 +31,13 @@ namespace RestBnb.API.Services
 
         public async Task<bool> CreateBookingAsync(Booking booking)
         {
+            var isPropertyAvailable = await IsPropertyAvailableWithinDateRangeAsync(booking.PropertyId, booking.CheckInDate, booking.CheckOutDate);
+            if (!isPropertyAvailable)
+                return false;
+
+            booking.UserId = _userResolverService.GetUserId();
+            booking.TotalPrice = CalculateTotalPriceForBooking(booking);
+
             await _dataContext.Bookings.AddAsync(booking);
             var created = await _dataContext.SaveChangesAsync();
 
@@ -40,9 +49,32 @@ namespace RestBnb.API.Services
             return await _dataContext.Bookings.SingleOrDefaultAsync(x => x.Id == bookingId);
         }
 
-        public async Task<bool> UpdateBookingAsync(Booking bookingToUpdate)
+        public async Task<bool> UpdateBookingAsync(Booking booking)
         {
-            _dataContext.Bookings.Update(bookingToUpdate);
+            var userOwnsBooking =
+                await DoesUserOwnBookingAsync(_userResolverService.GetUserId(), booking.Id);
+            var userOwnsProperty =
+                await DoesUserOwnBookingPropertyAsync(_userResolverService.GetUserId(), booking.Id);
+
+            if (!userOwnsBooking && !userOwnsProperty)
+            {
+                return false;
+            }
+
+            var isPropertyAvailable = await IsPropertyAvailableWithinDateRangeAsync(
+                booking.PropertyId,
+                booking.CheckInDate,
+                booking.CheckOutDate,
+                booking.Id);
+
+            if (!isPropertyAvailable)
+            {
+                return false;
+            }
+
+            booking.TotalPrice = CalculateTotalPriceForBooking(booking);
+
+            _dataContext.Bookings.Update(booking);
 
             var updated = await _dataContext.SaveChangesAsync();
             return updated > 0;
@@ -55,6 +87,13 @@ namespace RestBnb.API.Services
             if (booking == null)
                 return false;
 
+            var userOwnsBooking = await DoesUserOwnBookingAsync(_userResolverService.GetUserId(), bookingId);
+            var userOwnProperty = await DoesUserOwnBookingPropertyAsync(_userResolverService.GetUserId(), bookingId);
+
+            if (!userOwnProperty && !userOwnsBooking) return false;
+
+            if (await IsBookingInProgressAsync(bookingId)) return false;
+
             booking.CancellationDate = DateTime.UtcNow;
 
             _dataContext.Bookings.Remove(booking);
@@ -63,7 +102,12 @@ namespace RestBnb.API.Services
             return removed > 0;
         }
 
-        public async Task<bool> DoesUserOwnBookingAsync(int userId, int bookingId)
+        private static decimal CalculateTotalPriceForBooking(Booking booking)
+        {
+            return (booking.CheckOutDate - booking.CheckInDate).Days * booking.PricePerNight;
+        }
+
+        private async Task<bool> DoesUserOwnBookingAsync(int userId, int bookingId)
         {
             var booking = await _dataContext.Bookings
                 .AsNoTracking()
@@ -72,20 +116,21 @@ namespace RestBnb.API.Services
             return booking != null && booking.UserId == userId;
         }
 
-        public async Task<bool> DoesUserOwnProperty(int userId, int bookingId)
+        private async Task<bool> DoesUserOwnBookingPropertyAsync(int userId, int bookingId)
         {
             var booking = await _dataContext.Bookings
+                .AsNoTracking()
                 .Include(x => x.Property)
                 .SingleAsync(x => x.Id == bookingId);
 
             return booking.Property.UserId == userId;
         }
 
-        public async Task<bool> IsPropertyAvailableWithinGivenTimePeriod(
-            int bookingId,
+        private async Task<bool> IsPropertyAvailableWithinDateRangeAsync(
             int propertyId,
             DateTime checkInDate,
-            DateTime checkOutDate)
+            DateTime checkOutDate,
+            int bookingId = default)
         {
 
             return !await _dataContext.Bookings
@@ -98,9 +143,9 @@ namespace RestBnb.API.Services
                 .AnyAsync();
         }
 
-        public async Task<bool> IsBookingInProgress(int bookingId)
+        private async Task<bool> IsBookingInProgressAsync(int bookingId)
         {
-            var booking = await _dataContext.Bookings.SingleAsync(x => x.Id == bookingId);
+            var booking = await _dataContext.Bookings.AsNoTracking().SingleAsync(x => x.Id == bookingId);
 
             return DateTime.UtcNow > booking.CheckInDate && DateTime.UtcNow < booking.CheckOutDate;
         }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using RestBnb.API.Contracts.V1.Requests;
-using RestBnb.API.Contracts.V1.Requests.Queries;
+using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Queries;
 using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Mapping
@@ -9,11 +9,12 @@ namespace RestBnb.API.Mapping
     {
         public RequestToDomainProfile()
         {
-            CreateMap<GetAllPropertiesQuery, GetAllPropertiesFilter>();
             CreateMap<PropertyRequest, Property>();
+            CreateMap<GetAllPropertiesQuery, GetAllPropertiesFilter>();
 
+            CreateMap<BookingCreateRequest, Booking>();
+            CreateMap<BookingUpdateRequest, Booking>();
             CreateMap<GetAllBookingsQuery, GetAllBookingsFilter>();
-            CreateMap<BookingRequest, Booking>();
         }
     }
 }

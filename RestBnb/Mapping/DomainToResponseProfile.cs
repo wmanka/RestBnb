@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using RestBnb.API.Contracts.V1.Requests;
-using RestBnb.API.Contracts.V1.Responses;
+using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Responses;
 using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Mapping
@@ -13,7 +13,6 @@ namespace RestBnb.API.Mapping
             CreateMap<Property, PropertyRequest>();
 
             CreateMap<Booking, BookingResponse>();
-            CreateMap<Booking, BookingRequest>();
         }
     }
 }

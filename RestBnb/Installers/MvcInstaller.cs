@@ -40,6 +40,7 @@ namespace RestBnb.API.Installers
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IBookingsService, BookingsService>();
 
+            services.AddTransient<UserResolverService>();
             services.AddTransient<IJsonConverterService, JsonConverterService>();
 
             var jwtSettings = new JwtSettings();

@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using RestBnb.API.Contracts.V1;
-using RestBnb.API.Contracts.V1.Requests;
-using RestBnb.API.Contracts.V1.Requests.Queries;
-using RestBnb.API.Contracts.V1.Responses;
-using RestBnb.API.Extensions;
 using RestBnb.API.Services.Interfaces;
+using RestBnb.Core.Contracts.V1;
+using RestBnb.Core.Contracts.V1.Requests;
+using RestBnb.Core.Contracts.V1.Requests.Queries;
+using RestBnb.Core.Contracts.V1.Responses;
 using RestBnb.Core.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -31,39 +30,14 @@ namespace RestBnb.API.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.Bookings.Create)]
-        public async Task<IActionResult> Create(BookingRequest bookingRequest)
+        public async Task<IActionResult> Create(BookingCreateRequest request)
         {
-            var booking = _mapper.Map<Booking>(bookingRequest);
-            booking.UserId = HttpContext.GetCurrentUserId();
+            var booking = _mapper.Map<Booking>(request);
 
-            if ((booking.CheckOutDate - booking.CheckInDate).Days < 1)
+            if (!await _bookingsService.CreateBookingAsync(booking))
             {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The booking must last for at least one day."}
-                    }
-                });
+                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not create new booking" } } });
             }
-
-            var isPropertyAvailable = await _bookingsService
-                .IsPropertyAvailableWithinGivenTimePeriod(booking.Id, booking.PropertyId, booking.CheckInDate, booking.CheckOutDate);
-
-            if (!isPropertyAvailable)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The property is not available during given time period."}
-                    }
-                });
-            }
-
-            booking.TotalPrice = (booking.CheckOutDate - booking.CheckInDate).Days * booking.PricePerNight;
-
-            await _bookingsService.CreateBookingAsync(booking);
 
             return Created(
                 ApiRoutes.Bookings.Get.Replace("{bookingId}", booking.Id.ToString()),
@@ -91,159 +65,49 @@ namespace RestBnb.API.Controllers.V1
         [HttpDelete(ApiRoutes.Bookings.Delete)]
         public async Task<IActionResult> Delete(int bookingId)
         {
-            var userOwnsBooking =
-                await _bookingsService.DoesUserOwnBookingAsync(HttpContext.GetCurrentUserId(), bookingId);
-
-            if (!userOwnsBooking)
-            {
-                var userOwnProperty =
-                    await _bookingsService.DoesUserOwnProperty(HttpContext.GetCurrentUserId(), bookingId);
-
-                if (!userOwnProperty)
-                {
-                    return BadRequest(new ErrorResponse
-                    {
-                        Errors = new List<ErrorModel>
-                        {
-                            new ErrorModel {Message = "You do not own this booking or property"}
-                        }
-                    });
-                }
-            }
-
-            var isBookingInProgress = await _bookingsService.IsBookingInProgress(bookingId);
-
-            if (isBookingInProgress)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "You can't cancel booking after it has started"}
-                    }
-                });
-            }
-
             var deleted = await _bookingsService.DeleteBookingAsync(bookingId);
 
             if (deleted)
                 return NoContent();
 
-            return NotFound();
+            return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not delete booking" } } });
         }
 
         [HttpPut(ApiRoutes.Bookings.Put)]
-        public async Task<IActionResult> Put(int bookingId, BookingRequest bookingRequest)
+        public async Task<IActionResult> Put(int bookingId, BookingUpdateRequest request)
         {
-            var userOwnsBooking =
-                await _bookingsService.DoesUserOwnBookingAsync(HttpContext.GetCurrentUserId(), bookingId);
+            var booking = await _bookingsService.GetBookingByIdAsync(bookingId);
 
-            if (!userOwnsBooking)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "You do not own this booking"}
-                    }
-                });
-            }
-
-            if ((bookingRequest.CheckOutDate - bookingRequest.CheckInDate).Days < 1)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The booking must last for at least one day."}
-                    }
-                });
-            }
-
-            var isPropertyAvailable = await _bookingsService
-                .IsPropertyAvailableWithinGivenTimePeriod(bookingId, bookingRequest.PropertyId, bookingRequest.CheckInDate, bookingRequest.CheckOutDate);
-
-            if (!isPropertyAvailable)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The property is not available during given time period."}
-                    }
-                });
-            }
-
-            var bookingFromDb = await _bookingsService.GetBookingByIdAsync(bookingId);
-
-            if (bookingFromDb == null)
+            if (booking == null)
                 return NotFound();
 
-            bookingFromDb.TotalPrice = (bookingRequest.CheckOutDate - bookingRequest.CheckInDate).Days * bookingRequest.PricePerNight;
+            _mapper.Map(request, booking);
 
-            _mapper.Map(bookingRequest, bookingFromDb);
+            if (!await _bookingsService.UpdateBookingAsync(booking))
+            {
+                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not update booking" } } });
+            }
 
-            await _bookingsService.UpdateBookingAsync(bookingFromDb);
-
-            return Ok(_mapper.Map<BookingResponse>(bookingFromDb));
+            return Ok(_mapper.Map<BookingResponse>(booking));
         }
 
         [HttpPatch(ApiRoutes.Bookings.Patch)]
-        public async Task<IActionResult> Patch(int bookingId, JsonPatchDocument<BookingRequest> bookingRequestPatchModel)
+        public async Task<IActionResult> Patch(int bookingId, JsonPatchDocument<BookingUpdateRequest> patchRequest)
         {
-            var userOwnsBooking =
-                await _bookingsService.DoesUserOwnBookingAsync(HttpContext.GetCurrentUserId(), bookingId);
+            var booking = await _bookingsService.GetBookingByIdAsync(bookingId);
+            if (booking == null) return NotFound();
 
-            if (!userOwnsBooking)
+            var bookingMappedToRequest = _mapper.Map<Booking, BookingUpdateRequest>(booking);
+
+            patchRequest.ApplyTo(bookingMappedToRequest);
+            _mapper.Map(bookingMappedToRequest, booking);
+
+            if (!await _bookingsService.UpdateBookingAsync(booking))
             {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "You do not own this booking"}
-                    }
-                });
+                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not patch booking" } } });
             }
 
-            var bookingFromDb = await _bookingsService.GetBookingByIdAsync(bookingId);
-            if (bookingFromDb == null) return NotFound();
-
-            var bookingFromDbDto = _mapper.Map<Booking, BookingRequest>(bookingFromDb);
-
-            bookingRequestPatchModel.ApplyTo(bookingFromDbDto);
-
-            if ((bookingFromDbDto.CheckOutDate - bookingFromDbDto.CheckInDate).Days < 1)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The booking must last for at least one day."}
-                    }
-                });
-            }
-
-            var isPropertyAvailable = await _bookingsService
-                .IsPropertyAvailableWithinGivenTimePeriod(bookingId, bookingFromDbDto.PropertyId, bookingFromDbDto.CheckInDate, bookingFromDbDto.CheckOutDate);
-
-            if (!isPropertyAvailable)
-            {
-                return BadRequest(new ErrorResponse
-                {
-                    Errors = new List<ErrorModel>
-                    {
-                        new ErrorModel{ Message = "The property is not available during given time period."}
-                    }
-                });
-            }
-
-            _mapper.Map(bookingFromDbDto, bookingFromDb);
-
-            bookingFromDb.TotalPrice = (bookingFromDb.CheckOutDate - bookingFromDb.CheckInDate).Days * bookingFromDb.PricePerNight;
-
-            await _bookingsService.UpdateBookingAsync(bookingFromDb);
-
-            return Ok(_mapper.Map<Booking, BookingResponse>(bookingFromDb));
+            return Ok(_mapper.Map<Booking, BookingResponse>(booking));
         }
     }
 }
