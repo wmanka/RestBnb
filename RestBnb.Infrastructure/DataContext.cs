@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.Core.Entities;
-using RestBnb.Core.Enums;
+using RestBnb.Infrastructure.Configurations;
 using System;
 using System.Linq;
 using System.Threading;
@@ -29,24 +29,15 @@ namespace RestBnb.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserRole>().ToTable("UserRoles");
-            modelBuilder.Entity<Property>().ToTable("Properties");
-            modelBuilder.Entity<Booking>().ToTable("Bookings");
-            modelBuilder.Entity<Country>().ToTable("Countries");
-            modelBuilder.Entity<State>().ToTable("States");
-            modelBuilder.Entity<City>().ToTable("Cities");
-
-            modelBuilder.Entity<Booking>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Bookings)
-                .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Booking>()
-                .Property(x => x.BookingState)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (BookingState)Enum.Parse(typeof(BookingState), v));
+            // TODO: To be refactored
+            modelBuilder
+                .ApplyConfiguration(new BookingEntityConfiguration())
+                .ApplyConfiguration(new CityEntityConfiguration())
+                .ApplyConfiguration(new CountryEntityConfiguration())
+                .ApplyConfiguration(new PropertyEntityConfiguration())
+                .ApplyConfiguration(new StateEntityConfiguration())
+                .ApplyConfiguration(new UserEntityConfiguration())
+                .ApplyConfiguration(new UserRoleEntityConfiguration());
 
             foreach (var property in modelBuilder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
@@ -54,24 +45,6 @@ namespace RestBnb.Infrastructure
             {
                 property.SetColumnType("decimal(6, 2)");
             }
-
-            modelBuilder.Entity<UserRole>()
-            .HasKey(t => new { t.UserId, t.RoleId });
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(pt => pt.User)
-                .WithMany(p => p.UserRoles)
-                .HasForeignKey(pt => pt.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(pt => pt.Role)
-                .WithMany(t => t.UserRoles)
-                .HasForeignKey(pt => pt.RoleId);
-
-            // .IgnoreQueryFilters() to disable
-            modelBuilder.Entity<User>().HasQueryFilter(p => !p.IsDeleted);
-            modelBuilder.Entity<Property>().HasQueryFilter(p => !p.IsDeleted);
-            //modelBuilder.Entity<Booking>().HasQueryFilter(p => !p.IsDeleted);
 
             base.OnModelCreating(modelBuilder);
         }
