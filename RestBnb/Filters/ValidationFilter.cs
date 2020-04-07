@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using RestBnb.API.Contracts.V1.Responses;
+using RestBnb.Core.Contracts.V1.Responses;
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestBnb.API.Helpers;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
+using RestBnb.Core.Helpers;
 using RestBnb.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;

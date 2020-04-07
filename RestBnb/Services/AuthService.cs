@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using RestBnb.API.Contracts.V1;
-using RestBnb.API.Helpers;
-using RestBnb.API.Options;
 using RestBnb.API.Services.Interfaces;
+using RestBnb.Core.Contracts.V1;
 using RestBnb.Core.Entities;
+using RestBnb.Core.Helpers;
+using RestBnb.Core.Options;
 using RestBnb.Infrastructure;
 using System;
 using System.Collections.Generic;

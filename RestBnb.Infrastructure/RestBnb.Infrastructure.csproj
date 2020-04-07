@@ -13,15 +13,26 @@
     <Compile Remove="Migrations\20200328161950_AddPropertiesTable.Designer.cs" />
     <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.cs" />
     <Compile Remove="Migrations\20200331121216_AddColumnsToPropertiesTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331131411_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331131411_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331140924_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331140924_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200331141052_AddBookingsTable.cs" />
+    <Compile Remove="Migrations\20200331141052_AddBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.cs" />
+    <Compile Remove="Migrations\20200403091138_AddBookingStatePropertyToBookingsTable.Designer.cs" />
+    <Compile Remove="Migrations\20200404110729_AddCancellationDateToBookingsTable.cs" />
+    <Compile Remove="Migrations\20200404110729_AddCancellationDateToBookingsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.3.1" />
   </ItemGroup>
 
   <ItemGroup>

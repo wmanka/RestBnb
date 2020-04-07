@@ -17,5 +17,6 @@ namespace RestBnb.Core.Entities
 
         public IEnumerable<UserRole> UserRoles { get; set; }
         public IEnumerable<Property> Properties { get; set; }
+        public IEnumerable<Booking> Bookings { get; set; }
     }
 }

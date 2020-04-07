@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.Core.Entities;
+using RestBnb.Infrastructure.Extensions;
 using System;
-using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,41 +22,16 @@ namespace RestBnb.Infrastructure
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<UserRole>().ToTable("UserRoles");
-            modelBuilder.Entity<Property>().ToTable("Properties");
-            modelBuilder.Entity<Country>().ToTable("Countries");
-            modelBuilder.Entity<State>().ToTable("States");
-            modelBuilder.Entity<City>().ToTable("Cities");
-
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(t => t.GetProperties())
-                .Where(p => p.ClrType == typeof(decimal)))
-            {
-                property.SetColumnType("decimal(6, 2)");
-            }
-
-            modelBuilder.Entity<UserRole>()
-            .HasKey(t => new { t.UserId, t.RoleId });
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(pt => pt.User)
-                .WithMany(p => p.UserRoles)
-                .HasForeignKey(pt => pt.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(pt => pt.Role)
-                .WithMany(t => t.UserRoles)
-                .HasForeignKey(pt => pt.RoleId);
-
-            modelBuilder.Entity<User>().HasQueryFilter(p => !p.IsDeleted);
-            modelBuilder.Entity<Property>().HasQueryFilter(p => !p.IsDeleted);
-            // .IgnoreQueryFilters() to disable
+            modelBuilder
+                .ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())
+                .SetPrecisionForAllPropertiesOfTypeDecimal(6, 2);
 
             base.OnModelCreating(modelBuilder);
         }
