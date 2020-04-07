@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.Core.Entities;
-using RestBnb.Infrastructure.Configurations;
+using RestBnb.Infrastructure.Extensions;
 using System;
-using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,22 +29,9 @@ namespace RestBnb.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // TODO: To be refactored
             modelBuilder
-                .ApplyConfiguration(new BookingEntityConfiguration())
-                .ApplyConfiguration(new CityEntityConfiguration())
-                .ApplyConfiguration(new CountryEntityConfiguration())
-                .ApplyConfiguration(new PropertyEntityConfiguration())
-                .ApplyConfiguration(new StateEntityConfiguration())
-                .ApplyConfiguration(new UserEntityConfiguration())
-                .ApplyConfiguration(new UserRoleEntityConfiguration());
-
-            foreach (var property in modelBuilder.Model.GetEntityTypes()
-                .SelectMany(t => t.GetProperties())
-                .Where(p => p.ClrType == typeof(decimal)))
-            {
-                property.SetColumnType("decimal(6, 2)");
-            }
+                .ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly())
+                .SetPrecisionForAllPropertiesOfTypeDecimal(6, 2);
 
             base.OnModelCreating(modelBuilder);
         }
