@@ -1,4 +1,4 @@
-﻿namespace RestBnb.Core.Contracts.V1
+﻿namespace RestBnb.Core.Constants
 {
     public static class ApiRoles
     {

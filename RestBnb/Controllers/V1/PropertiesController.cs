@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Extensions;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Contracts.V1;
+using RestBnb.Core.Constants;
 using RestBnb.Core.Contracts.V1.Requests.Properties;
 using RestBnb.Core.Contracts.V1.Requests.Queries;
 using RestBnb.Core.Contracts.V1.Responses;

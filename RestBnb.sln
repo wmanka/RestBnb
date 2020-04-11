@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestBnb.Core", "RestBnb.Dom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestBnb.Infrastructure", "RestBnb.Infrastructure\RestBnb.Infrastructure.csproj", "{3D271433-58FE-4343-ABE1-B8E46C646597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestBnb.Tests", "RestBnb.Tests\RestBnb.Tests.csproj", "{0403DA70-25E9-42E5-B8A6-28666FE82691}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{3D271433-58FE-4343-ABE1-B8E46C646597}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D271433-58FE-4343-ABE1-B8E46C646597}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D271433-58FE-4343-ABE1-B8E46C646597}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0403DA70-25E9-42E5-B8A6-28666FE82691}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0403DA70-25E9-42E5-B8A6-28666FE82691}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0403DA70-25E9-42E5-B8A6-28666FE82691}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0403DA70-25E9-42E5-B8A6-28666FE82691}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

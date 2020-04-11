@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Contracts.V1;
+using RestBnb.Core.Constants;
 using RestBnb.Core.Entities;
 using RestBnb.Infrastructure;
 using System.Linq;

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using RestBnb.Core.Constants;
 
 namespace RestBnb.API.Services
 {
