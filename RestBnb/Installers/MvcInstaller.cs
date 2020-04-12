@@ -19,7 +19,11 @@ namespace RestBnb.API.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMvc(mvcOptions => mvcOptions.Filters.Add<ValidationFilter>())
+            services.AddMvc(mvcOptions =>
+                {
+                    mvcOptions.Filters.Add<ValidationFilter>();
+                    mvcOptions.Filters.Add<LastActiveTrackerFilter>();
+                })
                 .AddFluentValidation(fluentValidationConfiguration =>
                 {
                     fluentValidationConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>();
