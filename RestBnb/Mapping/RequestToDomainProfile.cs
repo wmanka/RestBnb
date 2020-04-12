@@ -11,11 +11,14 @@ namespace RestBnb.API.Mapping
     {
         public RequestToDomainProfile()
         {
-            CreateMap<PropertyRequest, Property>();
+            CreateMap<PropertyCreateRequest, Property>();
+            CreateMap<PropertyUpdateRequest, Property>();
             CreateMap<GetAllPropertiesQuery, GetAllPropertiesFilter>();
+
             CreateMap<BookingCreateRequest, Booking>();
             CreateMap<BookingUpdateRequest, Booking>();
             CreateMap<GetAllBookingsQuery, GetAllBookingsFilter>();
+
             CreateMap<UserUpdateRequest, User>();
         }
     }

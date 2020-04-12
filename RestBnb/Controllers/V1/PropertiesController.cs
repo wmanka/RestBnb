@@ -30,9 +30,9 @@ namespace RestBnb.API.Controllers.V1
         }
 
         [HttpPost(ApiRoutes.Properties.Create)]
-        public async Task<IActionResult> Create(PropertyRequest propertyRequest)
+        public async Task<IActionResult> Create(PropertyCreateRequest propertyCreateRequest)
         {
-            var property = _mapper.Map<Property>(propertyRequest);
+            var property = _mapper.Map<Property>(propertyCreateRequest);
 
             if (!await _propertiesService.CreatePropertyAsync(property))
             {
@@ -74,14 +74,14 @@ namespace RestBnb.API.Controllers.V1
         }
 
         [HttpPut(ApiRoutes.Properties.Put)]
-        public async Task<IActionResult> Put(int propertyId, PropertyRequest propertyRequest)
+        public async Task<IActionResult> Put(int propertyId, PropertyUpdateRequest request)
         {
             var property = await _propertiesService.GetPropertyByIdAsync(propertyId);
 
             if (property == null)
                 return NotFound();
 
-            _mapper.Map(propertyRequest, property);
+            _mapper.Map(request, property);
 
             if (!await _propertiesService.UpdatePropertyAsync(property))
             {
@@ -92,14 +92,14 @@ namespace RestBnb.API.Controllers.V1
         }
 
         [HttpPatch(ApiRoutes.Properties.Patch)]
-        public async Task<IActionResult> Patch(int propertyId, JsonPatchDocument<PropertyRequest> patchRequest)
+        public async Task<IActionResult> Patch(int propertyId, JsonPatchDocument<PropertyUpdateRequest> patchRequest)
         {
             var property = await _propertiesService.GetPropertyByIdAsync(propertyId);
 
             if (property == null)
                 return NotFound();
 
-            var propertyMappedToRequest = _mapper.Map<Property, PropertyRequest>(property);
+            var propertyMappedToRequest = _mapper.Map<Property, PropertyUpdateRequest>(property);
 
             patchRequest.ApplyTo(propertyMappedToRequest);
             _mapper.Map(propertyMappedToRequest, property);
