@@ -11,10 +11,14 @@ namespace RestBnb.API.Services
     public class PropertiesService : IPropertiesService
     {
         private readonly DataContext _dataContext;
+        private readonly UserResolverService _userResolverService;
 
-        public PropertiesService(DataContext dataContext)
+        public PropertiesService(
+            DataContext dataContext,
+            UserResolverService userResolverService)
         {
             _dataContext = dataContext;
+            _userResolverService = userResolverService;
         }
 
         public async Task<IEnumerable<Property>> GetAllPropertiesAsync(GetAllPropertiesFilter filter)
@@ -28,6 +32,8 @@ namespace RestBnb.API.Services
 
         public async Task<bool> CreatePropertyAsync(Property property)
         {
+            property.UserId = _userResolverService.GetUserId();
+
             await _dataContext.Properties.AddAsync(property);
             var created = await _dataContext.SaveChangesAsync();
 
@@ -39,9 +45,14 @@ namespace RestBnb.API.Services
             return await _dataContext.Properties.SingleOrDefaultAsync(x => x.Id == propertyId);
         }
 
-        public async Task<bool> UpdatePropertyAsync(Property propertyToUpdate)
+        public async Task<bool> UpdatePropertyAsync(Property property)
         {
-            _dataContext.Properties.Update(propertyToUpdate);
+            var userOwnsProperty = await DoesUserOwnPropertyAsync(_userResolverService.GetUserId(), property.Id);
+
+            if (!userOwnsProperty)
+                return false;
+
+            _dataContext.Properties.Update(property);
 
             var updated = await _dataContext.SaveChangesAsync();
             return updated > 0;
@@ -54,13 +65,18 @@ namespace RestBnb.API.Services
             if (property == null)
                 return false;
 
+            var userOwnsProperty = await DoesUserOwnPropertyAsync(_userResolverService.GetUserId(), propertyId);
+
+            if (!userOwnsProperty)
+                return false;
+
             _dataContext.Properties.Remove(property);
             var removed = await _dataContext.SaveChangesAsync();
 
             return removed > 0;
         }
 
-        public async Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId)
+        private async Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId)
         {
             var property = await _dataContext.Properties
                 .AsNoTracking()
