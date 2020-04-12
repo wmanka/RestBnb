@@ -47,7 +47,7 @@ namespace RestBnb.API.Extensions
             {
                 foreach (var role in typeof(ApiRoles).GetFields().Select(x => x.Name).ToList())
                 {
-                    await roleService.CreateRoleAsync(new Role { Name = role });
+                    await roleService.CreateRoleAsync(new Role(role));
                 }
             }
         }

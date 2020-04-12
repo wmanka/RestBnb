@@ -31,6 +31,18 @@
             public const string Put = Base + "/bookings/{bookingId}";
             public const string Patch = Base + "/bookings/{bookingId}";
             public const string Delete = Base + "/bookings/{bookingId}";
+        }        
+        
+        public static class Users
+        {
+            public const string Get = Base + "/users/{userId}";
+            public const string Patch = Base + "/users/{userId}";
+            public const string Delete = Base + "/users/{userId}";
+        }
+
+        public static class HealthChecks
+        {
+            public const string Details = "/health";
         }
     }
 }

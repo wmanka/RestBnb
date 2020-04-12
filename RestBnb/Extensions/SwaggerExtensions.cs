@@ -16,7 +16,9 @@ namespace RestBnb.API.Extensions
             var swaggerOptions = GetSwaggerOptions(configuration);
 
             app.UseSwagger(options => options.RouteTemplate = swaggerOptions.JsonRoute);
-            app.UseSwaggerUI(options => options.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
+
+            app.UseSwaggerUI(options => options
+                .SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
         }
 
         private static SwaggerOptions GetSwaggerOptions(IConfiguration configuration)
