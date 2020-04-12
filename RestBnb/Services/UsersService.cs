@@ -13,13 +13,16 @@ namespace RestBnb.API.Services
     {
         private readonly DataContext _dataContext;
         private readonly IRolesService _rolesService;
+        private readonly UserResolverService _userResolverService;
 
         public UsersService(
             DataContext dataContext,
-            IRolesService rolesService)
+            IRolesService rolesService,
+            UserResolverService userResolverService)
         {
             _dataContext = dataContext;
             _rolesService = rolesService;
+            _userResolverService = userResolverService;
         }
 
         public async Task<bool> CreateUserAsync(User user)
@@ -37,7 +40,10 @@ namespace RestBnb.API.Services
             if (user == null)
                 return false;
 
+            if (_userResolverService.GetUserId() != userId) return false;
+
             _dataContext.Users.Remove(user);
+
             var removed = await _dataContext.SaveChangesAsync();
 
             return removed > 0;
@@ -66,7 +72,7 @@ namespace RestBnb.API.Services
             return updated > 0;
         }
 
-        public async Task<bool> CheckPasswordAsync(string email, string password)
+        public async Task<bool> VerifyPasswordAsync(string email, string password)
         {
             var user = await GetUserByEmailAsync(email);
 
@@ -87,9 +93,11 @@ namespace RestBnb.API.Services
         {
             var roleInDatabase = await _rolesService.GetRoleByNameAsync(roleName);
 
-            if (roleInDatabase == null) return false;
+            if (roleInDatabase == null)
+                return false;
 
             var userInDatabase = await GetUserByIdAsync(user.Id);
+
             if (userInDatabase == null)
                 return false;
 

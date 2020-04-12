@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using RestBnb.Core.Contracts.V1.Requests.Bookings;
+using RestBnb.Core.Contracts.V1.Requests.Properties;
+using RestBnb.Core.Contracts.V1.Requests.Users;
 using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Mapping
@@ -10,6 +12,8 @@ namespace RestBnb.API.Mapping
         {
             CreateMap<Booking, BookingCreateRequest>();
             CreateMap<Booking, BookingUpdateRequest>();
+            CreateMap<Property, PropertyRequest>();
+            CreateMap<User, UserUpdateRequest>();
         }
     }
 }

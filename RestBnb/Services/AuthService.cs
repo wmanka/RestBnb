@@ -116,7 +116,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            var userHasValidPassword = await _userService.CheckPasswordAsync(email, password);
+            var userHasValidPassword = await _userService.VerifyPasswordAsync(email, password);
 
             if (!userHasValidPassword)
             {
