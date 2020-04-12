@@ -10,6 +10,7 @@ using RestBnb.API.Filters;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Options;
+using RestBnb.Infrastructure.Services;
 using System.Text;
 
 namespace RestBnb.API.Installers
@@ -39,6 +40,7 @@ namespace RestBnb.API.Installers
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IBookingsService, BookingsService>();
 
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<UserResolverService>();
             services.AddTransient<ICountriesConverterService, CountriesConverterService>();
 

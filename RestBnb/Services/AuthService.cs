@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Contracts.V1;
+using RestBnb.Core.Constants;
 using RestBnb.Core.Entities;
 using RestBnb.Core.Helpers;
 using RestBnb.Core.Options;
 using RestBnb.Infrastructure;
+using RestBnb.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using RestBnb.Core.Constants;
 
 namespace RestBnb.API.Services
 {
@@ -23,17 +24,20 @@ namespace RestBnb.API.Services
         private readonly JwtSettings _jwtSettings;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly DataContext _dataContext;
+        private readonly IEmailSender _emailSender;
 
         public AuthService(
             IUsersService userService,
             DataContext context,
             TokenValidationParameters tokenValidationParameters,
-            JwtSettings jwtSettings)
+            JwtSettings jwtSettings,
+            IEmailSender emailSender)
         {
             _userService = userService;
             _dataContext = context;
             _tokenValidationParameters = tokenValidationParameters;
             _jwtSettings = jwtSettings;
+            _emailSender = emailSender;
         }
 
         /// <summary>
@@ -79,6 +83,16 @@ namespace RestBnb.API.Services
                 return new AuthenticationResult
                 {
                     Errors = new[] { "Could not assign user to default role." }
+                };
+            }
+
+            var emailSend = await _emailSender.SendEmailAsync(newUser.Email, "Welcome to RestBnb!", "Thank you for signing up.");
+
+            if (emailSend.StatusCode != HttpStatusCode.Accepted)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] { "Could not send confirmation email." }
                 };
             }
 

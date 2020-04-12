@@ -32,5 +32,10 @@
             public const string Patch = Base + "/bookings/{bookingId}";
             public const string Delete = Base + "/bookings/{bookingId}";
         }
+
+        public static class HealthChecks
+        {
+            public const string Details = "/health";
+        }
     }
 }
