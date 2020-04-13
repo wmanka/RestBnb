@@ -32,7 +32,7 @@ namespace RestBnb.UnitTests.Controllers
             };
             const string token = "token";
             const string refreshToken = "refresh token";
-            _authServiceMock.Setup(repo => repo.RegisterAsync(email, password))
+            _authServiceMock.Setup(authService => authService.RegisterAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = true, Token = token, RefreshToken = refreshToken });
             var controller = new AuthController(_authServiceMock.Object);
 
@@ -55,7 +55,7 @@ namespace RestBnb.UnitTests.Controllers
                 Password = password
             };
             const string errorMessage = "User with this email address already exists";
-            _authServiceMock.Setup(repo => repo.RegisterAsync(email, password))
+            _authServiceMock.Setup(authService => authService.RegisterAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = false, Errors = new[] { errorMessage } });
             var controller = new AuthController(_authServiceMock.Object);
 
@@ -79,7 +79,7 @@ namespace RestBnb.UnitTests.Controllers
                 Password = password
             };
             const string errorMessage = "Could not create user.";
-            _authServiceMock.Setup(repo => repo.RegisterAsync(email, password))
+            _authServiceMock.Setup(authService => authService.RegisterAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = false, Errors = new[] { errorMessage } });
             var controller = new AuthController(_authServiceMock.Object);
 
@@ -100,7 +100,7 @@ namespace RestBnb.UnitTests.Controllers
                 Email = email,
                 Password = password
             };
-            _authServiceMock.Setup(repo => repo.LoginAsync(email, password))
+            _authServiceMock.Setup(authService => authService.LoginAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = true, Token = "token", RefreshToken = "refresh token" });
             var controller = new AuthController(_authServiceMock.Object);
 
@@ -123,7 +123,7 @@ namespace RestBnb.UnitTests.Controllers
                 Password = password
             };
             const string errorMessage = "User with this email address already exists";
-            _authServiceMock.Setup(repo => repo.LoginAsync(email, password))
+            _authServiceMock.Setup(authService => authService.LoginAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = false, Errors = new[] { errorMessage } });
             var controller = new AuthController(_authServiceMock.Object);
 
@@ -146,11 +146,57 @@ namespace RestBnb.UnitTests.Controllers
                 Password = password
             };
             const string errorMessage = "Username or password is incorrect";
-            _authServiceMock.Setup(repo => repo.LoginAsync(email, password))
+            _authServiceMock.Setup(authService => authService.LoginAsync(email, password))
                 .ReturnsAsync(new AuthenticationResult { Success = false, Errors = new[] { errorMessage } });
             var controller = new AuthController(_authServiceMock.Object);
 
             var result = await controller.Login(userLoginRequest);
+
+            var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
+            var authFailedResponse = Assert.IsType<AuthFailedResponse>(badRequestObjectResult.Value);
+            Assert.Equal(errorMessage, authFailedResponse.Errors.First());
+        }
+
+        [Fact]
+        public async Task GivenValidTokenAndRefreshToken_WhenRefreshingToken_ThenReturnsAuthSuccessResponse()
+        {
+            const string token = "token";
+            const string refreshToken = "refresh token";
+            var refreshTokenRequest = new RefreshTokenRequest
+            {
+                Token = token,
+                RefreshToken = refreshToken
+            };
+            const string newToken = "new token";
+            const string newRefreshToken = "new refresh token";
+            _authServiceMock.Setup(authService => authService.RefreshTokenAsync(token, refreshToken))
+                .ReturnsAsync(new AuthenticationResult { Success = true, Token = newToken, RefreshToken = newRefreshToken });
+            var controller = new AuthController(_authServiceMock.Object);
+
+            var result = await controller.Refresh(refreshTokenRequest);
+
+            var okObjectResult = Assert.IsType<OkObjectResult>(result);
+            var authSuccessResponse = Assert.IsType<AuthSuccessResponse>(okObjectResult.Value);
+            Assert.Equal(newToken, authSuccessResponse.Token);
+            Assert.Equal(newRefreshToken, authSuccessResponse.RefreshToken);
+        }
+
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("invalidToken", "invalidRefreshToken")]
+        public async Task GivenInvalidTokenAndRefreshToken_WhenRefreshingToken_ThenReturnsBadRequestResponse(string token, string refreshToken)
+        {
+            var refreshTokenRequest = new RefreshTokenRequest
+            {
+                Token = token,
+                RefreshToken = refreshToken
+            };
+            const string errorMessage = "This token is invalid";
+            _authServiceMock.Setup(authService => authService.RefreshTokenAsync(token, refreshToken))
+                .ReturnsAsync(new AuthenticationResult { Success = false, Errors = new[] { errorMessage } });
+            var controller = new AuthController(_authServiceMock.Object);
+
+            var result = await controller.Refresh(refreshTokenRequest);
 
             var badRequestObjectResult = Assert.IsType<BadRequestObjectResult>(result);
             var authFailedResponse = Assert.IsType<AuthFailedResponse>(badRequestObjectResult.Value);
