@@ -21,7 +21,7 @@ namespace RestBnb.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GivenCorrectEmailAndPasswordOfNonExistingUser_WhenRegistering_ThenReturnsAuthSuccessResponse()
+        public async Task GivenValidEmailAndPasswordOfNonExistingUser_WhenRegistering_ThenReturnsAuthSuccessResponse()
         {
             const string email = "email@test.com";
             const string password = "Password1!";
@@ -45,7 +45,7 @@ namespace RestBnb.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GivenCorrectEmailAndPasswordOfAlreadyExistingUser_WhenRegistering_ThenReturnsAuthSuccessResponse()
+        public async Task GivenEmailAndPasswordOfAlreadyExistingUser_WhenRegistering_ThenReturnsAuthSuccessResponse()
         {
             const string email = "email@test.com";
             const string password = "Password1!";
@@ -71,7 +71,7 @@ namespace RestBnb.UnitTests.Controllers
         [InlineData("", "")]
         [InlineData("wrongEmail", "Password1!")]
         [InlineData("test@email.com", "wrongPassword")]
-        public async Task GivenIncorrectEmailAndPassword_WhenRegistering_ThenReturnsBadRequestResponse(string email, string password)
+        public async Task GivenInvalidEmailOrPassword_WhenRegistering_ThenReturnsBadRequestResponse(string email, string password)
         {
             var userRegistrationRequest = new UserRegistrationRequest
             {
@@ -91,7 +91,7 @@ namespace RestBnb.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GivenCorrectEmailAndPasswordOfExistingUser_WhenLoggingIn_ThenReturnsAuthSuccessResponse()
+        public async Task GivenEmailAndPasswordOfExistingUser_WhenLoggingIn_ThenReturnsAuthSuccessResponse()
         {
             const string email = "email@test.com";
             const string password = "Password1!";
@@ -113,7 +113,7 @@ namespace RestBnb.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task GivenCorrectEmailAndPasswordOfNonExistingUser_WhenLoggingIn_ThenReturnsAuthFailedResponse()
+        public async Task GivenValidEmailAndPasswordOfNonExistingUser_WhenLoggingIn_ThenReturnsAuthFailedResponse()
         {
             const string email = "email@test.com";
             const string password = "Password1!";
@@ -138,7 +138,7 @@ namespace RestBnb.UnitTests.Controllers
         [InlineData("", "")]
         [InlineData("wrongEmail", "Password1!")]
         [InlineData("test@email.com", "wrongPassword")]
-        public async Task GivenIncorrectEmailAndPassword_WhenLoggingIn_ThenReturnsBadRequestResponse(string email, string password)
+        public async Task GivenInvalidEmailAndPassword_WhenLoggingIn_ThenReturnsBadRequestResponse(string email, string password)
         {
             var userLoginRequest = new UserLoginRequest
             {

@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+﻿using RestBnb.API.Helpers;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Constants;
 using RestBnb.Core.Entities;
-using RestBnb.Core.Helpers;
-using RestBnb.Core.Options;
-using RestBnb.Infrastructure;
+using RestBnb.Core.Services;
 using RestBnb.Infrastructure.Services;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Services
@@ -21,22 +15,22 @@ namespace RestBnb.API.Services
     public class AuthService : IAuthService
     {
         private readonly IUsersService _userService;
-        private readonly JwtSettings _jwtSettings;
-        private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly DataContext _dataContext;
         private readonly IEmailSender _emailSender;
+        private readonly IAuthenticationServiceHelper _authenticationServiceHelper;
+        private readonly IRefreshTokensService _refreshTokensService;
+        private readonly IStringHasherService _stringHasherService;
 
         public AuthService(
             IUsersService userService,
-            DataContext context,
-            TokenValidationParameters tokenValidationParameters,
-            JwtSettings jwtSettings,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IAuthenticationServiceHelper authenticationServiceHelper,
+            IRefreshTokensService refreshTokensService,
+            IStringHasherService stringHasherService)
         {
             _userService = userService;
-            _dataContext = context;
-            _tokenValidationParameters = tokenValidationParameters;
-            _jwtSettings = jwtSettings;
+            _authenticationServiceHelper = authenticationServiceHelper;
+            _refreshTokensService = refreshTokensService;
+            _stringHasherService = stringHasherService;
             _emailSender = emailSender;
         }
 
@@ -57,7 +51,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            var (hash, salt) = StringHasherHelper.HashStringWithHmacAndSalt(password);
+            var (hash, salt) = _stringHasherService.HashStringWithHmacAndSalt(password);
 
             var newUser = new User
             {
@@ -86,9 +80,9 @@ namespace RestBnb.API.Services
                 };
             }
 
-            var emailSend = await _emailSender.SendEmailAsync(newUser.Email, "Welcome to RestBnb!", "Thank you for signing up.");
+            var emailSent = await _emailSender.SendEmailAsync(newUser.Email, "Welcome to RestBnb!", "Thank you for signing up.");
 
-            if (emailSend.StatusCode != HttpStatusCode.Accepted)
+            if (emailSent.StatusCode != HttpStatusCode.Accepted)
             {
                 return new AuthenticationResult
                 {
@@ -96,7 +90,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            return await GetAuthenticationResultAsync(newUser);
+            return await _authenticationServiceHelper.GetAuthenticationResultAsync(newUser);
         }
 
         /// <summary>
@@ -126,7 +120,7 @@ namespace RestBnb.API.Services
                 };
             }
 
-            return await GetAuthenticationResultAsync(user);
+            return await _authenticationServiceHelper.GetAuthenticationResultAsync(user);
         }
 
         /// <summary>
@@ -136,7 +130,7 @@ namespace RestBnb.API.Services
         /// <param name="refreshToken"></param>
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
-            var validatedToken = GetPrincipalFromToken(token);
+            var validatedToken = _authenticationServiceHelper.GetPrincipalFromToken(token);
 
             if (validatedToken == null)
             {
@@ -158,8 +152,7 @@ namespace RestBnb.API.Services
 
             var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            var storedRefreshToken = await _dataContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
-
+            var storedRefreshToken = await _refreshTokensService.GetRefreshTokenByTokenAsync(refreshToken);
             if (storedRefreshToken == null
                 || DateTime.UtcNow > storedRefreshToken.ExpiryDate
                 || storedRefreshToken.Invalidated
@@ -170,85 +163,12 @@ namespace RestBnb.API.Services
             }
 
             storedRefreshToken.Used = true;
-            _dataContext.RefreshTokens.Update(storedRefreshToken);
-            await _dataContext.SaveChangesAsync();
+            await _refreshTokensService.UpdateRefreshTokenAsync(storedRefreshToken);
 
             var user = await _userService.GetUserByIdAsync(int.Parse(validatedToken.Claims.Single(x => x.Type == "id").Value));
 
-            return await GetAuthenticationResultAsync(user);
-        }
-
-        private async Task<AuthenticationResult> GetAuthenticationResultAsync(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", user.Id.ToString())
-            };
-
-            var userRoles = await _userService.GetRolesAsync(user);
-            if (userRoles != null)
-            {
-                claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role.Name)));
-            }
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
-                SigningCredentials =
-                    new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            var refreshToken = new RefreshToken
-            {
-                JwtId = token.Id,
-                UserId = user.Id,
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(6)
-            };
-
-            await _dataContext.RefreshTokens.AddAsync(refreshToken);
-            await _dataContext.SaveChangesAsync();
-
-            return new AuthenticationResult
-            {
-                Success = true,
-                Token = tokenHandler.WriteToken(token),
-                RefreshToken = refreshToken.Token
-            };
-        }
-
-        private ClaimsPrincipal GetPrincipalFromToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            try
-            {
-                var tokenValidationParameters = _tokenValidationParameters.Clone();
-                tokenValidationParameters.ValidateLifetime = false;
-                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
-
-                return !IsJwtWithValidSecurityAlgorithm(validatedToken) ? null : principal;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken)
-        {
-            return validatedToken is JwtSecurityToken jwtSecurityToken &&
-                   jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                       StringComparison.InvariantCultureIgnoreCase);
+            var response = await _authenticationServiceHelper.GetAuthenticationResultAsync(user);
+            return response;
         }
     }
 }
