@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
-using RestBnb.Core.Helpers;
+using RestBnb.Core.Services;
 using RestBnb.Infrastructure;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +14,18 @@ namespace RestBnb.API.Services
         private readonly DataContext _dataContext;
         private readonly IRolesService _rolesService;
         private readonly UserResolverService _userResolverService;
+        private readonly IStringHasherService _stringHasherService;
 
         public UsersService(
             DataContext dataContext,
             IRolesService rolesService,
-            UserResolverService userResolverService)
+            UserResolverService userResolverService,
+            IStringHasherService stringHasherService)
         {
             _dataContext = dataContext;
             _rolesService = rolesService;
             _userResolverService = userResolverService;
+            _stringHasherService = stringHasherService;
         }
 
         public async Task<bool> CreateUserAsync(User user)
@@ -76,7 +79,7 @@ namespace RestBnb.API.Services
         {
             var user = await GetUserByEmailAsync(email);
 
-            return StringHasherHelper.DoesGivenStringMatchHashedString(
+            return _stringHasherService.DoesGivenStringMatchHashedString(
                 password, user.PasswordHash, user.PasswordSalt);
         }
 
