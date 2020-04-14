@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using RestBnb.API.Application.Properties.Requests;
+using RestBnb.API.Application.Properties.Commands;
 using System;
 
 namespace RestBnb.API.Validators.Properties
 {
-    public class UpdatePropertyRequestValidator : AbstractValidator<UpdatePropertyRequest>
+    public class UpdatePropertyCommandValidator : AbstractValidator<UpdatePropertyCommand>
     {
-        public UpdatePropertyRequestValidator()
+        public UpdatePropertyCommandValidator()
         {
             RuleFor(x => x.AccommodatesNumber).GreaterThan(0);
             RuleFor(x => x.BathroomNumber).GreaterThan(0);

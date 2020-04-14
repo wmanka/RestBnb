@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using RestBnb.API.Extensions;
 using RestBnb.API.Installers;
+using RestBnb.API.Middleware;
 using RestBnb.Core.Constants;
 using RestBnb.Core.Contracts.HealthChecks;
 using System.Linq;
@@ -58,6 +59,7 @@ namespace RestBnb.API
                 }
             });
 
+            app.UseMiddleware(typeof(ErrorHandler));
             app.UseAuthentication();
             app.UseSwagger(Configuration);
             app.UseHttpsRedirection();

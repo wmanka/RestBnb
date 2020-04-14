@@ -2,11 +2,14 @@
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
+using RestBnb.API.Extensions;
 using RestBnb.API.Filters;
 using RestBnb.API.Helpers;
 using RestBnb.API.Services;
@@ -24,7 +27,6 @@ namespace RestBnb.API.Installers
         {
             services.AddMvc(mvcOptions =>
                 {
-                    mvcOptions.Filters.Add<ValidationFilter>();
                     mvcOptions.Filters.Add<LastActiveTrackerFilter>();
                 })
                 .AddFluentValidation(fluentValidationConfiguration =>
@@ -54,7 +56,11 @@ namespace RestBnb.API.Installers
             services.AddTransient<IAuthenticationServiceHelper, AuthenticationServiceHelper>();
             services.AddTransient<IStringHasherService, StringHasherService>();
 
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMediatR(typeof(Startup));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(JwtSettings), jwtSettings);
