@@ -1,9 +1,12 @@
-﻿using System;
+﻿using MediatR;
+using RestBnb.API.Application.Properties.Responses;
+using System;
 
-namespace RestBnb.Core.Contracts.V1.Requests.Properties
+namespace RestBnb.API.Application.Properties.Commands
 {
-    public class PropertyCreateRequest
+    public class UpdatePropertyCommand : IRequest<PropertyResponse>
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
@@ -18,5 +21,10 @@ namespace RestBnb.Core.Contracts.V1.Requests.Properties
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public int CityId { get; set; }
+
+        public UpdatePropertyCommand(int id)
+        {
+            Id = id;
+        }
     }
 }

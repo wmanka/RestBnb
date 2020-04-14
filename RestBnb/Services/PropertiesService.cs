@@ -47,6 +47,7 @@ namespace RestBnb.API.Services
 
         public async Task<bool> UpdatePropertyAsync(Property property)
         {
+            //TODO: Move business validation logic somewhere else (?)
             var userOwnsProperty = await DoesUserOwnPropertyAsync(_userResolverService.GetUserId(), property.Id);
 
             if (!userOwnsProperty)

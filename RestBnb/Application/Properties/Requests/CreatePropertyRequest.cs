@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace RestBnb.Core.Contracts.V1.Responses
+namespace RestBnb.API.Application.Properties.Requests
 {
-    public class PropertyResponse
+    public class CreatePropertyRequest
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }

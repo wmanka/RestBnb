@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +12,7 @@ using RestBnb.API.Helpers;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Options;
+using RestBnb.Core.Services;
 using RestBnb.Infrastructure.Services;
 using System.Text;
 
@@ -50,6 +52,9 @@ namespace RestBnb.API.Installers
             services.AddTransient<UserResolverService>();
             services.AddTransient<ICountriesConverterService, CountriesConverterService>();
             services.AddTransient<IAuthenticationServiceHelper, AuthenticationServiceHelper>();
+            services.AddTransient<IStringHasherService, StringHasherService>();
+
+            services.AddMediatR(typeof(Startup));
 
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(JwtSettings), jwtSettings);

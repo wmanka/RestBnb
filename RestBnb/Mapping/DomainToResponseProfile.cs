@@ -8,7 +8,6 @@ namespace RestBnb.API.Mapping
     {
         public DomainToResponseProfile()
         {
-            CreateMap<Property, PropertyResponse>();
             CreateMap<Booking, BookingResponse>();
             CreateMap<User, UserResponse>();
         }

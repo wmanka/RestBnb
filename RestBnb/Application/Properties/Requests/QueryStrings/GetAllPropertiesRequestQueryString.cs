@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace RestBnb.Core.Contracts.V1.Requests.Queries
+namespace RestBnb.API.Application.Properties.Requests.QueryStrings
 {
-    public class GetAllPropertiesQuery
+    public class GetAllPropertiesRequestQueryString
     {
         [FromQuery(Name = "maxPricePerNight")]
         public decimal MaxPricePerNight { get; set; }
