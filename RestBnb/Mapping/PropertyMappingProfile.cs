@@ -7,9 +7,9 @@ using RestBnb.Core.Entities;
 
 namespace RestBnb.API.Mapping
 {
-    public class PropertyMapping : Profile
+    public class PropertyMappingProfile : Profile
     {
-        public PropertyMapping()
+        public PropertyMappingProfile()
         {
             CreateMap<CreatePropertyRequest, CreatePropertyCommand>();
             CreateMap<UpdatePropertyRequest, UpdatePropertyCommand>();

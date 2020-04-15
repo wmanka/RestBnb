@@ -59,7 +59,7 @@ namespace RestBnb.API
                 }
             });
 
-            app.UseMiddleware(typeof(ErrorHandler));
+            app.UseMiddleware(typeof(ExceptionHandler));
             app.UseAuthentication();
             app.UseSwagger(Configuration);
             app.UseHttpsRedirection();

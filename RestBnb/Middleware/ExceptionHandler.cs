@@ -1,18 +1,17 @@
-﻿using System;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using RestBnb.API.Extensions;
 
 namespace RestBnb.API.Middleware
 {
-    public class ErrorHandler
+    public class ExceptionHandler
     {
         private readonly RequestDelegate _next;
-        public ErrorHandler(RequestDelegate next)
+        public ExceptionHandler(RequestDelegate next)
         {
             _next = next;
         }
@@ -37,13 +36,7 @@ namespace RestBnb.API.Middleware
             if (ex is ValidationException exception)
             {
                 code = HttpStatusCode.BadRequest;
-                var errorResponse = new ErrorR();
-
-                foreach (var error in exception.Errors)
-                {
-                    errorResponse.Errors.Add(
-                        new ErrorM { Field = error.PropertyName, Message = error.ErrorMessage });
-                }
+                var errorResponse = GetErrorResponse(exception);
 
                 result = JsonConvert.SerializeObject(errorResponse);
             }
@@ -52,6 +45,19 @@ namespace RestBnb.API.Middleware
             context.Response.ContentType = MediaTypeNames.Application.Json;
             context.Response.StatusCode = (int)code;
             return context.Response.WriteAsync(result);
+        }
+
+        private static ErrorR GetErrorResponse(ValidationException exception)
+        {
+            var errorResponse = new ErrorR();
+
+            foreach (var error in exception.Errors)
+            {
+                errorResponse.Errors.Add(
+                    new ErrorM {Field = error.PropertyName, Message = error.ErrorMessage});
+            }
+
+            return errorResponse;
         }
     }
 }

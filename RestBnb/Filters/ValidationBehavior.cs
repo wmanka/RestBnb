@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RestBnb.API.Extensions
+namespace RestBnb.API.Filters
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
@@ -21,13 +21,14 @@ namespace RestBnb.API.Extensions
         {
             var context = new ValidationContext(request);
 
-            var errors = _validators
+            var failures = _validators
                 .Select(v => v.Validate(context))
                 .SelectMany(result => result.Errors)
                 .Where(f => f != null)
                 .ToList();
 
-            return !errors.Any() ? next() : throw new ValidationException(errors);
+            //TODO: Return some base response object instead of throwing exception (?)
+            return !failures.Any() ? next() : throw new ValidationException(failures);
         }
     }
 }
