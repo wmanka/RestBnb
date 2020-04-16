@@ -27,7 +27,6 @@ namespace RestBnb.API.Filters
                 .Where(f => f != null)
                 .ToList();
 
-            //TODO: Return some base response object instead of throwing exception (?)
             return !failures.Any() ? next() : throw new ValidationException(failures);
         }
     }

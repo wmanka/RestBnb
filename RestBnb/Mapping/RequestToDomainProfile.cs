@@ -10,9 +10,9 @@ namespace RestBnb.API.Mapping
     {
         public RequestToDomainProfile()
         {
-            CreateMap<BookingCreateRequest, Booking>();
-            CreateMap<BookingUpdateRequest, Booking>();
-            CreateMap<GetAllBookingsQuery, GetAllBookingsFilter>();
+            CreateMap<CreateBookingRequest, Booking>();
+            CreateMap<UpdateBookingRequest, Booking>();
+            CreateMap<GetAllBookingsRequestQueryString, GetAllBookingsFilter>();
 
             CreateMap<UserUpdateRequest, User>();
         }

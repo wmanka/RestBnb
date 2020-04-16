@@ -3,7 +3,7 @@ using System;
 
 namespace RestBnb.Core.Contracts.V1.Requests.Queries
 {
-    public class GetAllBookingsQuery
+    public class GetAllBookingsRequestQueryString
     {
         public DateTime? CheckInDate { get; set; }
         public DateTime? CheckOutDate { get; set; }

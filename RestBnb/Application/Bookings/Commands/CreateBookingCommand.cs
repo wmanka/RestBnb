@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MediatR;
+using RestBnb.Core.Contracts.V1.Responses;
+using System;
 
-namespace RestBnb.Core.Contracts.V1.Requests.Bookings
+namespace RestBnb.API.Application.Bookings.Commands
 {
-    public class BookingCreateRequest
+    public class CreateBookingCommand : IRequest<BookingResponse>
     {
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
