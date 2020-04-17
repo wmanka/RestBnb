@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using RestBnb.API.Application.Properties.Commands;
+using RestBnb.API.Application.Properties.Responses;
 using RestBnb.API.Services.Interfaces;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Application.Properties.Handlers
 {
-    public class DeletePropertyHandler : IRequestHandler<DeletePropertyCommand>
+    public class DeletePropertyHandler : IRequestHandler<DeletePropertyCommand, PropertyResponse>
     {
         private readonly IPropertiesService _propertiesService;
 
@@ -16,11 +17,11 @@ namespace RestBnb.API.Application.Properties.Handlers
             _propertiesService = propertiesService;
         }
 
-        public async Task<Unit> Handle(DeletePropertyCommand request, CancellationToken cancellationToken)
+        public async Task<PropertyResponse> Handle(DeletePropertyCommand request, CancellationToken cancellationToken)
         {
             await _propertiesService.DeletePropertyAsync(request.Id);
 
-            return Unit.Value;
+            return null;
         }
     }
 }

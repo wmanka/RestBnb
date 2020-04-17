@@ -23,5 +23,7 @@ namespace RestBnb.API.Services.Interfaces
         Task<bool> AddToRoleAsync(User user, string roleName);
 
         Task<IEnumerable<Role>> GetRolesAsync(User user);
+
+        bool IsCurrentlyLoggedIn(int userId);
     }
 }

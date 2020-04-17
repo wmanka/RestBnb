@@ -92,6 +92,11 @@ namespace RestBnb.API.Services
                 .ToListAsync();
         }
 
+        public bool IsCurrentlyLoggedIn(int userId)
+        {
+            return _userResolverService.GetUserId() == userId;
+        }
+
         public async Task<bool> AddToRoleAsync(User user, string roleName)
         {
             var roleInDatabase = await _rolesService.GetRoleByNameAsync(roleName);

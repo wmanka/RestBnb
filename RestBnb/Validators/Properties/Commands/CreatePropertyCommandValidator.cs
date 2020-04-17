@@ -2,7 +2,7 @@
 using RestBnb.API.Application.Properties.Commands;
 using System;
 
-namespace RestBnb.API.Validators.Properties
+namespace RestBnb.API.Validators.Properties.Commands
 {
     public class CreatePropertyCommandValidator : AbstractValidator<CreatePropertyCommand>
     {
