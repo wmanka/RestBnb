@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using RestBnb.Core.Constants;
 using RestBnb.Core.Contracts.V1.Requests.Auth;
 
 namespace RestBnb.API.Validators.Auth

@@ -1,4 +1,4 @@
-﻿namespace RestBnb.API.Validators
+﻿namespace RestBnb.Core.Constants
 {
     public static class RegexPatterns
     {

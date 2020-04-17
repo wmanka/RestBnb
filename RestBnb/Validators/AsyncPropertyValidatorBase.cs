@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Validators
 {
-    public abstract class PropertyValidatorAsyncBase : PropertyValidator
+    public abstract class AsyncPropertyValidatorBase : PropertyValidator
     {
         public override bool ShouldValidateAsync(ValidationContext context)
         {
             return context.IsAsync() || Options.AsyncCondition != null;
         }
 
-        protected PropertyValidatorAsyncBase(string errorMessage) : base(errorMessage) { }
+        protected AsyncPropertyValidatorBase(string errorMessage) : base(errorMessage) { }
 
         protected override bool IsValid(PropertyValidatorContext context)
         {

@@ -1,13 +1,15 @@
 ﻿using FluentValidation.Validators;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RestBnb.API.Services.Interfaces;
+using RestBnb.Core.Contracts.V1.Responses;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Validators.Bookings
 {
-    public class MustExist<T> : PropertyValidatorAsyncBase where T : class
+    public class MustExist<T> : AsyncPropertyValidatorBase where T : IRequest<BookingResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 

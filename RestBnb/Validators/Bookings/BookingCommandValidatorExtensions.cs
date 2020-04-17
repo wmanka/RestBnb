@@ -14,7 +14,7 @@ namespace RestBnb.API.Validators.Bookings
         }
 
         public static IRuleBuilderOptions<T, TElement> MustExist<T, TElement>(this IRuleBuilder<T, TElement> ruleBuilder, IServiceProvider serviceProvider)
-            where TElement : class
+            where TElement : IRequest<BookingResponse>
         {
             return ruleBuilder.SetValidator(new MustExist<TElement>(serviceProvider));
         }

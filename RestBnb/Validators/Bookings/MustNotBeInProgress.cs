@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Validators.Bookings
 {
-    public class MustNotBeInProgress<T> : PropertyValidatorAsyncBase where T : IRequest<BookingResponse>
+    public class MustNotBeInProgress<T> : AsyncPropertyValidatorBase where T : IRequest<BookingResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 

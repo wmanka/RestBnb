@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Validators.Bookings
 {
-    public class MustBeOwnedByCurrentUser<T> : PropertyValidatorAsyncBase where T : IRequest<BookingResponse>
+    public class MustBeOwnedByCurrentUser<T> : AsyncPropertyValidatorBase where T : IRequest<BookingResponse>
     {
         private readonly IServiceProvider _serviceProvider;
 
