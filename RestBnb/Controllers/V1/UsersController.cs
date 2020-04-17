@@ -11,25 +11,15 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
-    [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
-
-        public UsersController(
-            IMapper mapper,
-            IMediator mediator)
-        {
-            _mapper = mapper;
-            _mediator = mediator;
-        }
+        public UsersController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
 
         [HttpGet(ApiRoutes.Users.Get)]
         public async Task<IActionResult> Get(int userId)
         {
-            var result = await _mediator.Send(new GetUserByIdQuery(userId));
+            var result = await Mediator.Send(new GetUserByIdQuery(userId));
 
             return Ok(result);
         }
@@ -37,7 +27,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpPut(ApiRoutes.Users.Update)]
         public async Task<IActionResult> Update(int userId, UpdateUserRequest request)
         {
-            var response = await _mediator.Send(_mapper.Map(request, new UpdateUserCommand(userId)));
+            var response = await Mediator.Send(Mapper.Map(request, new UpdateUserCommand(userId)));
 
             return Ok(response);
         }
@@ -45,7 +35,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpDelete(ApiRoutes.Users.Delete)]
         public async Task<IActionResult> Delete(int userId)
         {
-            await _mediator.Send(new DeleteUserCommand(userId));
+            await Mediator.Send(new DeleteUserCommand(userId));
 
             return NoContent();
         }

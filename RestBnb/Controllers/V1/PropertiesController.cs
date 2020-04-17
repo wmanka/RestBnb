@@ -13,24 +13,14 @@ using System.Threading.Tasks;
 namespace RestBnb.API.Controllers.V1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ApiController]
-    public class PropertiesController : ControllerBase
+    public class PropertiesController : BaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
-
-        public PropertiesController(
-            IMapper mapper,
-            IMediator mediator)
-        {
-            _mapper = mapper;
-            _mediator = mediator;
-        }
+        public PropertiesController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
 
         [HttpPost(ApiRoutes.Properties.Create)]
         public async Task<IActionResult> Create(CreatePropertyRequest createPropertyRequest)
         {
-            var response = await _mediator.Send(_mapper.Map<CreatePropertyCommand>(createPropertyRequest));
+            var response = await Mediator.Send(Mapper.Map<CreatePropertyCommand>(createPropertyRequest));
 
             return Created(
                 ApiRoutes.Properties.Get.Replace("{propertyId}",
@@ -40,7 +30,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpGet(ApiRoutes.Properties.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllPropertiesRequestQueryString requestQueryString)
         {
-            var response = await _mediator.Send(new GetAllPropertiesQuery(requestQueryString));
+            var response = await Mediator.Send(new GetAllPropertiesQuery(requestQueryString));
 
             return Ok(response);
         }
@@ -48,7 +38,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpGet(ApiRoutes.Properties.Get)]
         public async Task<IActionResult> GetById(int propertyId)
         {
-            var response = await _mediator.Send(new GetPropertyByIdQuery(propertyId));
+            var response = await Mediator.Send(new GetPropertyByIdQuery(propertyId));
 
             return Ok(response);
         }
@@ -56,7 +46,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpDelete(ApiRoutes.Properties.Delete)]
         public async Task<IActionResult> Delete(int propertyId)
         {
-            await _mediator.Send(new DeletePropertyCommand(propertyId));
+            await Mediator.Send(new DeletePropertyCommand(propertyId));
 
             return NoContent();
         }
@@ -64,7 +54,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpPut(ApiRoutes.Properties.Update)]
         public async Task<IActionResult> Update(int propertyId, UpdatePropertyRequest request)
         {
-            var response = await _mediator.Send(_mapper.Map(request, new UpdatePropertyCommand(propertyId)));
+            var response = await Mediator.Send(Mapper.Map(request, new UpdatePropertyCommand(propertyId)));
 
             return Ok(response);
         }

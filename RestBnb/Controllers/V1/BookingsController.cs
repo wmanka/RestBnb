@@ -14,34 +14,24 @@ using System.Threading.Tasks;
 namespace RestBnb.API.Controllers.V1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ApiController]
-    public class BookingsController : ControllerBase
+    public class BookingsController : BaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IMediator _mediator;
-
-        public BookingsController(
-            IMapper mapper,
-            IMediator mediator)
-        {
-            _mapper = mapper;
-            _mediator = mediator;
-        }
+        public BookingsController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
 
         [HttpPost(ApiRoutes.Bookings.Create)]
         public async Task<IActionResult> Create(CreateBookingRequest createBookingRequest)
         {
-            var response = await _mediator.Send(_mapper.Map<CreateBookingCommand>(createBookingRequest));
+            var response = await Mediator.Send(Mapper.Map<CreateBookingCommand>(createBookingRequest));
 
             return Created(
                 ApiRoutes.Bookings.Get.Replace("{bookingId}", response.Id.ToString()),
-                _mapper.Map<BookingResponse>(response));
+                Mapper.Map<BookingResponse>(response));
         }
 
         [HttpGet(ApiRoutes.Bookings.GetAll)]
         public async Task<IActionResult> GetAll([FromQuery] GetAllBookingsRequestQueryString requestQueryString)
         {
-            var response = await _mediator.Send(new GetAllBookingsQuery(requestQueryString));
+            var response = await Mediator.Send(new GetAllBookingsQuery(requestQueryString));
 
             return Ok(response);
         }
@@ -49,14 +39,14 @@ namespace RestBnb.API.Controllers.V1
         [HttpGet(ApiRoutes.Bookings.Get)]
         public async Task<IActionResult> Get(int bookingId)
         {
-            var response = await _mediator.Send(new GetBookingByIdQuery(bookingId));
+            var response = await Mediator.Send(new GetBookingByIdQuery(bookingId));
             return Ok(response);
         }
 
         [HttpDelete(ApiRoutes.Bookings.Delete)]
         public async Task<IActionResult> Delete(int bookingId)
         {
-            await _mediator.Send(new DeleteBookingCommand(bookingId));
+            await Mediator.Send(new DeleteBookingCommand(bookingId));
 
             return NoContent();
         }
@@ -64,7 +54,7 @@ namespace RestBnb.API.Controllers.V1
         [HttpPut(ApiRoutes.Bookings.Update)]
         public async Task<IActionResult> Update(int bookingId, UpdateBookingRequest request)
         {
-            var response = await _mediator.Send(_mapper.Map(request, new UpdateBookingCommand(bookingId)));
+            var response = await Mediator.Send(Mapper.Map(request, new UpdateBookingCommand(bookingId)));
 
             return Ok(response);
         }
