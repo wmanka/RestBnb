@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace RestBnb.Core.Contracts.V1.Requests.Users
+namespace RestBnb.API.Application.Users.Responses
 {
-    public class UserUpdateRequest
+    public class UserResponse
     {
         public string Email { get; set; }
         public string FirstName { get; set; }

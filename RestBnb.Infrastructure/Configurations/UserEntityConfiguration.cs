@@ -9,7 +9,7 @@ namespace RestBnb.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             // .IgnoreQueryFilters() to disable
-            builder.HasQueryFilter(p => !p.IsDeleted);
+            //builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

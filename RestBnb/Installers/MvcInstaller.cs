@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Converters;
-using RestBnb.API.Extensions;
 using RestBnb.API.Filters;
 using RestBnb.API.Helpers;
 using RestBnb.API.Services;

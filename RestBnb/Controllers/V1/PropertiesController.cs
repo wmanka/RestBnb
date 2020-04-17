@@ -61,7 +61,7 @@ namespace RestBnb.API.Controllers.V1
             return NoContent();
         }
 
-        [HttpPut(ApiRoutes.Properties.Put)]
+        [HttpPut(ApiRoutes.Properties.Update)]
         public async Task<IActionResult> Update(int propertyId, UpdatePropertyRequest request)
         {
             var response = await _mediator.Send(_mapper.Map(request, new UpdatePropertyCommand(propertyId)));

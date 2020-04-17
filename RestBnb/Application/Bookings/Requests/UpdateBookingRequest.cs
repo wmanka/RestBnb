@@ -1,7 +1,7 @@
 ﻿using RestBnb.Core.Enums;
 using System;
 
-namespace RestBnb.Core.Contracts.V1.Requests.Bookings
+namespace RestBnb.API.Application.Bookings.Requests
 {
     public class UpdateBookingRequest
     {

@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Bookings.Commands;
 using RestBnb.API.Application.Bookings.Queries;
-using RestBnb.API.Services.Interfaces;
+using RestBnb.API.Application.Bookings.Requests;
 using RestBnb.Core.Constants;
-using RestBnb.Core.Contracts.V1.Requests.Bookings;
 using RestBnb.Core.Contracts.V1.Requests.Queries;
 using RestBnb.Core.Contracts.V1.Responses;
 using System.Threading.Tasks;
@@ -19,14 +18,12 @@ namespace RestBnb.API.Controllers.V1
     public class BookingsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly IBookingsService _bookingsService;
         private readonly IMediator _mediator;
 
         public BookingsController(
-            IBookingsService bookingsService,
-            IMapper mapper, IMediator mediator)
+            IMapper mapper,
+            IMediator mediator)
         {
-            _bookingsService = bookingsService;
             _mapper = mapper;
             _mediator = mediator;
         }
@@ -64,7 +61,7 @@ namespace RestBnb.API.Controllers.V1
             return NoContent();
         }
 
-        [HttpPut(ApiRoutes.Bookings.Put)]
+        [HttpPut(ApiRoutes.Bookings.Update)]
         public async Task<IActionResult> Update(int bookingId, UpdateBookingRequest request)
         {
             var response = await _mediator.Send(_mapper.Map(request, new UpdateBookingCommand(bookingId)));
