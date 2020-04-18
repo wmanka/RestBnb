@@ -24,24 +24,6 @@ namespace RestBnb.API.Services
             return created > 0;
         }
 
-        public async Task<bool> DeleteRoleAsync(int roleId)
-        {
-            var role = await GetRoleByIdAsync(roleId);
-
-            if (role == null)
-                return false;
-
-            _dataContext.Roles.Remove(role);
-            var removed = await _dataContext.SaveChangesAsync();
-
-            return removed > 0;
-        }
-
-        public async Task<Role> GetRoleByIdAsync(int roleId)
-        {
-            return await _dataContext.Roles.SingleOrDefaultAsync(x => x.Id == roleId);
-        }
-
         public async Task<Role> GetRoleByNameAsync(string name)
         {
             return await _dataContext.Roles.SingleOrDefaultAsync(x => x.Name == name);
@@ -50,14 +32,6 @@ namespace RestBnb.API.Services
         public async Task<List<Role>> GetRolesAsync()
         {
             return await _dataContext.Roles.ToListAsync();
-        }
-
-        public async Task<bool> UpdateRoleAsync(Role roleToUpdate)
-        {
-            _dataContext.Roles.Update(roleToUpdate);
-
-            var updated = await _dataContext.SaveChangesAsync();
-            return updated > 0;
         }
     }
 }

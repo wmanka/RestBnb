@@ -11,11 +11,5 @@ namespace RestBnb.API.Services.Interfaces
         Task<bool> CreateRoleAsync(Role role);
 
         Task<Role> GetRoleByNameAsync(string name);
-
-        Task<Role> GetRoleByIdAsync(int roleId);
-
-        Task<bool> UpdateRoleAsync(Role roleToUpdate);
-
-        Task<bool> DeleteRoleAsync(int roleId);
     }
 }

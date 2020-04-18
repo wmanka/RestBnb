@@ -47,14 +47,14 @@ namespace RestBnb.API.Middleware
             return context.Response.WriteAsync(result);
         }
 
-        private static ErrorR GetErrorResponse(ValidationException exception)
+        private static ErrorResponse GetErrorResponse(ValidationException exception)
         {
-            var errorResponse = new ErrorR();
+            var errorResponse = new ErrorResponse();
 
             foreach (var error in exception.Errors)
             {
                 errorResponse.Errors.Add(
-                    new ErrorM {Field = error.PropertyName, Message = error.ErrorMessage});
+                    new ErrorModel { Field = error.PropertyName, Message = error.ErrorMessage });
             }
 
             return errorResponse;
