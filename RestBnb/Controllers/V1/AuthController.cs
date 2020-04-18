@@ -1,80 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RestBnb.API.Services.Interfaces;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using RestBnb.API.Application.Auth.Commands;
 using RestBnb.Core.Constants;
 using RestBnb.Core.Contracts.V1.Requests.Auth;
-using RestBnb.Core.Contracts.V1.Responses;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
+        public AuthController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
 
         [HttpPost(ApiRoutes.Auth.Register)]
         public async Task<IActionResult> Register(UserRegistrationRequest request)
         {
-            var authResponse = await _authService.RegisterAsync(request.Email, request.Password);
+            var response = await Mediator.Send(new UserRegistrationCommand(request.Email, request.Password));
 
-            if (!authResponse.Success)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authResponse.Errors
-                });
-            }
-
-            return Ok(new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                RefreshToken = authResponse.RefreshToken
-            });
+            return Ok(response);
         }
 
         [HttpPost(ApiRoutes.Auth.Login)]
         public async Task<IActionResult> Login(UserLoginRequest request)
         {
-            var authResponse = await _authService.LoginAsync(request.Email, request.Password);
+            var response = await Mediator.Send(new UserLoginCommand(request.Email, request.Password));
 
-            if (!authResponse.Success)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authResponse.Errors
-                });
-            }
-
-            return Ok(new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                RefreshToken = authResponse.RefreshToken
-            });
+            return Ok(response);
         }
 
         [HttpPost(ApiRoutes.Auth.Refresh)]
         public async Task<IActionResult> Refresh(RefreshTokenRequest request)
         {
-            var authResponse = await _authService.RefreshTokenAsync(request.Token, request.RefreshToken);
+            var response = await Mediator.Send(new RefreshTokenCommand(request.Token, request.RefreshToken));
 
-            if (!authResponse.Success)
-            {
-                return BadRequest(new AuthFailedResponse
-                {
-                    Errors = authResponse.Errors
-                });
-            }
-
-            return Ok(new AuthSuccessResponse
-            {
-                Token = authResponse.Token,
-                RefreshToken = authResponse.RefreshToken
-            });
+            return Ok(response);
         }
     }
 }

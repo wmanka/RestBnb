@@ -31,7 +31,7 @@ namespace RestBnb.API.Helpers
             _refreshTokensService = refreshTokensService;
         }
 
-        public async Task<AuthenticationResult> GetAuthenticationResultAsync(User user)
+        public async Task<AuthResponse> GetAuthenticationResultAsync(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
@@ -71,9 +71,8 @@ namespace RestBnb.API.Helpers
 
             await _refreshTokensService.CreateRefreshTokenAsync(refreshToken);
 
-            return new AuthenticationResult
+            return new AuthResponse
             {
-                Success = true,
                 Token = tokenHandler.WriteToken(token),
                 RefreshToken = refreshToken.Token
             };
