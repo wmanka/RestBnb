@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using RestBnb.API.Application.Auth.Commands;
+using RestBnb.API.Application.Auth.Responses;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 

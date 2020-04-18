@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using RestBnb.API.Application.Auth.Responses;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Entities;
 using RestBnb.Core.Options;

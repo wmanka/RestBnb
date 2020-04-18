@@ -1,4 +1,5 @@
-﻿using RestBnb.API.Helpers;
+﻿using RestBnb.API.Application.Auth.Responses;
+using RestBnb.API.Helpers;
 using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Constants;
 using RestBnb.Core.Entities;

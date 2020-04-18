@@ -1,4 +1,4 @@
-﻿namespace RestBnb.Core.Contracts.HealthChecks
+﻿namespace RestBnb.API.Application.HealthChecks
 {
     public class HealthCheck
     {

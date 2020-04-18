@@ -1,4 +1,4 @@
-﻿namespace RestBnb.Core.Contracts.V1.Requests.Auth
+﻿namespace RestBnb.API.Application.Auth.Requests
 {
     public class UserRegistrationRequest
     {

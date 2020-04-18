@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Auth.Commands;
+using RestBnb.API.Application.Auth.Requests;
 using RestBnb.Core.Constants;
-using RestBnb.Core.Contracts.V1.Requests.Auth;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using RestBnb.Core.Entities;
+using RestBnb.API.Application.Auth.Responses;
 
 namespace RestBnb.API.Application.Auth.Commands
 {

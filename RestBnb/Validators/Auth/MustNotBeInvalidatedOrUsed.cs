@@ -1,9 +1,9 @@
 ﻿using FluentValidation.Validators;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using RestBnb.API.Application.Auth.Responses;
 using RestBnb.API.Helpers;
 using RestBnb.API.Services.Interfaces;
-using RestBnb.Core.Entities;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿using RestBnb.Core.Entities;
+﻿using RestBnb.API.Application.Auth.Responses;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Services.Interfaces

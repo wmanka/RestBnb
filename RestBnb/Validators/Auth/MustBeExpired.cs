@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
+using RestBnb.API.Application.Auth.Responses;
 using RestBnb.API.Helpers;
-using RestBnb.Core.Entities;
 using System;
 using System.Linq;
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using RestBnb.Core.Entities;
+using RestBnb.API.Application.Auth.Responses;
 using System;
 
 namespace RestBnb.API.Validators.Auth
