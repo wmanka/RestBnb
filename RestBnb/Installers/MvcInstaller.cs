@@ -35,6 +35,17 @@ namespace RestBnb.API.Installers
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services
                 .AddControllersWithViews()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
