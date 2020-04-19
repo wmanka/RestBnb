@@ -18,8 +18,7 @@
             public const string GetAll = Base + "/properties";
             public const string Create = Base + "/properties";
             public const string Get = Base + "/properties/{propertyId}";
-            public const string Put = Base + "/properties/{propertyId}";
-            public const string Patch = Base + "/properties/{propertyId}";
+            public const string Update = Base + "/properties/{propertyId}";
             public const string Delete = Base + "/properties/{propertyId}";
         }
 
@@ -28,15 +27,14 @@
             public const string GetAll = Base + "/bookings";
             public const string Create = Base + "/bookings";
             public const string Get = Base + "/bookings/{bookingId}";
-            public const string Put = Base + "/bookings/{bookingId}";
-            public const string Patch = Base + "/bookings/{bookingId}";
+            public const string Update = Base + "/bookings/{bookingId}";
             public const string Delete = Base + "/bookings/{bookingId}";
-        }        
-        
+        }
+
         public static class Users
         {
             public const string Get = Base + "/users/{userId}";
-            public const string Patch = Base + "/users/{userId}";
+            public const string Update = Base + "/users/{userId}";
             public const string Delete = Base + "/users/{userId}";
         }
 

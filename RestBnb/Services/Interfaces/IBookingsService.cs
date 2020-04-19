@@ -1,4 +1,5 @@
 ﻿using RestBnb.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +16,11 @@ namespace RestBnb.API.Services.Interfaces
         Task<bool> UpdateBookingAsync(Booking booking);
 
         Task<bool> DeleteBookingAsync(int bookingId);
+
+        Task<bool> IsPropertyAvailableWithinDateRangeAsync(int propertyId, DateTime checkInDate, DateTime checkOutDate, int bookingId = default);
+
+        Task<bool> DoesUserOwnBookingAsync(int userId, int bookingId);
+
+        Task<bool> IsBookingInProgressAsync(int bookingId);
     }
 }

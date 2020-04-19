@@ -15,5 +15,7 @@ namespace RestBnb.API.Services.Interfaces
         Task<bool> UpdatePropertyAsync(Property property);
 
         Task<bool> DeletePropertyAsync(int propertyId);
+
+        public Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId);
     }
 }

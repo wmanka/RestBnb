@@ -1,4 +1,5 @@
 ﻿using Moq;
+using RestBnb.API.Application.Auth.Responses;
 using RestBnb.API.Helpers;
 using RestBnb.API.Services;
 using RestBnb.API.Services.Interfaces;
@@ -39,9 +40,8 @@ namespace RestBnb.UnitTests.Services
             const string refreshToken = "refresh token";
             var hash = Encoding.ASCII.GetBytes(password);
             var salt = Encoding.ASCII.GetBytes("salt");
-            var authenticationResult = new AuthenticationResult
+            var authenticationResult = new AuthResponse
             {
-                Success = true,
                 Token = token,
                 RefreshToken = refreshToken
             };
@@ -68,9 +68,9 @@ namespace RestBnb.UnitTests.Services
 
             var result = await authService.RegisterAsync(email, password);
 
-            Assert.IsAssignableFrom<AuthenticationResult>(result);
-            Assert.True(result.Success);
-            Assert.Null(result.Errors);
+            Assert.IsAssignableFrom<AuthResponse>(result);
+            Assert.Equal(token, result.Token);
+            Assert.Equal(refreshToken, result.RefreshToken);
         }
     }
 }

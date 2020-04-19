@@ -1,115 +1,62 @@
 ﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using RestBnb.API.Services.Interfaces;
+using RestBnb.API.Application.Properties.Commands;
+using RestBnb.API.Application.Properties.Queries;
+using RestBnb.API.Application.Properties.Requests;
+using RestBnb.API.Application.Properties.Requests.QueryStrings;
 using RestBnb.Core.Constants;
-using RestBnb.Core.Contracts.V1.Requests.Properties;
-using RestBnb.Core.Contracts.V1.Requests.Queries;
-using RestBnb.Core.Contracts.V1.Responses;
-using RestBnb.Core.Entities;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [ApiController]
-    public class PropertiesController : ControllerBase
+    public class PropertiesController : BaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IPropertiesService _propertiesService;
-
-        public PropertiesController(
-            IPropertiesService propertiesService,
-            IMapper mapper)
-        {
-            _propertiesService = propertiesService;
-            _mapper = mapper;
-        }
+        public PropertiesController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
 
         [HttpPost(ApiRoutes.Properties.Create)]
-        public async Task<IActionResult> Create(PropertyCreateRequest propertyCreateRequest)
+        public async Task<IActionResult> Create(CreatePropertyRequest createPropertyRequest)
         {
-            var property = _mapper.Map<Property>(propertyCreateRequest);
-
-            if (!await _propertiesService.CreatePropertyAsync(property))
-            {
-                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not create new property" } } });
-            }
+            var response = await Mediator.Send(Mapper.Map<CreatePropertyCommand>(createPropertyRequest));
 
             return Created(
-                ApiRoutes.Properties.Get.Replace("{propertyId}", property.Id.ToString()),
-                _mapper.Map<PropertyResponse>(property));
+                ApiRoutes.Properties.Get.Replace("{propertyId}",
+                response.Id.ToString()), response);
         }
 
         [HttpGet(ApiRoutes.Properties.GetAll)]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllPropertiesQuery query)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllPropertiesRequestQueryString requestQueryString)
         {
-            var filter = _mapper.Map<GetAllPropertiesFilter>(query);
+            var response = await Mediator.Send(new GetAllPropertiesQuery(requestQueryString));
 
-            var properties = await _propertiesService.GetAllPropertiesAsync(filter);
-
-            return Ok(_mapper.Map<IEnumerable<PropertyResponse>>(properties));
+            return Ok(response);
         }
 
         [HttpGet(ApiRoutes.Properties.Get)]
-        public async Task<IActionResult> Get(int propertyId)
+        public async Task<IActionResult> GetById(int propertyId)
         {
-            var property = await _propertiesService.GetPropertyByIdAsync(propertyId);
+            var response = await Mediator.Send(new GetPropertyByIdQuery(propertyId));
 
-            return Ok(_mapper.Map<PropertyResponse>(property));
+            return Ok(response);
         }
 
         [HttpDelete(ApiRoutes.Properties.Delete)]
         public async Task<IActionResult> Delete(int propertyId)
         {
-            var deleted = await _propertiesService.DeletePropertyAsync(propertyId);
+            await Mediator.Send(new DeletePropertyCommand(propertyId));
 
-            if (deleted)
-                return NoContent();
-
-            return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not delete property" } } });
+            return NoContent();
         }
 
-        [HttpPut(ApiRoutes.Properties.Put)]
-        public async Task<IActionResult> Put(int propertyId, PropertyUpdateRequest request)
+        [HttpPut(ApiRoutes.Properties.Update)]
+        public async Task<IActionResult> Update(int propertyId, UpdatePropertyRequest request)
         {
-            var property = await _propertiesService.GetPropertyByIdAsync(propertyId);
+            var response = await Mediator.Send(Mapper.Map(request, new UpdatePropertyCommand(propertyId)));
 
-            if (property == null)
-                return NotFound();
-
-            _mapper.Map(request, property);
-
-            if (!await _propertiesService.UpdatePropertyAsync(property))
-            {
-                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not patch property" } } });
-            }
-
-            return Ok(_mapper.Map<PropertyResponse>(property));
-        }
-
-        [HttpPatch(ApiRoutes.Properties.Patch)]
-        public async Task<IActionResult> Patch(int propertyId, JsonPatchDocument<PropertyUpdateRequest> patchRequest)
-        {
-            var property = await _propertiesService.GetPropertyByIdAsync(propertyId);
-
-            if (property == null)
-                return NotFound();
-
-            var propertyMappedToRequest = _mapper.Map<Property, PropertyUpdateRequest>(property);
-
-            patchRequest.ApplyTo(propertyMappedToRequest);
-            _mapper.Map(propertyMappedToRequest, property);
-
-            if (!await _propertiesService.UpdatePropertyAsync(property))
-            {
-                return BadRequest(new ErrorResponse { Errors = new List<ErrorModel> { new ErrorModel { Message = "Could not patch property" } } });
-            }
-
-            return Ok(_mapper.Map<Property, PropertyResponse>(property));
+            return Ok(response);
         }
     }
 }

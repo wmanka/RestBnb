@@ -47,11 +47,6 @@ namespace RestBnb.API.Services
 
         public async Task<bool> UpdatePropertyAsync(Property property)
         {
-            var userOwnsProperty = await DoesUserOwnPropertyAsync(_userResolverService.GetUserId(), property.Id);
-
-            if (!userOwnsProperty)
-                return false;
-
             _dataContext.Properties.Update(property);
 
             var updated = await _dataContext.SaveChangesAsync();
@@ -62,21 +57,14 @@ namespace RestBnb.API.Services
         {
             var property = await GetPropertyByIdAsync(propertyId);
 
-            if (property == null)
-                return false;
-
-            var userOwnsProperty = await DoesUserOwnPropertyAsync(_userResolverService.GetUserId(), propertyId);
-
-            if (!userOwnsProperty)
-                return false;
-
             _dataContext.Properties.Remove(property);
+
             var removed = await _dataContext.SaveChangesAsync();
 
             return removed > 0;
         }
 
-        private async Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId)
+        public async Task<bool> DoesUserOwnPropertyAsync(int userId, int propertyId)
         {
             var property = await _dataContext.Properties
                 .AsNoTracking()

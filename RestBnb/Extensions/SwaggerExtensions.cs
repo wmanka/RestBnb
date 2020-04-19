@@ -6,11 +6,6 @@ namespace RestBnb.API.Extensions
 {
     public static class SwaggerExtensions
     {
-        /// <summary>
-        /// Adds middleware for creating documentation using Swagger
-        /// </summary>
-        /// <param name="app"></param>
-        /// <param name="configuration"></param>
         public static void UseSwagger(this IApplicationBuilder app, IConfiguration configuration)
         {
             var swaggerOptions = GetSwaggerOptions(configuration);
