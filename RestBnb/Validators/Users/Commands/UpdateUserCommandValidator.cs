@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using RestBnb.API.Application.Users.Commands;
+using RestBnb.Core.Constants;
 using System;
 
 namespace RestBnb.API.Validators.Users.Commands
@@ -12,7 +13,7 @@ namespace RestBnb.API.Validators.Users.Commands
 
             RuleFor(user => user.FirstName).NotEmpty();
             //TODO: phone pattern not working
-            //RuleFor(user => user.PhoneNumber).Matches(RegexPatterns.User.PhoneNumber).WithMessage("It is not a valid phone number");
+            RuleFor(user => user.PhoneNumber).Matches(RegexPatterns.User.PhoneNumber).WithMessage("It is not a valid phone number");
 
             RuleFor(user => user)
                 .MustExist(serviceProvider)
