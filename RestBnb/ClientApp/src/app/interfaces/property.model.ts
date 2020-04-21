@@ -1,7 +1,7 @@
 import { Time } from '@angular/common';
 
 export interface Property {
-    id: number,
+    id: number;
     name: string;
     description: string;
     address: string;
