@@ -60,13 +60,15 @@ namespace RestBnb.API.Installers
             services.AddTransient<IBookingsService, BookingsService>();
             services.AddTransient<IRefreshTokensService, RefreshTokensService>();
 
+            services.AddTransient<IStringHasherService, StringHasherService>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<UserResolverService>();
+
             services.AddTransient<ICountriesConverterService, CountriesConverterService>();
             services.AddTransient<IAuthenticationServiceHelper, AuthenticationServiceHelper>();
-            services.AddTransient<IStringHasherService, StringHasherService>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<UserResolverService>();
 
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

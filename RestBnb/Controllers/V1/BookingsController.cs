@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Bookings.Commands;
@@ -16,8 +14,6 @@ namespace RestBnb.API.Controllers.V1
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BookingsController : BaseController
     {
-        public BookingsController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
-
         [HttpPost(ApiRoutes.Bookings.Create)]
         public async Task<IActionResult> Create(CreateBookingRequest createBookingRequest)
         {

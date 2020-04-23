@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Users.Commands;
@@ -14,8 +12,6 @@ namespace RestBnb.API.Controllers.V1
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : BaseController
     {
-        public UsersController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
-
         [HttpGet(ApiRoutes.Users.Get)]
         public async Task<IActionResult> Get(int userId)
         {

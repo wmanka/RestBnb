@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Properties.Commands;
@@ -15,8 +13,6 @@ namespace RestBnb.API.Controllers.V1
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PropertiesController : BaseController
     {
-        public PropertiesController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
-
         [HttpPost(ApiRoutes.Properties.Create)]
         public async Task<IActionResult> Create(CreatePropertyRequest createPropertyRequest)
         {
