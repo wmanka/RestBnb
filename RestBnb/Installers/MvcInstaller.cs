@@ -35,6 +35,17 @@ namespace RestBnb.API.Installers
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200", "https://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
+
             services
                 .AddControllersWithViews()
                 .AddNewtonsoftJson(options => options.SerializerSettings.Converters.Add(new StringEnumConverter()));
@@ -49,13 +60,15 @@ namespace RestBnb.API.Installers
             services.AddTransient<IBookingsService, BookingsService>();
             services.AddTransient<IRefreshTokensService, RefreshTokensService>();
 
+            services.AddTransient<IStringHasherService, StringHasherService>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<UserResolverService>();
+
             services.AddTransient<ICountriesConverterService, CountriesConverterService>();
             services.AddTransient<IAuthenticationServiceHelper, AuthenticationServiceHelper>();
-            services.AddTransient<IStringHasherService, StringHasherService>();
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<UserResolverService>();
 
             services.AddMediatR(typeof(Startup));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

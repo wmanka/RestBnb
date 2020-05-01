@@ -62,8 +62,9 @@ namespace RestBnb.API
             app.UseMiddleware(typeof(ExceptionHandler));
             app.UseAuthentication();
             app.UseSwagger(Configuration);
-            app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors();
+            app.UseHttpsRedirection();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());

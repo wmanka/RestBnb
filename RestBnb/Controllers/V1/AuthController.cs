@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.Auth.Commands;
 using RestBnb.API.Application.Auth.Requests;
 using RestBnb.Core.Constants;
@@ -8,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
-    [ApiController]
     public class AuthController : BaseController
     {
-        public AuthController(IMapper mapper, IMediator mediator) : base(mapper, mediator) { }
-
         [HttpPost(ApiRoutes.Auth.Register)]
         public async Task<IActionResult> Register(UserRegistrationRequest request)
         {

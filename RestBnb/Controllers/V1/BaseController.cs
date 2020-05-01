@@ -1,19 +1,17 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RestBnb.API.Controllers.V1
 {
     [ApiController]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
-        protected readonly IMapper Mapper;
-        protected readonly IMediator Mediator;
+        private IMediator _mediator;
+        private IMapper _mapper;
 
-        public BaseController(IMapper mapper, IMediator mediator)
-        {
-            Mapper = mapper;
-            Mediator = mediator;
-        }
+        public IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        public IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
     }
 }
