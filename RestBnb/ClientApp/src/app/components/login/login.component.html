@@ -1,1 +1,21 @@
-<p>login works!</p>
+<div fxLayout="row wrap">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+    <mat-card-content>
+      <form fxLayout="column" [formGroup]="loginForm" onsubmit="submit()">
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input matInput type="text" formControlName="email" />
+        </mat-form-field>
+        <br />
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput type="text" formControlName="password" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions fxLayout="column">
+      <button fxFlex type="submit" mat-raised-button>Login</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
