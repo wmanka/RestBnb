@@ -8,7 +8,7 @@ namespace RestBnb.API.Validators.Users.Commands
     {
         public DeleteUserCommandValidator(IServiceProvider serviceProvider)
         {
-            CascadeMode = CascadeMode.StopOnFirstFailure;
+            CascadeMode = CascadeMode.Stop;
 
             RuleFor(user => user.Id).NotEmpty().GreaterThan(0);
 
