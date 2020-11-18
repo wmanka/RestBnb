@@ -5,6 +5,7 @@ const appRoutes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: '/properties' },
     { path: 'properties', loadChildren: () => import('./components/properties/properties.module').then(m => m.PropertiesModule) },
     { path: 'login', loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule) },
+    { path: 'register', loadChildren: () => import('./components/register/register.module').then(m => m.RegisterModule) },
     { path: '**', pathMatch: 'full', redirectTo: '/properties' }
 ];
 

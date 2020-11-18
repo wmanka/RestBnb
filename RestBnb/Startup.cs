@@ -63,7 +63,12 @@ namespace RestBnb.API
             app.UseAuthentication();
             app.UseSwagger(Configuration);
             app.UseRouting();
-            app.UseCors();
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
