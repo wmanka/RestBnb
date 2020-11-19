@@ -36,7 +36,7 @@ namespace RestBnb.API.Validators.Properties.Commands
         {
             internal BusinessValidator(IServiceProvider serviceProvider)
             {
-                CascadeMode = CascadeMode.StopOnFirstFailure;
+                CascadeMode = CascadeMode.Stop;
 
                 RuleFor(property => property)
                     .MustExist(serviceProvider)

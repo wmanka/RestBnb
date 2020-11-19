@@ -8,9 +8,9 @@ namespace RestBnb.API.Validators
 {
     public abstract class AsyncPropertyValidatorBase : PropertyValidator
     {
-        public override bool ShouldValidateAsync(ValidationContext context)
+        public override bool ShouldValidateAsynchronously(IValidationContext context)
         {
-            return context.IsAsync() || Options.AsyncCondition != null;
+            return context.IsAsync() || Options.HasAsyncCondition;
         }
 
         protected AsyncPropertyValidatorBase(string errorMessage) : base(errorMessage) { }

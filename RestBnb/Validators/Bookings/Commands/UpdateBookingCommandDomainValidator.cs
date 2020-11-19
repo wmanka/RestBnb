@@ -31,7 +31,7 @@ namespace RestBnb.API.Validators.Bookings.Commands
         {
             internal BusinessValidator(IServiceProvider serviceProvider)
             {
-                CascadeMode = CascadeMode.StopOnFirstFailure;
+                CascadeMode = CascadeMode.Stop;
 
                 RuleFor(booking => booking)
                     .MustLastAtLeastOneDay()

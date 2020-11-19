@@ -9,7 +9,7 @@ namespace RestBnb.API.Validators.Users.Commands
     {
         public UpdateUserCommandValidator(IServiceProvider serviceProvider)
         {
-            CascadeMode = CascadeMode.StopOnFirstFailure;
+            CascadeMode = CascadeMode.Stop;
 
             RuleFor(user => user.FirstName).NotEmpty();
             RuleFor(user => user.PhoneNumber).Matches(RegexPatterns.User.PhoneNumber).WithMessage("It is not a valid phone number");

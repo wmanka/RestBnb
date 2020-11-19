@@ -1,24 +1,26 @@
-import { TokenStorageService } from './../../core/services/token-storage.service';
-import { LoginRoutingModule } from './login-routing.module';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { RegisterRoutingModule } from './register-routing.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
-  declarations: [LoginRoutingModule.components],
+  declarations: [RegisterRoutingModule.components],
   imports: [
-    LoginRoutingModule,
-    FormsModule,
+    RegisterRoutingModule,
     ReactiveFormsModule,
-    MatCardModule,
+    FormsModule,
     MatButtonModule,
     MatInputModule,
+    MatCardModule,
+    MatFormFieldModule,
     MatSnackBarModule,
   ],
   providers: [AuthenticationService, TokenStorageService],
 })
-export class LoginModule {}
+export class RegisterModule {}

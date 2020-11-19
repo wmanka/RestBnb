@@ -31,7 +31,7 @@ namespace RestBnb.API.Installers
                 .AddFluentValidation(fluentValidationConfiguration =>
                 {
                     fluentValidationConfiguration.RegisterValidatorsFromAssemblyContaining<Startup>();
-                    ValidatorOptions.LanguageManager.Enabled = false;
+                    ValidatorOptions.Global.LanguageManager.Enabled = false;
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
