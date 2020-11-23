@@ -3,6 +3,6 @@ import { NgModule } from '@angular/core';
 
 @NgModule({
   declarations: [PropertiesRoutingModule.components],
-  imports: [PropertiesRoutingModule]
+  imports: [PropertiesRoutingModule],
 })
-export class PropertiesModule { }
+export class PropertiesModule {}
