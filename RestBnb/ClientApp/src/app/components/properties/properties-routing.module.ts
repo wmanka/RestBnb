@@ -7,14 +7,10 @@ import { NgModule } from '@angular/core';
 const routes: Routes = [
   {
     path: '',
-    runGuardsAndResolvers: 'always',
-    canActivate: [AuthGuard],
     component: PropertiesListComponent,
   },
   {
     path: ':id',
-    runGuardsAndResolvers: 'always',
-    canActivate: [AuthGuard],
     component: PropertyDetailsComponent,
   },
 ];

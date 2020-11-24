@@ -38,6 +38,12 @@
             public const string Delete = Base + "/users/{userId}";
         }
 
+        public static class Cities
+        {
+            public const string GetAll = Base + "/cities";
+            public const string Get = Base + "/cities/{cityId}";
+        }
+
         public static class HealthChecks
         {
             public const string Details = "/health";
