@@ -16,13 +16,14 @@ import { SearchModel } from '../models/SearchModel';
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css']
+  styleUrls: ['./search-bar.component.css'],
 })
 export class SearchBarComponent {
   @Output() modelChanged = new EventEmitter<SearchModel>();
 
   public searchForm: FormGroup;
   public filteredOptions: Observable<CityResponse[]>;
+  public minDate: Date = new Date();
 
   constructor(private fb: FormBuilder, private citiesService: CitiesService) {
     this.searchForm = this.fb.group({
@@ -42,8 +43,12 @@ export class SearchBarComponent {
   }
 
   public search(): void {
-    const model = new SearchModel(this.searchForm.value.startDate, this.searchForm.value.endDate, 
-      this.searchForm.value.location, this.searchForm.value.numberOfGuests);
+    const model = new SearchModel(
+      this.searchForm.value.startDate,
+      this.searchForm.value.endDate,
+      this.searchForm.value.location,
+      this.searchForm.value.numberOfGuests
+    );
     this.notifyModelChanged(model);
   }
 
@@ -64,5 +69,3 @@ export class SearchBarComponent {
     this.modelChanged.emit(model);
   }
 }
-
-

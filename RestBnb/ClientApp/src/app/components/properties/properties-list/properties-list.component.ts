@@ -11,6 +11,6 @@ export class PropertiesListComponent {
   public updateComponent($event): void {
     this.searchModel = $event;
 
-    // console.log(this.searchModel.location);
+    console.log(this.searchModel.location);
   }
 }

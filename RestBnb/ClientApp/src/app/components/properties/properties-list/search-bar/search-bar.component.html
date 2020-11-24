@@ -31,7 +31,7 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Dates</mat-label>
-          <mat-date-range-input [rangePicker]="picker">
+          <mat-date-range-input [rangePicker]="picker" [min]="minDate">
             <input
               matStartDate
               formControlName="startDate"
