@@ -1,8 +1,9 @@
-import { CityResponse } from './../../../shared/models/cityResponse';
-import { CitiesService } from './../../../core/services/cities.service';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { CitiesService } from 'src/app/core/services/cities.service';
+import { CityResponse } from 'src/app/shared/models/cityResponse';
+
 import {
   debounceTime,
   distinctUntilChanged,
@@ -10,13 +11,16 @@ import {
   map,
   switchMap,
 } from 'rxjs/operators';
+import { SearchModel } from '../models/SearchModel';
 
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css'],
+  styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent {
+  @Output() modelChanged = new EventEmitter<SearchModel>();
+
   public searchForm: FormGroup;
   public filteredOptions: Observable<CityResponse[]>;
 
@@ -38,7 +42,9 @@ export class SearchBarComponent {
   }
 
   public search(): void {
-    console.log(this.searchForm);
+    const model = new SearchModel(this.searchForm.value.startDate, this.searchForm.value.endDate, 
+      this.searchForm.value.location, this.searchForm.value.numberOfGuests);
+    this.notifyModelChanged(model);
   }
 
   private filter(value: string) {
@@ -53,4 +59,10 @@ export class SearchBarComponent {
       })
     );
   }
+
+  private notifyModelChanged(model: SearchModel) {
+    this.modelChanged.emit(model);
+  }
 }
+
+

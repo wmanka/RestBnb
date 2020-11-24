@@ -1,8 +1,8 @@
 import { PropertyDetailsComponent } from './property-details/property-details.component';
 import { PropertiesListComponent } from './properties-list/properties-list.component';
-import { AuthGuard } from './../../core/guards/auth.guard';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { SearchBarComponent } from './properties-list/search-bar/search-bar.component';
 
 const routes: Routes = [
   {
@@ -20,5 +20,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class PropertiesRoutingModule {
-  static components = [PropertiesListComponent, PropertyDetailsComponent];
+  static components = [PropertiesListComponent, PropertyDetailsComponent, SearchBarComponent];
 }
