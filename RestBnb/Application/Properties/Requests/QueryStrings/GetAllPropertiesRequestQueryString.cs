@@ -14,6 +14,9 @@ namespace RestBnb.API.Application.Properties.Requests.QueryStrings
         public decimal AccommodatesNumber { get; set; }
 
         [FromQuery(Name = "userId")]
-        public decimal UserId { get; set; }
+        public decimal UserId { get; set; }        
+        
+        [FromQuery(Name = "cityId")]
+        public decimal CityId { get; set; }
     }
 }

@@ -11,7 +11,7 @@ import {
   map,
   switchMap,
 } from 'rxjs/operators';
-import { SearchModel } from '../models/SearchModel';
+import { SearchModel } from '../models/searchModel';
 
 @Component({
   selector: 'app-search-bar',
@@ -46,16 +46,22 @@ export class SearchBarComponent {
     const model = new SearchModel(
       this.searchForm.value.startDate,
       this.searchForm.value.endDate,
-      this.searchForm.value.location,
+      this.searchForm.value.location.id,
       this.searchForm.value.numberOfGuests
     );
+
     this.notifyModelChanged(model);
   }
 
-  private filter(value: string) {
-    const filterValue = value.toLowerCase();
+  private filter(value: string | CityResponse) {
+    let filterValue;
+    if (typeof value === 'string') {
+      filterValue = value.toLowerCase();
+    } else {
+      filterValue = value.name.toLowerCase();
+    }
 
-    return this.citiesService.getAll(value).pipe(
+    return this.citiesService.getAll(filterValue).pipe(
       filter((data) => !!data),
       map((data) => {
         return data.filter((option) =>
@@ -67,5 +73,9 @@ export class SearchBarComponent {
 
   private notifyModelChanged(model: SearchModel) {
     this.modelChanged.emit(model);
+  }
+
+  displayState(state: CityResponse) {
+    return state ? state.name : '';
   }
 }

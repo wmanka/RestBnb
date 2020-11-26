@@ -2,7 +2,7 @@ export class SearchModel {
   constructor(
     startDate: Date,
     endDate: Date,
-    location: string,
+    location: number,
     numberOfGuests: number
   ) {
     this.startDate = startDate;
@@ -13,6 +13,6 @@ export class SearchModel {
 
   startDate: Date;
   endDate: Date;
-  location: string;
+  location: number;
   numberOfGuests: number;
 }

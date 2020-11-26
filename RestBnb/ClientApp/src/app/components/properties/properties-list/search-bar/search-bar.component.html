@@ -20,10 +20,11 @@
           <mat-autocomplete
             #auto="matAutocomplete"
             autoActiveFirstOption="true"
+            [displayWith]="displayState"
           >
             <mat-option
               *ngFor="let option of filteredOptions | async"
-              [value]="option.name"
+              [value]="option"
             >
               {{ option.name }}
             </mat-option>

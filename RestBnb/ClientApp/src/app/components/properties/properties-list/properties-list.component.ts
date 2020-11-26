@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { SearchModel } from './models/SearchModel';
+import {
+  GetAllPropertiesParams,
+  PropertiesService,
+} from 'src/app/core/services/properties.service';
+import { PropertyListItem } from './models/propertyListItem';
+import { SearchModel } from './models/searchModel';
+
 @Component({
   selector: 'app-properties-list',
   templateUrl: './properties-list.component.html',
@@ -7,10 +13,22 @@ import { SearchModel } from './models/SearchModel';
 })
 export class PropertiesListComponent {
   public searchModel: SearchModel;
+  public properties: PropertyListItem[];
+  public displayedColumns: string[] = ['imageUrl', 'description', 'price'];
+
+  constructor(private propertiesService: PropertiesService) {}
 
   public updateComponent($event): void {
     this.searchModel = $event;
 
     console.log(this.searchModel.location);
+
+    var params = new GetAllPropertiesParams();
+    params.cityId = this.searchModel.location;
+
+    this.propertiesService.getAll(params).subscribe((properties) => {
+      this.properties = properties.map((x) => new PropertyListItem(x));
+      console.log(this.properties.length);
+    });
   }
 }

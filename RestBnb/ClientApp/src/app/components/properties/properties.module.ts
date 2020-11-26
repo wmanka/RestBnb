@@ -9,10 +9,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [PropertiesRoutingModule.components],
-  imports: [PropertiesRoutingModule,
+  imports: [
+    PropertiesRoutingModule,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
@@ -22,6 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatAutocompleteModule,
     MatSelectModule,
-    MatNativeDateModule,],
+    MatNativeDateModule,
+    MatTableModule,
+  ],
 })
-export class PropertiesModule { }
+export class PropertiesModule {}

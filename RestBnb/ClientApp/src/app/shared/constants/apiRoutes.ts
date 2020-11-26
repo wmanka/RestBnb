@@ -11,4 +11,8 @@ export class ApiRoutes {
   static Cities = class {
     public static GetAll = ApiRoutes.ApiBase + '/cities';
   };
+
+  static Properties = class {
+    public static GetAll = ApiRoutes.ApiBase + '/properties';
+  };
 }
