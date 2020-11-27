@@ -3,16 +3,16 @@ export class SearchModel {
     startDate: Date,
     endDate: Date,
     location: number,
-    numberOfGuests: number
+    accommodatesNumber: number
   ) {
     this.startDate = startDate;
     this.endDate = endDate;
     this.location = location;
-    this.numberOfGuests = numberOfGuests;
+    this.accommodatesNumber = accommodatesNumber;
   }
 
   startDate: Date;
   endDate: Date;
   location: number;
-  numberOfGuests: number;
+  accommodatesNumber: number;
 }

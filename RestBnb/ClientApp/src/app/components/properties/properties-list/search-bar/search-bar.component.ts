@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Type } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { CitiesService } from 'src/app/core/services/cities.service';
@@ -30,7 +30,7 @@ export class SearchBarComponent {
       location: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      numberOfGuests: ['', Validators.required],
+      accommodatesNumber: ['', Validators.required],
     });
 
     this.filteredOptions = this.searchForm.controls.location.valueChanges.pipe(
@@ -43,18 +43,19 @@ export class SearchBarComponent {
   }
 
   public search(): void {
-    const model = new SearchModel(
+    const searchModel = new SearchModel(
       this.searchForm.value.startDate,
       this.searchForm.value.endDate,
       this.searchForm.value.location.id,
-      this.searchForm.value.numberOfGuests
+      this.searchForm.value.accommodatesNumber
     );
 
-    this.notifyModelChanged(model);
+    this.notifyModelChanged(searchModel);
   }
 
   private filter(value: string | CityResponse) {
-    let filterValue;
+    let filterValue: string;
+
     if (typeof value === 'string') {
       filterValue = value.toLowerCase();
     } else {

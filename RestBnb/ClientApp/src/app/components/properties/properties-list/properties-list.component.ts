@@ -21,14 +21,12 @@ export class PropertiesListComponent {
   public updateComponent($event): void {
     this.searchModel = $event;
 
-    console.log(this.searchModel.location);
-
-    var params = new GetAllPropertiesParams();
+    const params = new GetAllPropertiesParams();
     params.cityId = this.searchModel.location;
+    params.accommodatesNumber = this.searchModel.accommodatesNumber;
 
     this.propertiesService.getAll(params).subscribe((properties) => {
       this.properties = properties.map((x) => new PropertyListItem(x));
-      console.log(this.properties.length);
     });
   }
 }

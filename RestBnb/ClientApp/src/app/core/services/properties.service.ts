@@ -17,11 +17,8 @@ export class PropertiesService {
 
     if (params != null) {
       Object.keys(params).forEach((key) => {
-        console.log(key);
         options.params = options.params.append(key, params[key]);
       });
-
-      console.log(options.params);
     }
 
     return this.http.get<PropertyResponse[]>(
