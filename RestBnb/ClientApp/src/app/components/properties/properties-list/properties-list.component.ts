@@ -14,7 +14,12 @@ import { SearchModel } from './models/searchModel';
 export class PropertiesListComponent {
   public searchModel: SearchModel;
   public properties: PropertyListItem[];
-  public displayedColumns: string[] = ['imageUrl', 'description', 'price'];
+  public displayedColumns: string[] = [
+    'imageUrl',
+    'description',
+    'price',
+    'buttons',
+  ];
 
   constructor(private propertiesService: PropertiesService) {}
 
@@ -28,5 +33,9 @@ export class PropertiesListComponent {
     this.propertiesService.getAll(params).subscribe((properties) => {
       this.properties = properties.map((x) => new PropertyListItem(x));
     });
+  }
+
+  public openDetailsTab(propertyId: number) {
+    window.open('/properties/' + propertyId, '_blank');
   }
 }
