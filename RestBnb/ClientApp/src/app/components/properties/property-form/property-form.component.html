@@ -57,7 +57,7 @@
             <mat-autocomplete
               #auto="matAutocomplete"
               autoActiveFirstOption="true"
-              [displayWith]="displayState"
+              [displayWith]="displayCity"
             >
               <mat-option
                 *ngFor="let option of filteredOptions | async"
@@ -131,8 +131,17 @@
           </mat-form-field>
         </div>
 
+        <mat-form-field>
+          <ngx-mat-file-input
+            formControlName="images"
+            placeholder="Property images"
+            multiple
+          ></ngx-mat-file-input>
+          <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
+
         <mat-card-actions>
-          <button type="submit" name="search" mat-raised-button>Search</button>
+          <button type="submit" name="submit" mat-raised-button>Submit</button>
         </mat-card-actions>
       </form>
     </mat-card-content>

@@ -33,6 +33,7 @@ export class PropertyFormComponent {
       checkInTime: ['', Validators.required],
       checkOutTime: ['', Validators.required],
       location: ['', Validators.required],
+      images: [''],
     });
 
     this.filteredOptions = this.propertyForm.controls.location.valueChanges.pipe(
@@ -67,7 +68,7 @@ export class PropertyFormComponent {
     );
   }
 
-  displayState(state: CityResponse) {
-    return state ? state.name : '';
+  public displayCity(city: CityResponse) {
+    return city ? city.name : '';
   }
 }
