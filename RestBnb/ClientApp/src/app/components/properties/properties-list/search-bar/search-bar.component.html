@@ -3,12 +3,13 @@
     <mat-card-title>Find property</mat-card-title>
     <mat-card-content>
       <form
-        fxLayout
-        fxLayoutAlign="space-between"
+        fxLayout="row"
+        fxLayoutAlign="space-around center"
+        fxLayoutGap="20px"
         [formGroup]="searchForm"
         (ngSubmit)="search()"
       >
-        <mat-form-field>
+        <mat-form-field fxFlex="50">
           <mat-label>Location</mat-label>
           <input
             type="text"
@@ -30,7 +31,7 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field fxFlex="30">
           <mat-label>Dates</mat-label>
           <mat-date-range-input [rangePicker]="picker" [min]="minDate">
             <input
@@ -50,7 +51,7 @@
           ></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field fxFlex="20">
           <mat-label>Number of guests</mat-label>
           <input
             matInput

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using RestBnb.API.Application.Properties.Commands;
-using System;
 
 namespace RestBnb.API.Validators.Properties.Commands
 {
@@ -16,8 +15,6 @@ namespace RestBnb.API.Validators.Properties.Commands
             RuleFor(property => property.Name).NotEmpty();
             RuleFor(property => property.Description).NotEmpty();
             RuleFor(property => property.CityId).GreaterThan(0);
-            RuleFor(property => property.StartDate.Date).GreaterThanOrEqualTo(DateTime.UtcNow.Date);
-            RuleFor(property => property.EndDate.Date).GreaterThanOrEqualTo(x => x.StartDate.Date);
         }
     }
 }

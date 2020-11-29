@@ -10,9 +10,11 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
+import { PropertyFormComponent } from './property-form/property-form.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
-  declarations: [PropertiesRoutingModule.components],
+  declarations: [PropertiesRoutingModule.components, PropertyFormComponent],
   imports: [
     PropertiesRoutingModule,
     CommonModule,
@@ -26,6 +28,7 @@ import { MatTableModule } from '@angular/material/table';
     MatSelectModule,
     MatNativeDateModule,
     MatTableModule,
+    FlexLayoutModule,
   ],
 })
 export class PropertiesModule {}

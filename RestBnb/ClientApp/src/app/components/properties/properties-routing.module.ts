@@ -1,3 +1,4 @@
+import { PropertyFormComponent } from './property-form/property-form.component';
 import { PropertyDetailsComponent } from './property-details/property-details.component';
 import { PropertiesListComponent } from './properties-list/properties-list.component';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,6 +14,10 @@ const routes: Routes = [
     path: ':id',
     component: PropertyDetailsComponent,
   },
+  {
+    path: 'edit/:id',
+    component: PropertyFormComponent,
+  },
 ];
 
 @NgModule({
@@ -20,5 +25,10 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class PropertiesRoutingModule {
-  static components = [PropertiesListComponent, PropertyDetailsComponent, SearchBarComponent];
+  static components = [
+    PropertiesListComponent,
+    PropertyDetailsComponent,
+    SearchBarComponent,
+    PropertyFormComponent,
+  ];
 }
