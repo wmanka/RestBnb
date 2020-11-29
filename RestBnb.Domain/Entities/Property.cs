@@ -30,5 +30,6 @@ namespace RestBnb.Core.Entities
         public User User { get; set; }
 
         public IEnumerable<Booking> Bookings { get; set; }
+        public IEnumerable<PropertyImage> PropertyImages { get; set; }
     }
 }

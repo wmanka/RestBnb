@@ -20,6 +20,14 @@
             public const string Get = Base + "/properties/{propertyId}";
             public const string Update = Base + "/properties/{propertyId}";
             public const string Delete = Base + "/properties/{propertyId}";
+        }       
+        
+        public static class PropertyImages
+        {
+            public const string GetAll = Base + "/properties/{propertyId}/images";
+            public const string Create = Base + "/properties/{propertyId}/images";
+            public const string Update = Base + "/properties/{propertyId}/images/{imageId}";
+            public const string Delete = Base + "/properties/{propertyId}/images/{imageId}";
         }
 
         public static class Bookings

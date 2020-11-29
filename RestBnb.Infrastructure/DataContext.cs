@@ -22,6 +22,7 @@ namespace RestBnb.Infrastructure
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Property> Properties { get; set; }
+        public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
