@@ -15,6 +15,7 @@ namespace RestBnb.Infrastructure
     {
         public DataContext(DbContextOptions options) : base(options)
         {
+            this.Database.SetCommandTimeout(500);
         }
 
         public DbSet<User> Users { get; set; }

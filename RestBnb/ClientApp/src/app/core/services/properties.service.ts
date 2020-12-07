@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PropertyFormModel } from 'src/app/components/properties/properties-list/models/propertyFormModel';
 import { ApiRoutes } from 'src/app/shared/constants/apiRoutes';
 import { PropertyResponse } from 'src/app/shared/models/propertyResponse';
 
@@ -24,6 +25,27 @@ export class PropertiesService {
     return this.http.get<PropertyResponse[]>(
       ApiRoutes.Properties.GetAll,
       options
+    );
+  }
+
+  public get(id: number): Observable<PropertyResponse> {
+    return this.http.get<PropertyResponse>(ApiRoutes.Properties.Get + id);
+  }
+
+  public create(property: PropertyFormModel): Observable<PropertyResponse> {
+    return this.http.post<PropertyResponse>(
+      ApiRoutes.Properties.Create,
+      property
+    );
+  }
+
+  public update(
+    propertyId: number,
+    property: PropertyFormModel
+  ): Observable<PropertyResponse> {
+    return this.http.put<PropertyResponse>(
+      ApiRoutes.Properties.Create + '/' + propertyId,
+      property
     );
   }
 }

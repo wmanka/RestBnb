@@ -1,5 +1,4 @@
 import { ApiRoutes } from './shared/constants/apiRoutes';
-import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -10,10 +9,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JwtModule } from '@auth0/angular-jwt';
-
-export function tokenGetter() {
-  return localStorage.getItem('token');
-}
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,12 +21,18 @@ export function tokenGetter() {
     AppRoutingModule,
     CoreModule,
     SharedModule,
-    HttpClientModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: tokenGetter,
-        allowedDomains: [environment.apiUrl],
-        disallowedRoutes: [ApiRoutes.Auth.Login, ApiRoutes.Auth.Register],
+        tokenGetter: () => {
+          return localStorage.getItem('token');
+        },
+        allowedDomains: [environment.host],
+        disallowedRoutes: [
+          ApiRoutes.Auth.Login,
+          ApiRoutes.Auth.Register,
+          // ApiRoutes.Properties.GetAll,
+          ApiRoutes.Cities.GetAll,
+        ],
       },
     }),
   ],

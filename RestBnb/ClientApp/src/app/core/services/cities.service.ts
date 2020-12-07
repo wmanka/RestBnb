@@ -17,4 +17,8 @@ export class CitiesService {
 
     return this.http.get<CityResponse[]>(ApiRoutes.Cities.GetAll, options);
   }
+
+  public get(id: number): Observable<CityResponse> {
+    return this.http.get<CityResponse>(ApiRoutes.Cities.Get + '/' + id);
+  }
 }
