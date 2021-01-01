@@ -19,8 +19,8 @@ jobs:
         node-version: 12.16.3
     - name: Install npm dependencies and build
       run: |
-          npm ci
-          npm run build:ci
+          npm i
+          npm run build:prod
       working-directory: ./RestBnb/ClientApp
     - name: Build with dotnet
       run: dotnet build --configuration Release
