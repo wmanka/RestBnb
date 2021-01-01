@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Output, Type } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { CitiesService } from 'src/app/core/services/cities.service';
 import { CityResponse } from 'src/app/shared/models/cityResponse';
-
+import { SearchModel } from '../models/searchModel';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -11,7 +11,6 @@ import {
   map,
   switchMap,
 } from 'rxjs/operators';
-import { SearchModel } from '../models/searchModel';
 
 @Component({
   selector: 'app-search-bar',
