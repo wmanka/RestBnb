@@ -1,12 +1,12 @@
 import { PropertyResponse } from './../../../shared/models/propertyResponse';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { CitiesService } from 'src/app/core/services/cities.service';
 import { CityResponse } from 'src/app/shared/models/cityResponse';
 import { PropertiesService } from 'src/app/core/services/properties.service';
 import { PropertyFormModel } from '../properties-list/models/propertyFormModel';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -32,9 +32,11 @@ export class PropertyFormComponent {
     private fb: FormBuilder,
     private citiesService: CitiesService,
     private propertiesService: PropertiesService,
+    private router: Router,
     private route: ActivatedRoute
   ) {
     this.property = this.route.snapshot.data.property;
+
     if (this.property != null) {
       this.isInEditMode = true;
     }
@@ -111,16 +113,14 @@ export class PropertyFormComponent {
     propertyFormModel.checkOutTime = checkOutDateTime;
     propertyFormModel.cityId = this.propertyForm.value.location.id;
 
-    console.log(propertyFormModel);
-
     if (this.isInEditMode) {
       this.propertiesService
         .update(this.property.id, propertyFormModel)
-        .subscribe((x) => console.log(x));
+        .subscribe((x) => this.router.navigate(['/properties/' + x.id]));
     } else {
       this.propertiesService
         .create(propertyFormModel)
-        .subscribe((x) => console.log(x));
+        .subscribe((x) => this.router.navigate(['/properties/' + x.id]));
     }
   }
 

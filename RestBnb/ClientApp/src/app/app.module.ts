@@ -30,7 +30,6 @@ import { environment } from 'src/environments/environment';
         disallowedRoutes: [
           ApiRoutes.Auth.Login,
           ApiRoutes.Auth.Register,
-          // ApiRoutes.Properties.GetAll,
           ApiRoutes.Cities.GetAll,
         ],
       },

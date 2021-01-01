@@ -36,6 +36,6 @@ export class PropertiesListComponent {
   }
 
   public openDetailsTab(propertyId: number) {
-    window.open('/properties/' + propertyId, '_blank');
+    window.open('/properties/details/' + propertyId, '_blank');
   }
 }

@@ -15,7 +15,10 @@ export class PropertyResolver implements Resolve<PropertyResponse> {
   resolve(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): Observable<any> | Promise<any> | any {
+  ):
+    | Observable<PropertyResponse>
+    | Promise<PropertyResponse>
+    | PropertyResponse {
     const propertyId = parseInt(route.paramMap.get('id'));
     return this.propertiesService.get(propertyId);
   }
