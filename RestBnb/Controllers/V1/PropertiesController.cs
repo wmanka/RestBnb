@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PropertiesController : BaseController
     {
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost(ApiRoutes.Properties.Create)]
         public async Task<IActionResult> Create(CreatePropertyRequest createPropertyRequest)
         {
@@ -39,6 +39,7 @@ namespace RestBnb.API.Controllers.V1
             return Ok(response);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpDelete(ApiRoutes.Properties.Delete)]
         public async Task<IActionResult> Delete(int propertyId)
         {
@@ -47,6 +48,7 @@ namespace RestBnb.API.Controllers.V1
             return NoContent();
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut(ApiRoutes.Properties.Update)]
         public async Task<IActionResult> Update(int propertyId, UpdatePropertyRequest request)
         {

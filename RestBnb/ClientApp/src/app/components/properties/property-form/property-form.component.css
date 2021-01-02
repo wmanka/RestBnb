@@ -1,0 +1,12 @@
+.price-input {
+  text-align: right;
+}
+
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.price-input {
+  -moz-appearance: textfield;
+}

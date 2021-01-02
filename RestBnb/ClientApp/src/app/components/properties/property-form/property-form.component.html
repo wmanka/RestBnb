@@ -1,0 +1,149 @@
+<div style="width: 50%">
+  <mat-card>
+    <mat-card-title>Add/edit property</mat-card-title>
+    <mat-card-content>
+      <form
+        fxLayout="column"
+        fxLayoutAlign="space-around stretch"
+        fxLayoutGap="20px"
+        [formGroup]="propertyForm"
+        (ngSubmit)="submit()"
+      >
+        <div fxLayout="row" fxLayoutGap="20px">
+          <mat-form-field fxFlex="75">
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              type="text"
+              name="name"
+              placeholder="Type property name"
+              formControlName="name"
+            />
+          </mat-form-field>
+
+          <mat-form-field fxFlex="25">
+            <mat-label>Price Per Night</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="price"
+              class="price-input"
+            />
+            <span matPrefix>$&nbsp;</span>
+            <span matSuffix>.00</span>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea
+            matInput
+            cdkTextareaAutosize
+            placeholder="Type description"
+            formControlName="description"
+          ></textarea>
+        </mat-form-field>
+
+        <div fxLayout="row" fxLayoutGap="20px">
+          <mat-form-field fxFlex>
+            <mat-label>Location</mat-label>
+            <input
+              type="text"
+              placeholder="Find any city, state, country..."
+              matInput
+              formControlName="location"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete
+              #auto="matAutocomplete"
+              autoActiveFirstOption="true"
+              [displayWith]="displayCity"
+            >
+              <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option"
+              >
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-label>Address</mat-label>
+            <input
+              matInput
+              type="text"
+              name="address"
+              placeholder="Type address"
+              formControlName="address"
+            />
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="20px">
+          <mat-form-field fxFlex>
+            <mat-label>Accommodates number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="accommodatesNumber"
+              placeholder="Type number of accommodates"
+            />
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-label>Bathroom number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="bathroomNumber"
+              placeholder="Type number of bathrooms in property"
+            />
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>Bedroom number</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="bedroomNumber"
+              placeholder="Type number of bedrooms in property"
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <mat-form-field fxFlex>
+            <mat-label>Check In Time</mat-label>
+            <input
+              matInput
+              type="time"
+              formControlName="checkInTime"
+              placeholder="Type check in time"
+            />
+          </mat-form-field>
+
+          <mat-form-field fxFlex>
+            <mat-label>Check Out Time</mat-label>
+            <input
+              matInput
+              type="time"
+              formControlName="checkOutTime"
+              placeholder="Type check out time"
+            />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field>
+          <ngx-mat-file-input
+            formControlName="images"
+            placeholder="Property images"
+            multiple
+          ></ngx-mat-file-input>
+          <mat-icon matSuffix>folder</mat-icon>
+        </mat-form-field>
+
+        <mat-card-actions>
+          <button type="submit" name="submit" mat-raised-button>Submit</button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

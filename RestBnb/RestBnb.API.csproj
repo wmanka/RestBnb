@@ -36,5 +36,9 @@
     <ProjectReference Include="..\RestBnb.Infrastructure\RestBnb.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Cities\Responses\" />
+  </ItemGroup>
+
 
 </Project>

@@ -1,0 +1,70 @@
+<div fxLayout="row wrap">
+  <mat-card>
+    <mat-card-title>Find property</mat-card-title>
+    <mat-card-content>
+      <form
+        fxLayout="row"
+        fxLayoutAlign="space-around center"
+        fxLayoutGap="20px"
+        [formGroup]="searchForm"
+        (ngSubmit)="search()"
+      >
+        <mat-form-field fxFlex="50">
+          <mat-label>Location</mat-label>
+          <input
+            type="text"
+            placeholder="Find any city, state, country..."
+            matInput
+            formControlName="location"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            autoActiveFirstOption="true"
+            [displayWith]="displayState"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field fxFlex="30">
+          <mat-label>Dates</mat-label>
+          <mat-date-range-input [rangePicker]="picker" [min]="minDate">
+            <input
+              matStartDate
+              formControlName="startDate"
+              placeholder="Start date"
+            />
+            <input
+              matEndDate
+              formControlName="endDate"
+              placeholder="End date"
+            />
+          </mat-date-range-input>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <mat-form-field fxFlex="20">
+          <mat-label>Number of guests</mat-label>
+          <input
+            matInput
+            type="number"
+            name="accommodatesNumber"
+            placeholder="Type number of guests"
+            formControlName="accommodatesNumber"
+          />
+        </mat-form-field>
+        <mat-card-actions>
+          <button type="submit" name="search" mat-raised-button>Search</button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

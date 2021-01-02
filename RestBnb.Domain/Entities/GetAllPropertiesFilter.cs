@@ -6,5 +6,6 @@
         public decimal MinPricePerNight { get; set; }
         public int AccommodatesNumber { get; set; }
         public int UserId { get; set; }
+        public int CityId { get; set; }
     }
 }

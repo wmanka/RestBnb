@@ -56,7 +56,9 @@ namespace RestBnb.API.Installers
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IPropertiesService, PropertiesService>();
+            services.AddTransient<IPropertyImagesService, PropertyImagesService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<ICitiesService, CitiesService>();
             services.AddTransient<IBookingsService, BookingsService>();
             services.AddTransient<IRefreshTokensService, RefreshTokensService>();
 

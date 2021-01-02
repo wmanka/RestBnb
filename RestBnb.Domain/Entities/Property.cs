@@ -13,8 +13,6 @@ namespace RestBnb.Core.Entities
         public int BedroomNumber { get; set; }
         public int BathroomNumber { get; set; }
         public int AccommodatesNumber { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
         public DateTime CheckInTime { get; set; }
         public DateTime CheckOutTime { get; set; }
         public string Latitude { get; set; }
@@ -30,5 +28,6 @@ namespace RestBnb.Core.Entities
         public User User { get; set; }
 
         public IEnumerable<Booking> Bookings { get; set; }
+        public IEnumerable<PropertyImage> PropertyImages { get; set; }
     }
 }
