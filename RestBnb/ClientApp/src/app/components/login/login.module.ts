@@ -1,4 +1,3 @@
-import { TokenStorageService } from './../../core/services/token-storage.service';
 import { LoginRoutingModule } from './login-routing.module';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +18,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatSnackBarModule,
   ],
-  providers: [AuthenticationService, TokenStorageService],
+  providers: [AuthenticationService],
 })
 export class LoginModule {}
