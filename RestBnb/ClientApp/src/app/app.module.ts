@@ -1,3 +1,4 @@
+import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { ApiRoutes } from './shared/constants/apiRoutes';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
@@ -36,5 +37,6 @@ import { environment } from 'src/environments/environment';
     }),
   ],
   bootstrap: [AppComponent],
+  providers: [TokenStorageService],
 })
 export class AppModule {}

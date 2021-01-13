@@ -8,6 +8,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { RegisterRoutingModule } from './register-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [RegisterRoutingModule.components],
@@ -20,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatCardModule,
     MatFormFieldModule,
     MatSnackBarModule,
+    MatDividerModule,
   ],
   providers: [AuthenticationService, TokenStorageService],
 })

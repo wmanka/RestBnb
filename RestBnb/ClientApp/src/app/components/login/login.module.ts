@@ -1,4 +1,3 @@
-import { TokenStorageService } from './../../core/services/token-storage.service';
 import { LoginRoutingModule } from './login-routing.module';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [LoginRoutingModule.components],
@@ -18,7 +18,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatInputModule,
     MatSnackBarModule,
+    MatDividerModule,
   ],
-  providers: [AuthenticationService, TokenStorageService],
+  providers: [AuthenticationService],
 })
 export class LoginModule {}
