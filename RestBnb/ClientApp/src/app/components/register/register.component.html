@@ -1,4 +1,4 @@
-<div fxLayout="row wrap">
+<div fxLayout class="register-card">
   <mat-card>
     <mat-card-title>Register</mat-card-title>
     <mat-card-content>
@@ -38,5 +38,10 @@
         </mat-card-actions>
       </form>
     </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions>
+      <mat-label>Already have an account?</mat-label>
+      <button mat-button [routerLink]="['/login']">Login</button>
+    </mat-card-actions>
   </mat-card>
 </div>

@@ -1,4 +1,3 @@
-import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -8,9 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
-  declarations: [NavbarComponent],
+  declarations: [NavbarComponent, FooterComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -20,6 +20,6 @@ import { RouterModule } from '@angular/router';
     MatMenuModule,
     RouterModule,
   ],
-  exports: [NavbarComponent],
+  exports: [NavbarComponent, FooterComponent],
 })
 export class SharedModule {}

@@ -11,7 +11,7 @@ export class CitiesService {
   constructor(private http: HttpClient) {}
 
   public getAll(name: string): Observable<CityResponse[]> {
-    let term = name.trim();
+    const term = name.trim();
 
     const options = term ? { params: new HttpParams().set('name', term) } : {};
 
