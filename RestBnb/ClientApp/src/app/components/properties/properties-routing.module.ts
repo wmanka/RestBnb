@@ -15,6 +15,9 @@ const routes: Routes = [
   {
     path: 'details/:id',
     component: PropertyDetailsComponent,
+    resolve: {
+      property: PropertyResolver,
+    },
   },
   {
     path: 'add',

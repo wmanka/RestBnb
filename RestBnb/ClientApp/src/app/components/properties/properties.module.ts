@@ -14,6 +14,8 @@ import { MatTableModule } from '@angular/material/table';
 import { PropertyFormComponent } from './property-form/property-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCarouselModule } from '@ngbmodule/material-carousel';
 
 @NgModule({
   declarations: [PropertiesRoutingModule.components, PropertyFormComponent],
@@ -33,6 +35,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     FlexLayoutModule,
     MaterialFileInputModule,
     MatIconModule,
+    MatDividerModule,
+    MatCarouselModule.forRoot(),
   ],
 })
 export class PropertiesModule {}
