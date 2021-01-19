@@ -51,7 +51,11 @@
         <form fxLayout="column" [formGroup]="bookingForm" (ngSubmit)="submit()">
           <mat-form-field fxFlex="30">
             <mat-label>Dates</mat-label>
-            <mat-date-range-input [rangePicker]="picker" [min]="minDate">
+            <mat-date-range-input
+              [rangePicker]="picker"
+              [min]="minDate"
+              [dateFilter]="dateFilter"
+            >
               <input
                 matStartDate
                 formControlName="startDate"

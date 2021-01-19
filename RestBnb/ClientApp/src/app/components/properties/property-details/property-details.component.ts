@@ -1,4 +1,7 @@
-import { BookingsService } from './../../../core/services/bookings.service';
+import {
+  BookingsService,
+  GetAllBookingsParams,
+} from './../../../core/services/bookings.service';
 import { CitiesService } from './../../../core/services/cities.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -19,9 +22,10 @@ export class PropertyDetailsComponent {
   public checkOut: string;
   public minDate: Date = new Date();
   public bookingForm: FormGroup;
-  public bookedDates;
+  public bookedDates: Date[] = [];
   public startDate: Date;
   public endDate: Date;
+  public dateFilter;
 
   public slides = [
     {
@@ -59,11 +63,45 @@ export class PropertyDetailsComponent {
       startDate: [this.startDate, Validators.required],
       endDate: [this.endDate, Validators.required],
     });
+
+    const bookingsParams = new GetAllBookingsParams();
+    bookingsParams.propertyId = this.property.id;
+
+    this.bookingsService.getAll(bookingsParams).subscribe((bookings) => {
+      bookings.forEach((booking) => {
+        const daysBetween = this.enumerateDaysBetweenDates(
+          booking.checkInDate,
+          booking.checkOutDate
+        );
+
+        daysBetween.forEach((date) => {
+          console.log(moment(date).format('DD/MM/YYYY'));
+          this.bookedDates.push(moment(date).toDate());
+        });
+      });
+
+      this.dateFilter = (d: Date): boolean => {
+        return (
+          this.bookedDates.findIndex(
+            (testDate) => d.toDateString() === testDate.toDateString()
+          ) < 0
+        );
+      };
+    });
+  }
+  enumerateDaysBetweenDates(from, to) {
+    const fromDate = moment(new Date(from)).startOf('day');
+    const toDate = moment(new Date(to)).endOf('day');
+
+    const span = moment.duration(toDate.diff(fromDate)).asDays();
+    const days = [];
+    for (let i = 0; i <= span; i++) {
+      days.push(moment(fromDate).add(i, 'day').startOf('day'));
+    }
+    return days;
   }
 
   public submit() {
-    console.log(this.bookingForm);
-
     const model = new BookingFormModel();
     model.checkInDate = this.bookingForm.value.startDate;
     model.checkOutDate = this.bookingForm.value.endDate;
