@@ -5,6 +5,7 @@ import {
 } from 'src/app/core/services/properties.service';
 import { PropertyListItem } from './models/propertyListItem';
 import { SearchModel } from './models/searchModel';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-properties-list',
@@ -36,6 +37,13 @@ export class PropertiesListComponent {
   }
 
   public openDetailsTab(propertyId: number) {
-    window.open('/properties/details/' + propertyId, '_blank');
+    window.open(
+      '/properties/details/' +
+        propertyId +
+        '?startDate=' +
+        moment(this.searchModel.startDate).unix() +
+        '&endDate=' +
+        moment(this.searchModel.endDate).unix()
+    );
   }
 }

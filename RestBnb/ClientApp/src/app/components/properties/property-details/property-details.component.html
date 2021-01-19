@@ -1,4 +1,6 @@
-<div *ngIf="property && checkIn && checkOut && cityName">
+<div
+  *ngIf="property && checkIn && checkOut && cityName && startDate && endDate"
+>
   <mat-carousel
     timings="250ms ease-in"
     [autoplay]="true"

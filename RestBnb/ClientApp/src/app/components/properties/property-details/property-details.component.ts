@@ -19,6 +19,9 @@ export class PropertyDetailsComponent {
   public checkOut: string;
   public minDate: Date = new Date();
   public bookingForm: FormGroup;
+  public bookedDates;
+  public startDate: Date;
+  public endDate: Date;
 
   public slides = [
     {
@@ -38,6 +41,14 @@ export class PropertyDetailsComponent {
     private bookingsService: BookingsService
   ) {
     this.property = this.route.snapshot.data.property;
+
+    let params;
+    this.route.queryParams.subscribe((x) => {
+      params = x;
+      this.startDate = new Date(params.startDate * 1000);
+      this.endDate = new Date(params.endDate * 1000);
+    });
+
     this.checkIn = moment(this.property.checkInTime).format('HH:mm');
     this.checkOut = moment(this.property.checkOutTime).format('HH:mm');
     this.citiesService
@@ -45,8 +56,8 @@ export class PropertyDetailsComponent {
       .subscribe((x) => (this.cityName = x.name));
 
     this.bookingForm = this.fb.group({
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      startDate: [this.startDate, Validators.required],
+      endDate: [this.endDate, Validators.required],
     });
   }
 
