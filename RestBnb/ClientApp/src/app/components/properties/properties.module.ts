@@ -1,3 +1,4 @@
+import { SharedModule } from './../../shared/shared.module';
 import { PropertiesRoutingModule } from './properties-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -36,6 +37,7 @@ import { MatCarouselModule } from '@ngbmodule/material-carousel';
     MaterialFileInputModule,
     MatIconModule,
     MatDividerModule,
+    SharedModule,
     MatCarouselModule.forRoot(),
   ],
 })

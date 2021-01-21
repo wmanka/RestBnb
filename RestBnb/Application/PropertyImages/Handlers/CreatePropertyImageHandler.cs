@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RestBnb.API.Application.PropertyImages.Handlers
 {
-    public class CreatePropertyImageHandler : IRequestHandler<CreatePropertyImageCommand, PropertyImageResponse>
+    public class CreatePropertyImageHandler : IRequestHandler<CreatePropertyImageRangeCommand, PropertyImageResponse>
     {
         private readonly IMapper _mapper;
         private readonly IPropertyImagesService _propertyImagesService;
@@ -20,7 +20,7 @@ namespace RestBnb.API.Application.PropertyImages.Handlers
             _propertyImagesService = propertyImagesService;
         }
 
-        public async Task<PropertyImageResponse> Handle(CreatePropertyImageCommand request, CancellationToken cancellationToken)
+        public async Task<PropertyImageResponse> Handle(CreatePropertyImageRangeCommand request, CancellationToken cancellationToken)
         {
             var image = _mapper.Map<PropertyImage>(request);
 

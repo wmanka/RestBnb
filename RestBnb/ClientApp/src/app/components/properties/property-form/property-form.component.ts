@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { PropertyResponse } from './../../../shared/models/propertyResponse';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,9 +13,11 @@ import {
   distinctUntilChanged,
   filter,
   map,
+  mergeMap,
   switchMap,
 } from 'rxjs/operators';
 import * as moment from 'moment';
+import { PropertyImagesService } from 'src/app/core/services/images.service';
 
 @Component({
   selector: 'app-property-form',
@@ -27,13 +30,17 @@ export class PropertyFormComponent {
   public minDate: Date = new Date();
   public property: PropertyResponse;
   public isInEditMode: boolean;
+  public response: { dbPath: '' };
+  public images: FormData;
 
   constructor(
     private fb: FormBuilder,
     private citiesService: CitiesService,
     private propertiesService: PropertiesService,
+    private imagesService: PropertyImagesService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private http: HttpClient
   ) {
     this.property = this.route.snapshot.data.property;
 
@@ -81,7 +88,7 @@ export class PropertyFormComponent {
     );
   }
 
-  public submit(): void {
+  public async submit() {
     const checkInTimeFieldValue: string = this.propertyForm.value.checkInTime;
     const checkOutTimeFieldValue: string = this.propertyForm.value.checkOutTime;
 
@@ -116,12 +123,23 @@ export class PropertyFormComponent {
     if (this.isInEditMode) {
       this.propertiesService
         .update(this.property.id, propertyFormModel)
-        .subscribe((x) => this.router.navigate(['/properties/' + x.id]));
+        .subscribe((property: PropertyResponse) =>
+          this.router.navigate(['/properties/' + property.id])
+        );
     } else {
       this.propertiesService
         .create(propertyFormModel)
-        .subscribe((x) => this.router.navigate(['/properties/' + x.id]));
+        .pipe(
+          mergeMap((property: PropertyResponse) =>
+            this.imagesService.create(property.id, this.images)
+          )
+        )
+        .subscribe((a) => console.log(a));
     }
+  }
+
+  public onUploadFinished(images: FormData) {
+    this.images = images;
   }
 
   private filter(value: string | CityResponse) {

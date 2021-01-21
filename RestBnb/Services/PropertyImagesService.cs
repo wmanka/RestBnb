@@ -17,9 +17,9 @@ namespace RestBnb.API.Services
             _dataContext = dataContext;
         }
 
-        public async Task<bool> CreateAsync(PropertyImage property)
+        public async Task<bool> CreateAsync(PropertyImage propertyImage)
         {
-            await _dataContext.PropertyImages.AddAsync(property);
+            await _dataContext.PropertyImages.AddAsync(propertyImage);
 
             var created = await _dataContext.SaveChangesAsync();
 
@@ -38,10 +38,10 @@ namespace RestBnb.API.Services
             return removed > 0;
         }
 
-        public async Task<IEnumerable<PropertyImage>> GetAllAsync(int propertyId)
+        public async Task<IEnumerable<PropertyImage>> GetAllAsync(int propertyImageId)
         {
             return await _dataContext.PropertyImages
-                .Where(x => x.PropertyId == propertyId).ToListAsync();
+                .Where(x => x.PropertyId == propertyImageId).ToListAsync();
         }
     }
 }

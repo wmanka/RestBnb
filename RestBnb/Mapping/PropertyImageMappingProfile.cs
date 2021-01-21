@@ -10,8 +10,8 @@ namespace RestBnb.API.Mapping
     {
         public PropertyImageMappingProfile()
         {
-            CreateMap<CreatePropertyImageRequest, CreatePropertyImageCommand>();
-            CreateMap<CreatePropertyImageCommand, PropertyImage>();
+            CreateMap<CreatePropertyImageRangeRequest, CreatePropertyImageRangeCommand>();
+            CreateMap<CreatePropertyImageRangeCommand, PropertyImage>();
             CreateMap<PropertyImage, PropertyImageResponse>();
         }
     }

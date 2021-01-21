@@ -8,9 +8,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
+import { UploadComponent } from './components/upload/upload.component';
 
 @NgModule({
-  declarations: [NavbarComponent, FooterComponent],
+  declarations: [NavbarComponent, FooterComponent, UploadComponent],
   imports: [
     CommonModule,
     MatToolbarModule,
@@ -20,6 +21,6 @@ import { FooterComponent } from './components/footer/footer.component';
     MatMenuModule,
     RouterModule,
   ],
-  exports: [NavbarComponent, FooterComponent],
+  exports: [NavbarComponent, FooterComponent, UploadComponent],
 })
 export class SharedModule {}
