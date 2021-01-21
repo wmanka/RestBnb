@@ -17,4 +17,13 @@ export class PropertyImagesService {
       images
     );
   }
+
+  public getAll(propertyId: number) {
+    return this.http.get(
+      ApiRoutes.PropertyImages.GetAll.replace(
+        'propertyId',
+        propertyId.toString()
+      )
+    );
+  }
 }

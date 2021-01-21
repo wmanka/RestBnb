@@ -1,5 +1,13 @@
 <div
-  *ngIf="property && checkIn && checkOut && cityName && startDate && endDate"
+  *ngIf="
+    property &&
+    checkIn &&
+    checkOut &&
+    cityName &&
+    startDate &&
+    endDate &&
+    propertyImages
+  "
 >
   <mat-carousel
     timings="250ms ease-in"
@@ -17,8 +25,8 @@
   >
     <mat-carousel-slide
       #matCarouselSlide
-      *ngFor="let slide of slides; let i = index"
-      [image]="slide.image"
+      *ngFor="let thumbnail of thumbnails; let i = index"
+      [image]="thumbnail"
       overlayColor="#00000040"
       [hideOverlay]="false"
     ></mat-carousel-slide>

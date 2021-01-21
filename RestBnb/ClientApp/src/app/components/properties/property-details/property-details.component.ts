@@ -1,3 +1,4 @@
+import { PropertyImagesService } from 'src/app/core/services/images.service';
 import {
   BookingsService,
   GetAllBookingsParams,
@@ -9,6 +10,7 @@ import { PropertyResponse } from 'src/app/shared/models/propertyResponse';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookingFormModel } from 'src/app/shared/models/bookingFormModel';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-property-details',
@@ -26,23 +28,15 @@ export class PropertyDetailsComponent {
   public startDate: Date;
   public endDate: Date;
   public dateFilter;
-
-  public slides = [
-    {
-      image:
-        'https://www.homekoncept.com.pl/wp-content/uploads/2019/03/HomeKONCEPT_37_zdjecie_1.jpg',
-    },
-    {
-      image:
-        'https://lh3.googleusercontent.com/proxy/Ht5Pfx6ALDxM7r_qMYceZYNqDs2YgqpYgnrQslUCe2Dc3Jt-F921i70QpVRovIp80mOenS-M1m6c5Onocga8sKynVgDQGzYrZoDtzw3U723IReBI4wU1',
-    },
-  ];
+  public propertyImages;
+  public thumbnails: Array<SafeUrl> = [];
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private citiesService: CitiesService,
-    private bookingsService: BookingsService
+    private bookingsService: BookingsService,
+    private propertyImagesService: PropertyImagesService
   ) {
     this.property = this.route.snapshot.data.property;
 
@@ -64,6 +58,16 @@ export class PropertyDetailsComponent {
       endDate: [this.endDate, Validators.required],
     });
 
+    this.propertyImagesService.getAll(this.property.id).subscribe((x) => {
+      this.propertyImages = x;
+
+      this.propertyImages.forEach((element) => {
+        let imageUrl = 'data:image/jpeg;base64,' + element.image;
+
+        this.thumbnails.push(imageUrl);
+      });
+    });
+
     const bookingsParams = new GetAllBookingsParams();
     bookingsParams.propertyId = this.property.id;
 
@@ -75,7 +79,6 @@ export class PropertyDetailsComponent {
         );
 
         daysBetween.forEach((date) => {
-          console.log(moment(date).format('DD/MM/YYYY'));
           this.bookedDates.push(moment(date).toDate());
         });
       });
@@ -89,7 +92,8 @@ export class PropertyDetailsComponent {
       };
     });
   }
-  enumerateDaysBetweenDates(from, to) {
+
+  public enumerateDaysBetweenDates(from, to) {
     const fromDate = moment(new Date(from)).startOf('day');
     const toDate = moment(new Date(to)).endOf('day');
 
