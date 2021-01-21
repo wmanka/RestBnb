@@ -38,10 +38,10 @@ namespace RestBnb.API.Services
             return removed > 0;
         }
 
-        public async Task<IEnumerable<PropertyImage>> GetAllAsync(int propertyImageId)
+        public async Task<IEnumerable<PropertyImage>> GetAllAsync(int propertyId)
         {
             return await _dataContext.PropertyImages
-                .Where(x => x.PropertyId == propertyImageId).ToListAsync();
+                .Where(x => x.PropertyId == propertyId).ToListAsync();
         }
     }
 }

@@ -4,58 +4,26 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.PropertyImages.Commands;
 using RestBnb.API.Application.PropertyImages.Queries;
-using RestBnb.API.Application.PropertyImages.Requests;
-using RestBnb.API.Services.Interfaces;
 using RestBnb.Core.Constants;
-using RestBnb.Core.Entities;
-using System.IO;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
     public class PropertyImagesController : BaseController
     {
-        public IPropertyImagesService Service { get; }
-
-        public PropertyImagesController(IPropertyImagesService service)
-        {
-            Service = service;
-        }
-
         [EnableCors]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [RequestFormSizeLimit(valueCountLimit: 214748364)]
         [HttpPost(ApiRoutes.PropertyImages.Create)]
         public async Task<IActionResult> CreateRangeAsync(int propertyId)
         {
-            var formCollection = await Request.ReadFormAsync();
-            var files = formCollection.Files;
+            var imagesCollection = await Request.ReadFormAsync();
+            var images = imagesCollection.Files.ToArray();
 
-            var createPropertyImageRequest = new CreatePropertyImageRangeRequest();
+            var response = await Mediator.Send(new CreatePropertyImageRangeCommand(propertyId, images));
 
-            foreach (var file in files)
-            {
-                var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                using var memoryStream = new MemoryStream();
-                await file.CopyToAsync(memoryStream);
-                await file.CopyToAsync(memoryStream);
-                
-                var propertyImage = new PropertyImage()
-                {
-                    Image = memoryStream.ToArray(),
-                    PropertyId = propertyId
-                };
-                
-                await Service.CreateAsync(propertyImage);
-            }
-
-            var response = await Mediator.Send(Mapper.Map(createPropertyImageRequest, new CreatePropertyImageRangeCommand(propertyId)));
-
-            return Created(
-                ApiRoutes.PropertyImages.GetAll
-                .Replace("{propertyId}", propertyId.ToString())
-                .Replace("{imageId}", response.Id.ToString()), response);
+            return Ok(response);
         }
 
         [HttpGet(ApiRoutes.PropertyImages.GetAll)]

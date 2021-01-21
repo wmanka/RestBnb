@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using RestBnb.API.Application.Properties.Responses;
 using System;
+using System.Collections.Generic;
 
 namespace RestBnb.API.Application.Properties.Commands
 {
