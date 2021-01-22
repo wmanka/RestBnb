@@ -1,3 +1,5 @@
+import { PropertyImageResponse } from './../../../shared/models/imageResponse';
+import { PropertyImagesService } from 'src/app/core/services/images.service';
 import { Component } from '@angular/core';
 import {
   GetAllPropertiesParams,
@@ -22,7 +24,10 @@ export class PropertiesListComponent {
     'buttons',
   ];
 
-  constructor(private propertiesService: PropertiesService) {}
+  constructor(
+    private propertiesService: PropertiesService,
+    private propertyImagesService: PropertyImagesService
+  ) {}
 
   public updateComponent($event): void {
     this.searchModel = $event;
@@ -33,6 +38,17 @@ export class PropertiesListComponent {
 
     this.propertiesService.getAll(params).subscribe((properties) => {
       this.properties = properties.map((x) => new PropertyListItem(x));
+
+      this.properties.forEach((property) => {
+        this.propertyImagesService
+          .getAll(property.id)
+          .subscribe((x: PropertyImageResponse[]) => {
+            if (x.length > 0) {
+              let imageUrl = 'data:image/jpeg;base64,' + x[0].image;
+              property.imageUrl = imageUrl;
+            }
+          });
+      });
     });
   }
 

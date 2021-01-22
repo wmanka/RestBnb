@@ -1,6 +1,8 @@
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiRoutes } from 'src/app/shared/constants/apiRoutes';
+import { PropertyImageResponse } from 'src/app/shared/models/imageResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +20,8 @@ export class PropertyImagesService {
     );
   }
 
-  public getAll(propertyId: number) {
-    return this.http.get(
+  public getAll(propertyId: number): Observable<PropertyImageResponse[]> {
+    return this.http.get<PropertyImageResponse[]>(
       ApiRoutes.PropertyImages.GetAll.replace(
         'propertyId',
         propertyId.toString()
