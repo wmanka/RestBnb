@@ -3,6 +3,7 @@
     <mat-card-title>Add/edit property</mat-card-title>
     <mat-card-content>
       <form
+        enctype="multipart/form-data"
         fxLayout="column"
         fxLayoutAlign="space-around stretch"
         fxLayoutGap="20px"
@@ -130,16 +131,11 @@
             />
           </mat-form-field>
         </div>
-
-        <mat-form-field>
-          <ngx-mat-file-input
-            formControlName="images"
-            placeholder="Property images"
-            multiple
-          ></ngx-mat-file-input>
-          <mat-icon matSuffix>folder</mat-icon>
-        </mat-form-field>
-
+        <div fxLayout="row" fxLayoutGap="20px">
+          <app-upload
+            (onUploadFinished)="onUploadFinished($event)"
+          ></app-upload>
+        </div>
         <mat-card-actions>
           <button type="submit" name="submit" mat-raised-button>Submit</button>
         </mat-card-actions>

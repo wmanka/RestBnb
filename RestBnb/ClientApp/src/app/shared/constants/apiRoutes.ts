@@ -18,4 +18,15 @@ export class ApiRoutes {
     public static Create = ApiRoutes.ApiBase + '/properties';
     public static Get = ApiRoutes.ApiBase + '/properties/';
   };
+
+  static Bookings = class {
+    public static GetAll = ApiRoutes.ApiBase + '/bookings';
+    public static Create = ApiRoutes.ApiBase + '/bookings';
+    public static Get = ApiRoutes.ApiBase + '/bookings/';
+  };
+
+  static PropertyImages = class {
+    public static Create = ApiRoutes.ApiBase + '/properties/propertyId/images';
+    public static GetAll = ApiRoutes.ApiBase + '/properties/propertyId/images';
+  };
 }

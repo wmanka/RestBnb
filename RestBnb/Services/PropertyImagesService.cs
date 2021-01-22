@@ -17,9 +17,9 @@ namespace RestBnb.API.Services
             _dataContext = dataContext;
         }
 
-        public async Task<bool> CreateAsync(PropertyImage property)
+        public async Task<bool> CreateAsync(PropertyImage propertyImage)
         {
-            await _dataContext.PropertyImages.AddAsync(property);
+            await _dataContext.PropertyImages.AddAsync(propertyImage);
 
             var created = await _dataContext.SaveChangesAsync();
 

@@ -1,3 +1,4 @@
+import { SharedModule } from './../../shared/shared.module';
 import { PropertiesRoutingModule } from './properties-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +15,8 @@ import { MatTableModule } from '@angular/material/table';
 import { PropertyFormComponent } from './property-form/property-form.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCarouselModule } from '@ngbmodule/material-carousel';
 
 @NgModule({
   declarations: [PropertiesRoutingModule.components, PropertyFormComponent],
@@ -33,6 +36,9 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     FlexLayoutModule,
     MaterialFileInputModule,
     MatIconModule,
+    MatDividerModule,
+    SharedModule,
+    MatCarouselModule.forRoot(),
   ],
 })
 export class PropertiesModule {}

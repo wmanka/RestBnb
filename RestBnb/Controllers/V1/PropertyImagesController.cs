@@ -1,26 +1,29 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using RestBnb.API.Application.PropertyImages.Commands;
 using RestBnb.API.Application.PropertyImages.Queries;
-using RestBnb.API.Application.PropertyImages.Requests;
 using RestBnb.Core.Constants;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RestBnb.API.Controllers.V1
 {
     public class PropertyImagesController : BaseController
     {
+        [EnableCors]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [RequestFormSizeLimit(valueCountLimit: 214748364)]
         [HttpPost(ApiRoutes.PropertyImages.Create)]
-        public async Task<IActionResult> Create(int propertyId, CreatePropertyImageRequest createPropertyImageRequest)
+        public async Task<IActionResult> CreateRangeAsync(int propertyId)
         {
-            var response = await Mediator.Send(Mapper.Map(createPropertyImageRequest, new CreatePropertyImageCommand(propertyId)));
+            var imagesCollection = await Request.ReadFormAsync();
+            var images = imagesCollection.Files.ToArray();
 
-            return Created(
-                ApiRoutes.PropertyImages.GetAll
-                .Replace("{propertyId}", propertyId.ToString())
-                .Replace("{imageId}", response.Id.ToString()), response);
+            var response = await Mediator.Send(new CreatePropertyImageRangeCommand(propertyId, images));
+
+            return Ok(response);
         }
 
         [HttpGet(ApiRoutes.PropertyImages.GetAll)]

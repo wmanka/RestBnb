@@ -1,4 +1,6 @@
-﻿namespace RestBnb.API.Application.PropertyImages.Responses
+﻿using Microsoft.AspNetCore.Http;
+
+namespace RestBnb.API.Application.PropertyImages.Responses
 {
     public class PropertyImageResponse
     {
