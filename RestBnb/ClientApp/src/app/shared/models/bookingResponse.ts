@@ -7,4 +7,5 @@ export class BookingResponse {
   bookingState: string;
   userId: number;
   propertyId: number;
+  cancellationDate: Date | null;
 }

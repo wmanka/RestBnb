@@ -13,5 +13,6 @@ namespace RestBnb.Core.Contracts.V1.Responses
         public BookingState BookingState { get; set; }
         public int UserId { get; set; }
         public int PropertyId { get; set; }
+        public DateTime? CancellationDate { get; set; }
     }
 }

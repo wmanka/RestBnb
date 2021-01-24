@@ -22,6 +22,7 @@ export class ApiRoutes {
   static Bookings = class {
     public static GetAll = ApiRoutes.ApiBase + '/bookings';
     public static Create = ApiRoutes.ApiBase + '/bookings';
+    public static Put = ApiRoutes.ApiBase + '/bookings/bookingId';
     public static Get = ApiRoutes.ApiBase + '/bookings/';
   };
 

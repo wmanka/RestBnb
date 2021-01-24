@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenStorageService {
   private authStateSource = new Subject<boolean>();
-  public authState$ = this.authStateSource.asObservable();
-
   public redirectUrl: string;
+
+  public authState$ = this.authStateSource.asObservable();
 
   public getToken(): string {
     return localStorage.getItem('token');
@@ -26,5 +27,10 @@ export class TokenStorageService {
 
   public isLoggedIn(): boolean {
     return this.getToken() != null;
+  }
+
+  public getCurrentUserId(): number {
+    const decodedToken = jwt_decode(this.getToken());
+    return decodedToken['id'];
   }
 }

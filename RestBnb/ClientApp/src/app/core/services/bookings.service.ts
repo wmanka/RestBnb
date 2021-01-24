@@ -26,6 +26,16 @@ export class BookingsService {
 
     return this.http.get<BookingResponse[]>(ApiRoutes.Bookings.GetAll, options);
   }
+
+  public put(
+    bookingId: number,
+    booking: UpdateBookingModel
+  ): Observable<BookingResponse> {
+    return this.http.put<BookingResponse>(
+      ApiRoutes.Bookings.Put.replace('bookingId', bookingId.toString()),
+      booking
+    );
+  }
 }
 
 export class GetAllBookingsParams {
@@ -34,4 +44,11 @@ export class GetAllBookingsParams {
   bookingState?: string;
   userId?: number;
   propertyId?: number;
+}
+
+export class UpdateBookingModel {
+  checkInDate: Date;
+  checkOutDate: Date;
+  BookingState: string;
+  cancellationDate: Date;
 }
