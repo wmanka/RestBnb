@@ -10,7 +10,7 @@ namespace RestBnb.Infrastructure.Configurations
         {
             builder.ToTable("Properties");
 
-            builder.HasQueryFilter(p => !p.IsDeleted);
+            //builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }

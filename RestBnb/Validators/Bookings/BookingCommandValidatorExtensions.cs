@@ -25,11 +25,11 @@ namespace RestBnb.API.Validators.Bookings
             return ruleBuilder.SetValidator(new MustBeAvailable<TElement>(serviceProvider));
         }
 
-        public static IRuleBuilderOptions<T, TElement> MustBeOwnedByCurrentUser<T, TElement>(this IRuleBuilder<T, TElement> ruleBuilder, IServiceProvider serviceProvider)
-            where TElement : IRequest<BookingResponse>
-        {
-            return ruleBuilder.SetValidator(new MustBeOwnedByCurrentUser<TElement>(serviceProvider));
-        }
+        //public static IRuleBuilderOptions<T, TElement> MustBeOwnedByCurrentUser<T, TElement>(this IRuleBuilder<T, TElement> ruleBuilder, IServiceProvider serviceProvider)
+        //    where TElement : IRequest<BookingResponse>
+        //{
+        //    return ruleBuilder.SetValidator(new MustBeOwnedByCurrentUser<TElement>(serviceProvider));
+        //}
 
         public static IRuleBuilderOptions<T, TElement> MustNotBeInProgress<T, TElement>(this IRuleBuilder<T, TElement> ruleBuilder, IServiceProvider serviceProvider)
             where TElement : IRequest<BookingResponse>

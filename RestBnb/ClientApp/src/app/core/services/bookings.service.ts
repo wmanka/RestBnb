@@ -1,3 +1,4 @@
+import { BookingState } from './../../shared/models/bookingResponse';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -41,7 +42,7 @@ export class BookingsService {
 export class GetAllBookingsParams {
   checkInDate?: Date;
   checkOutDate?: Date;
-  bookingState?: string;
+  bookingState?: BookingState;
   userId?: number;
   propertyId?: number;
 }
@@ -49,6 +50,6 @@ export class GetAllBookingsParams {
 export class UpdateBookingModel {
   checkInDate: Date;
   checkOutDate: Date;
-  BookingState: string;
+  BookingState: BookingState;
   cancellationDate: Date;
 }

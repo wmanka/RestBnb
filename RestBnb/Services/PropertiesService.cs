@@ -97,7 +97,7 @@ namespace RestBnb.API.Services
 
             if (filter?.CityId > 0)
             {
-                properties = properties.Where(x => x.CityId >= filter.CityId);
+                properties = properties.Where(x => x.CityId == filter.CityId);
             }
 
             return properties;

@@ -1,6 +1,10 @@
+import { BookingState } from './../../../shared/models/bookingResponse';
 import { PropertyImagesService } from './../../../core/services/images.service';
 import { CitiesService } from './../../../core/services/cities.service';
-import { PropertiesService } from './../../../core/services/properties.service';
+import {
+  PropertiesService,
+  GetAllPropertiesParams,
+} from './../../../core/services/properties.service';
 import { TokenStorageService } from './../../../core/services/token-storage.service';
 import {
   BookingsService,
@@ -34,8 +38,11 @@ import {
 })
 export class BookingsComponent {
   public userId: number;
+
   public data: BookingsListElement[] = [];
-  columnsToDisplay = [
+  public myPropertiesBookings: BookingsListElement[] = [];
+
+  public columnsToDisplay = [
     'checkInDate',
     'checkOutDate',
     'bookingState',
@@ -43,8 +50,17 @@ export class BookingsComponent {
     'pricePerNight',
     'totalPrice',
   ];
+  public expandedElement: BookingResponse | null;
 
-  expandedElement: BookingResponse | null;
+  myPropertiesBookingsDisplayedColumns: string[] = [
+    'propertyName',
+    'city',
+    'checkInDate',
+    'checkOutDate',
+    'totalPrice',
+    'details',
+    'actions',
+  ];
 
   constructor(
     private bookingsService: BookingsService,
@@ -55,10 +71,54 @@ export class BookingsComponent {
   ) {
     this.userId = this.tokenStorageService.getCurrentUserId();
 
-    const params = new GetAllBookingsParams();
-    params.userId = this.userId;
+    this.loadMyPropertiesBookings();
+    this.loadMyBookings();
+  }
 
-    this.bookingsService.getAll(params).subscribe((bookings) => {
+  public loadMyPropertiesBookings() {
+    let getAllPropertiesParams = new GetAllPropertiesParams();
+    getAllPropertiesParams.userId = this.userId;
+
+    this.propertiesService
+      .getAll(getAllPropertiesParams)
+      .subscribe((properties) => {
+        properties.forEach((property) => {
+          let getAllBookingsParams = new GetAllBookingsParams();
+          getAllBookingsParams.propertyId = property.id;
+
+          this.bookingsService
+            .getAll(getAllBookingsParams)
+            .subscribe((bookings) => {
+              bookings.forEach((booking) => {
+                let bookingOfMyPropertyListElement = new BookingsListElement();
+
+                bookingOfMyPropertyListElement.bookingState =
+                  booking.bookingState;
+                bookingOfMyPropertyListElement.checkInDate =
+                  booking.checkInDate;
+                bookingOfMyPropertyListElement.checkOutDate =
+                  booking.checkOutDate;
+                bookingOfMyPropertyListElement.id = booking.id;
+                bookingOfMyPropertyListElement.pricePerNight =
+                  property.pricePerNight;
+                bookingOfMyPropertyListElement.propertyId = property.id;
+                bookingOfMyPropertyListElement.propertyName = property.name;
+                bookingOfMyPropertyListElement.totalPrice = booking.totalPrice;
+                bookingOfMyPropertyListElement.cancellationDate =
+                  booking.cancellationDate;
+
+                this.myPropertiesBookings.push(bookingOfMyPropertyListElement);
+              });
+            });
+        });
+      });
+  }
+
+  public loadMyBookings() {
+    let getAllBookingsParams = new GetAllBookingsParams();
+    getAllBookingsParams.userId = this.userId;
+
+    this.bookingsService.getAll(getAllBookingsParams).subscribe((bookings) => {
       bookings.forEach((booking) => {
         this.propertiesService.get(booking.propertyId).subscribe((property) => {
           this.citiesService.get(property.cityId).subscribe((city) => {
@@ -102,10 +162,36 @@ export class BookingsComponent {
     updateModel.checkInDate = booking.checkInDate;
     updateModel.checkOutDate = booking.checkOutDate;
 
-    this.bookingsService.put(bookingId, updateModel).subscribe((x) => {
-      console.log(x);
+    this.bookingsService.put(bookingId, updateModel).subscribe((xx) => {
       let i = this.data.findIndex((x) => x.id == bookingId);
       this.data[i].cancellationDate = new Date();
+    });
+  }
+
+  public cancelBookingAsHost(bookingId: number) {
+    let booking = this.myPropertiesBookings.find((b) => b.id === bookingId);
+    let updateModel = new UpdateBookingModel();
+    updateModel.cancellationDate = new Date();
+    updateModel.BookingState = booking.bookingState;
+    updateModel.checkInDate = booking.checkInDate;
+    updateModel.checkOutDate = booking.checkOutDate;
+
+    this.bookingsService.put(bookingId, updateModel).subscribe(() => {
+      let i = this.myPropertiesBookings.findIndex((b) => b.id === bookingId);
+      this.myPropertiesBookings[i].cancellationDate = new Date();
+    });
+  }
+
+  public acceptBooking(bookingId: number) {
+    let booking = this.myPropertiesBookings.find((b) => b.id === bookingId);
+    let updateModel = new UpdateBookingModel();
+    updateModel.BookingState = BookingState.Accepted;
+    updateModel.checkInDate = booking.checkInDate;
+    updateModel.checkOutDate = booking.checkOutDate;
+
+    this.bookingsService.put(bookingId, updateModel).subscribe((xx) => {
+      let i = this.myPropertiesBookings.findIndex((b) => b.id === bookingId);
+      this.myPropertiesBookings[i].bookingState = xx.bookingState;
     });
   }
 }
@@ -120,7 +206,7 @@ export class BookingsListElement {
   city: string;
   pricePerNight: number;
   totalPrice: number;
-  bookingState: string;
+  bookingState: BookingState;
   accommodatesNumber: number;
   bathroomNumber: number;
   bedroomNumber: number;

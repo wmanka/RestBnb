@@ -4,8 +4,13 @@ export class BookingResponse {
   checkOutDate: Date;
   pricePerNight: number;
   totalPrice: number;
-  bookingState: string;
+  bookingState: BookingState;
   userId: number;
   propertyId: number;
   cancellationDate: Date | null;
+}
+
+export enum BookingState {
+  Pending = 0,
+  Accepted = 1,
 }
