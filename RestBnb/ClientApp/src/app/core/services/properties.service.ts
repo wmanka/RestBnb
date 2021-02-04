@@ -48,6 +48,10 @@ export class PropertiesService {
       property
     );
   }
+
+  public delete(propertyId: number): Observable<void> {
+    return this.http.delete<void>(ApiRoutes.Properties.Delete + propertyId);
+  }
 }
 
 export class GetAllPropertiesParams {

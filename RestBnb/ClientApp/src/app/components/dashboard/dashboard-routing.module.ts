@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { MyPropertiesBookingsComponent } from './my-properties-bookings/my-properties-bookings.component';
+import { MyPropertiesComponent } from './my-properties/my-properties.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     component: MyPropertiesBookingsComponent,
   },
+  {
+    path: 'my-properties',
+    canActivate: [AuthGuard],
+    component: MyPropertiesComponent,
+  },
 ];
 
 @NgModule({
@@ -22,5 +28,9 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class DashboardRoutingModule {
-  static components = [MyBookingsComponent, MyPropertiesBookingsComponent];
+  static components = [
+    MyBookingsComponent,
+    MyPropertiesBookingsComponent,
+    MyPropertiesComponent,
+  ];
 }
