@@ -30,9 +30,9 @@ namespace RestBnb.API.Validators.Properties.Commands
             {
                 CascadeMode = CascadeMode.Stop;
 
-                RuleFor(booking => booking)
-                    .MustExist(serviceProvider)
-                    .MustBeOwnedByCurrentUser(serviceProvider);
+                //RuleFor(booking => booking)
+                //    .MustExist(serviceProvider)
+                //    .MustBeOwnedByCurrentUser(serviceProvider);
             }
         }
     }

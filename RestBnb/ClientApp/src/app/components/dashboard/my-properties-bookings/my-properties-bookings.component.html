@@ -1,0 +1,135 @@
+<div *ngIf="isLoading" class="mat-spinner-wrapper">
+  <mat-progress-spinner
+    class="mat-spinner-element"
+    [color]="color"
+    [mode]="mode"
+  >
+  </mat-progress-spinner>
+</div>
+<div *ngIf="!isLoading" class="my-properties-bookings-component">
+  <h3>My properties bookings</h3>
+  <p *ngIf="myPropertiesBookings && myPropertiesBookings.length == 0">
+    You don't have any bookings of your properties.
+  </p>
+  <table
+    *ngIf="myPropertiesBookings && myPropertiesBookings.length > 0"
+    mat-table
+    [dataSource]="myPropertiesBookings"
+    class="mat-elevation-z8"
+  >
+    <ng-container matColumnDef="propertyName">
+      <th mat-header-cell *matHeaderCellDef>Property Name</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.propertyName }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef>City</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.city }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.address }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkInDate">
+      <th mat-header-cell *matHeaderCellDef>Check-in Date</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.checkInDate | date }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkOutDate">
+      <th mat-header-cell *matHeaderCellDef>Check-out Date</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.checkOutDate | date }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPrice">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.totalPrice | currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="details">
+      <th mat-header-cell *matHeaderCellDef>Property Details</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        <button
+          mat-raised-button
+          style="margin: 10px"
+          color="secondary"
+          [routerLink]="['/properties/details', bookingOfMyProperty.propertyId]"
+        >
+          Property details
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        <button
+          *ngIf="bookingOfMyProperty.bookingState == 'Pending'"
+          mat-raised-button
+          style="margin: 10px"
+          color="primary"
+          (click)="acceptBooking(bookingOfMyProperty.id)"
+        >
+          Accept
+        </button>
+        <button
+          *ngIf="
+            bookingOfMyProperty.bookingState == 'Accepted' &&
+            !bookingOfMyProperty.cancellationDate
+          "
+          mat-raised-button
+          style="margin: 10px"
+          color="primary"
+          disabled
+        >
+          Accepted
+        </button>
+        <button
+          *ngIf="
+            !bookingOfMyProperty.cancellationDate &&
+            (bookingOfMyProperty.bookingState == 'Accepted' ||
+              bookingOfMyProperty.bookingState == 'Pending')
+          "
+          mat-raised-button
+          style="margin: 10px"
+          color="warn"
+          (click)="cancelBookingAsHost(bookingOfMyProperty.id)"
+        >
+          Cancel
+        </button>
+
+        <button
+          *ngIf="bookingOfMyProperty.cancellationDate"
+          mat-raised-button
+          style="margin: 10px"
+          color="warn"
+          disabled
+        >
+          Cancelled
+        </button>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="myPropertiesBookingsDisplayedColumns"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: myPropertiesBookingsDisplayedColumns"
+    ></tr>
+  </table>
+</div>

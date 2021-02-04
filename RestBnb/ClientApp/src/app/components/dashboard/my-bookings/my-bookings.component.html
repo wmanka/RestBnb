@@ -1,0 +1,152 @@
+<div *ngIf="isLoading" class="mat-spinner-wrapper">
+  <mat-progress-spinner
+    class="mat-spinner-element"
+    [color]="color"
+    [mode]="mode"
+  >
+  </mat-progress-spinner>
+</div>
+<div *ngIf="!isLoading" class="my-bookings-component">
+  <h3>My bookings</h3>
+  <div>
+    <table
+      *ngIf="data"
+      mat-table
+      [dataSource]="data"
+      multiTemplateDataRows
+      class="mat-elevation-z8"
+    >
+      <ng-container matColumnDef="checkInDate">
+        <th mat-header-cell *matHeaderCellDef>Check-in Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.checkInDate | date }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="checkOutDate">
+        <th mat-header-cell *matHeaderCellDef>Check-out Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.checkOutDate | date }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bookingState">
+        <th mat-header-cell *matHeaderCellDef>Booking Stte</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.bookingState }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef>City</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.city }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="pricePerNight">
+        <th mat-header-cell *matHeaderCellDef>Price per night</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.pricePerNight | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalPrice">
+        <th mat-header-cell *matHeaderCellDef>Total price</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.totalPrice | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="expandedDetail">
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [attr.colspan]="columnsToDisplay.length"
+        >
+          <div
+            class="example-element-detail"
+            [@detailExpand]="
+              element == expandedElement ? 'expanded' : 'collapsed'
+            "
+          >
+            <div class="example-element-diagram">
+              <div *ngIf="element.imageUrl" class="example-element-image">
+                <img [src]="element.imageUrl" />
+              </div>
+            </div>
+            <div class="example-element-content">
+              <div class="example-element-description">
+                {{ element.propertyName }}
+              </div>
+              <div class="example-element-description">
+                <span class="example-element-description-attribution"
+                  >{{ element.address }}, {{ element.city }}</span
+                >
+              </div>
+              <div class="example-element-description">
+                {{ element.description }}
+              </div>
+              <div class="example-element-description">
+                Accommodates number:
+                {{ element.accommodatesNumber }}
+              </div>
+              <div class="example-element-description">
+                Bathroom number:
+                {{ element.bathroomNumber }}
+              </div>
+              <div class="example-element-description">
+                Bedroom number:
+                {{ element.bedroomNumber }}
+              </div>
+            </div>
+            <div class="example-element-diagram">
+              <button
+                mat-raised-button
+                style="margin: 10px"
+                color="primary"
+                [routerLink]="['/properties/details', element.propertyId]"
+              >
+                Property details
+              </button>
+              <br />
+              <button
+                *ngIf="!element.cancellationDate"
+                mat-raised-button
+                style="margin: 10px"
+                color="warn"
+                (click)="cancelBooking(element.id)"
+              >
+                Cancel booking
+              </button>
+              <br />
+              <button
+                *ngIf="element.cancellationDate"
+                mat-raised-button
+                style="margin: 10px"
+                color="warn"
+                disabled
+              >
+                Booking cancelled {{ element.cancellationDate | date }}
+              </button>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: columnsToDisplay"
+        class="example-element-row"
+        [class.example-expanded-row]="expandedElement === element"
+        (click)="expandedElement = expandedElement === element ? null : element"
+      ></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: ['expandedDetail']"
+        class="example-detail-row"
+      ></tr>
+    </table>
+  </div>
+</div>

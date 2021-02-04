@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -23,7 +24,8 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private authenticationService: AuthenticationService,
     private tokenStorageService: TokenStorageService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     this.registerForm = this.fb.group(
       {
@@ -47,6 +49,7 @@ export class RegisterComponent implements OnInit {
       .subscribe((data) => {
         this.tokenStorageService.signIn(data.token);
         this.openSnackBar();
+        this.router.navigate(['/properties']);
       });
   }
 

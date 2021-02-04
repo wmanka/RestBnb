@@ -1,5 +1,3 @@
-import { ApiRoutes } from 'src/app/shared/constants/apiRoutes';
-import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({

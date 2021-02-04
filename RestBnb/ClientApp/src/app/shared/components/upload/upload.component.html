@@ -1,6 +1,7 @@
 <div class="row" style="margin-bottom: 15px">
   <div class="col-md-3">
     <input
+      matInput
       type="file"
       #file
       placeholder="Choose file"
@@ -9,7 +10,13 @@
       multiple
     />
 
-    <button type="button" class="btn btn-success" (click)="file.click()">
+    <button
+      mat-raised-button
+      color="accent"
+      type="button"
+      class="btn btn-success"
+      (click)="file.click()"
+    >
       Upload File
     </button>
   </div>

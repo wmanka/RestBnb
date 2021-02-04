@@ -16,10 +16,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
-import { BookingsComponent } from './bookings/bookings.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MyPropertiesComponent } from './my-properties/my-properties.component';
 
 @NgModule({
-  declarations: [BookingsComponent],
+  declarations: [DashboardRoutingModule.components, MyPropertiesComponent],
   imports: [
     DashboardRoutingModule,
     CommonModule,
@@ -39,6 +40,7 @@ import { BookingsComponent } from './bookings/bookings.component';
     SharedModule,
     MatTabsModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class DashboardModule {}

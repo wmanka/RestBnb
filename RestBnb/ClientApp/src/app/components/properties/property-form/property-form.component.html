@@ -1,6 +1,7 @@
-<div style="width: 50%">
+<div class="property-form-card">
   <mat-card>
-    <mat-card-title>Add/edit property</mat-card-title>
+    <mat-card-title *ngIf="isInEditMode">Edit property</mat-card-title>
+    <mat-card-title *ngIf="!isInEditMode">Add property</mat-card-title>
     <mat-card-content>
       <form
         enctype="multipart/form-data"

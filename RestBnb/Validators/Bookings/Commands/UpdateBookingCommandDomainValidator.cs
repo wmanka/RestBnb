@@ -37,7 +37,7 @@ namespace RestBnb.API.Validators.Bookings.Commands
                     .MustLastAtLeastOneDay()
                     .MustExist(serviceProvider)
                     .MustBeAvailable(serviceProvider)
-                    .MustBeOwnedByCurrentUser(serviceProvider)
+                    //.MustBeOwnedByCurrentUser(serviceProvider)
                     .MustNotBeInProgress(serviceProvider);
             }
         }

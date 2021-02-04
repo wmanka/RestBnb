@@ -17,6 +17,7 @@ export class ApiRoutes {
     public static GetAll = ApiRoutes.ApiBase + '/properties';
     public static Create = ApiRoutes.ApiBase + '/properties';
     public static Get = ApiRoutes.ApiBase + '/properties/';
+    public static Delete = ApiRoutes.ApiBase + '/properties/';
   };
 
   static Bookings = class {
@@ -24,6 +25,12 @@ export class ApiRoutes {
     public static Create = ApiRoutes.ApiBase + '/bookings';
     public static Put = ApiRoutes.ApiBase + '/bookings/bookingId';
     public static Get = ApiRoutes.ApiBase + '/bookings/';
+  };
+
+  static BookingsList = class {
+    public static GetMyBookings = ApiRoutes.ApiBase + '/myBookingsList';
+    public static GetMyPropertiesBookings =
+      ApiRoutes.ApiBase + '/myPropertiesBookingsList';
   };
 
   static PropertyImages = class {

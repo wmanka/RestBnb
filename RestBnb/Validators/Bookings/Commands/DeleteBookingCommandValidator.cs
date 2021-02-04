@@ -32,7 +32,7 @@ namespace RestBnb.API.Validators.Bookings.Commands
 
                 RuleFor(booking => booking)
                     .MustExist(serviceProvider)
-                    .MustBeOwnedByCurrentUser(serviceProvider)
+                    //.MustBeOwnedByCurrentUser(serviceProvider)
                     .MustNotBeInProgress(serviceProvider);
             }
         }

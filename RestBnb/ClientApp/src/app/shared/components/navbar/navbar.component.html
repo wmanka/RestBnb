@@ -21,13 +21,17 @@
       <mat-icon>dashboard</mat-icon>
       <span>Profile</span>
     </button>
-    <button mat-menu-item [routerLink]="['/']">
+    <button mat-menu-item [routerLink]="['/dashboard/my-properties']">
       <mat-icon>house</mat-icon>
-      <span>Properties</span>
+      <span>My Properties</span>
     </button>
-    <button mat-menu-item [routerLink]="['/dashboard/bookings']">
+    <button mat-menu-item [routerLink]="['/dashboard/my-bookings']">
       <mat-icon>bookmarks</mat-icon>
-      <span>Bookings</span>
+      <span>My Bookings</span>
+    </button>
+    <button mat-menu-item [routerLink]="['/dashboard/my-properties-bookings']">
+      <mat-icon>bookmarks</mat-icon>
+      <span>My Properties Bookings</span>
     </button>
     <button mat-menu-item (click)="logout()">
       <mat-icon>close</mat-icon>
