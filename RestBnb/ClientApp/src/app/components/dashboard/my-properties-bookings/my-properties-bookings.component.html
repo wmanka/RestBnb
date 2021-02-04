@@ -1,0 +1,94 @@
+<h3>My properties bookings</h3>
+<table
+  *ngIf="myPropertiesBookings.length > 0"
+  mat-table
+  [dataSource]="myPropertiesBookings"
+  class="mat-elevation-z8"
+>
+  <ng-container matColumnDef="propertyName">
+    <th mat-header-cell *matHeaderCellDef>Property Name</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      {{ bookingOfMyProperty.propertyName }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="city">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      {{ bookingOfMyProperty.city }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="checkInDate">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      {{ bookingOfMyProperty.checkInDate }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="checkOutDate">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      {{ bookingOfMyProperty.checkOutDate }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="totalPrice">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      {{ bookingOfMyProperty.totalPrice }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="details">
+    <th mat-header-cell *matHeaderCellDef>Property Details</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      <button
+        mat-raised-button
+        color="secondary"
+        [routerLink]="['/properties/details', bookingOfMyProperty.propertyId]"
+      >
+        Property details
+      </button>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let bookingOfMyProperty">
+      <button
+        *ngIf="bookingOfMyProperty.bookingState == 'Pending'"
+        mat-raised-button
+        color="primary"
+        (click)="acceptBooking(bookingOfMyProperty.id)"
+      >
+        Accept
+      </button>
+      <button
+        *ngIf="bookingOfMyProperty.bookingState == 'Accepted'"
+        mat-raised-button
+        color="primary"
+        disabled
+      >
+        Accepted
+      </button>
+      <button
+        *ngIf="!bookingOfMyProperty.cancellationDate"
+        mat-raised-button
+        color="warn"
+        (click)="cancelBookingAsHost(bookingOfMyProperty.id)"
+      >
+        Cancel
+      </button>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    *matHeaderRowDef="myPropertiesBookingsDisplayedColumns"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: myPropertiesBookingsDisplayedColumns"
+  ></tr>
+</table>

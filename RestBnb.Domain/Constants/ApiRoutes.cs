@@ -39,6 +39,11 @@
             public const string Delete = Base + "/bookings/{bookingId}";
         }
 
+        public static class BookingsList
+        {
+            public const string GetMyBookings = Base + "/bookingsList";
+        }
+
         public static class Users
         {
             public const string Get = Base + "/users/{userId}";

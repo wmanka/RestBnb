@@ -16,10 +16,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
-import { BookingsComponent } from './bookings/bookings.component';
 
 @NgModule({
-  declarations: [BookingsComponent],
+  declarations: [DashboardRoutingModule.components],
   imports: [
     DashboardRoutingModule,
     CommonModule,
