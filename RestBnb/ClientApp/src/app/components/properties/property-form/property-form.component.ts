@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { PropertyResponse } from './../../../shared/models/propertyResponse';
+import { PropertyResponse } from 'src/app/shared/models/propertyResponse';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -39,8 +38,7 @@ export class PropertyFormComponent {
     private propertiesService: PropertiesService,
     private imagesService: PropertyImagesService,
     private router: Router,
-    private route: ActivatedRoute,
-    private http: HttpClient
+    private route: ActivatedRoute
   ) {
     this.property = this.route.snapshot.data.property;
 
@@ -124,7 +122,7 @@ export class PropertyFormComponent {
       this.propertiesService
         .update(this.property.id, propertyFormModel)
         .subscribe((property: PropertyResponse) =>
-          this.router.navigate(['/properties/' + property.id])
+          this.router.navigate(['/properties/details/' + property.id])
         );
     } else {
       this.propertiesService
@@ -134,7 +132,9 @@ export class PropertyFormComponent {
             this.imagesService.create(property.id, this.images)
           )
         )
-        .subscribe((a) => console.log(a));
+        .subscribe((property: PropertyResponse) => {
+          this.router.navigate(['/properties/details/' + property.id]);
+        });
     }
   }
 

@@ -4,7 +4,7 @@ import {
   BookingsService,
   UpdateBookingModel,
 } from '../../../core/services/bookings.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BookingResponse } from 'src/app/shared/models/bookingResponse';
 import {
   animate,

@@ -80,6 +80,8 @@ namespace RestBnb.API.Controllers.V1
             foreach (var property in properties)
             {
                 var bookings = await _bookingsService.GetAllBookingsAsync(new GetAllBookingsFilter { PropertyId = property.Id });
+                var city = await _citiesService.GetCityByIdAsync(property.CityId);
+
 
                 foreach (var booking in bookings)
                 {
@@ -93,7 +95,9 @@ namespace RestBnb.API.Controllers.V1
                         PricePerNight = booking.PricePerNight,
                         PropertyId = property.Id,
                         PropertyName = property.Name,
-                        TotalPrice = booking.TotalPrice
+                        TotalPrice = booking.TotalPrice,
+                        City = city.Name,
+                        Address = property.Address
                     };
                     list.Add(element);
                 }

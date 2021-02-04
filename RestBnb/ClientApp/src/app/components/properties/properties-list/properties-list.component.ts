@@ -19,6 +19,7 @@ export class PropertiesListComponent {
   public properties: PropertyListItem[];
   public displayedColumns: string[] = [
     'imageUrl',
+    'name',
     'description',
     'price',
     'buttons',

@@ -6,7 +6,7 @@
   >
   </mat-progress-spinner>
 </div>
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="my-properties-bookings-component">
   <h3>My properties bookings</h3>
   <p *ngIf="myPropertiesBookings && myPropertiesBookings.length == 0">
     You don't have any bookings of your properties.
@@ -25,30 +25,37 @@
     </ng-container>
 
     <ng-container matColumnDef="city">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th mat-header-cell *matHeaderCellDef>City</th>
       <td mat-cell *matCellDef="let bookingOfMyProperty">
         {{ bookingOfMyProperty.city }}
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="checkInDate">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>Address</th>
       <td mat-cell *matCellDef="let bookingOfMyProperty">
-        {{ bookingOfMyProperty.checkInDate }}
+        {{ bookingOfMyProperty.address }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="checkInDate">
+      <th mat-header-cell *matHeaderCellDef>Check-in Date</th>
+      <td mat-cell *matCellDef="let bookingOfMyProperty">
+        {{ bookingOfMyProperty.checkInDate | date }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="checkOutDate">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <th mat-header-cell *matHeaderCellDef>Check-out Date</th>
       <td mat-cell *matCellDef="let bookingOfMyProperty">
-        {{ bookingOfMyProperty.checkOutDate }}
+        {{ bookingOfMyProperty.checkOutDate | date }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="totalPrice">
       <th mat-header-cell *matHeaderCellDef>Price</th>
       <td mat-cell *matCellDef="let bookingOfMyProperty">
-        {{ bookingOfMyProperty.totalPrice }}
+        {{ bookingOfMyProperty.totalPrice | currency }}
       </td>
     </ng-container>
 
@@ -57,6 +64,7 @@
       <td mat-cell *matCellDef="let bookingOfMyProperty">
         <button
           mat-raised-button
+          style="margin: 10px"
           color="secondary"
           [routerLink]="['/properties/details', bookingOfMyProperty.propertyId]"
         >
@@ -71,6 +79,7 @@
         <button
           *ngIf="bookingOfMyProperty.bookingState == 'Pending'"
           mat-raised-button
+          style="margin: 10px"
           color="primary"
           (click)="acceptBooking(bookingOfMyProperty.id)"
         >
@@ -82,6 +91,7 @@
             !bookingOfMyProperty.cancellationDate
           "
           mat-raised-button
+          style="margin: 10px"
           color="primary"
           disabled
         >
@@ -94,6 +104,7 @@
               bookingOfMyProperty.bookingState == 'Pending')
           "
           mat-raised-button
+          style="margin: 10px"
           color="warn"
           (click)="cancelBookingAsHost(bookingOfMyProperty.id)"
         >
@@ -103,6 +114,7 @@
         <button
           *ngIf="bookingOfMyProperty.cancellationDate"
           mat-raised-button
+          style="margin: 10px"
           color="warn"
           disabled
         >

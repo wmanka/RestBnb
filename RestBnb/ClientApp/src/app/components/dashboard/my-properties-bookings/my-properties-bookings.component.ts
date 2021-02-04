@@ -27,6 +27,7 @@ export class MyPropertiesBookingsComponent {
   myPropertiesBookingsDisplayedColumns: string[] = [
     'propertyName',
     'city',
+    'address',
     'checkInDate',
     'checkOutDate',
     'totalPrice',
@@ -43,6 +44,7 @@ export class MyPropertiesBookingsComponent {
 
     this.bookingsListService.getMyPropertiesBookings().subscribe((bookings) => {
       this.myPropertiesBookings = bookings;
+      console.log(this.myPropertiesBookings);
       this.isLoading = false;
     });
   }

@@ -32,26 +32,26 @@
     ></mat-carousel-slide>
   </mat-carousel>
 
-  <div fxLayout="row" fxLayoutGap="20">
+  <div fxLayout="row" fxLayoutGap="20" class="details-card">
     <mat-card fxFlex="70%">
       <mat-card-title>{{ property.name }}</mat-card-title>
       <mat-card-subtitle
         >{{ cityName }}, {{ property.address }}</mat-card-subtitle
       >
-      <mat-card-content>
-        <p>{{ property.description }}</p>
-        <mat-divider></mat-divider>
+      <mat-divider></mat-divider>
 
+      <mat-card-content style="padding-top: 10px">
+        <p>{{ property.description }}</p>
         <p>Accommodates number: {{ property.accommodatesNumber }}</p>
         <p>Bedroom number: {{ property.bedroomNumber }}</p>
         <p>Bathroom number: {{ property.bathroomNumber }}</p>
-        <p>Check-In number: {{ checkIn }}</p>
-        <p>Check-Out number: {{ checkOut }}</p>
+        <p>Check-In time: {{ checkIn }}</p>
+        <p>Check-Out time: {{ checkOut }}</p>
       </mat-card-content>
     </mat-card>
 
-    <mat-card fxFlex="30%">
-      <mat-card-title>Create booking</mat-card-title>
+    <mat-card fxFlex="30%" class="book-card">
+      <mat-card-title>Book property</mat-card-title>
       <mat-card-subtitle>
         {{ property.pricePerNight | currency }} / night</mat-card-subtitle
       >
@@ -83,13 +83,16 @@
           </mat-form-field>
           <mat-card-actions fxLayout="column">
             <button fxFlex type="submit" name="submit" mat-raised-button>
-              Book
+              Confirm booking
             </button>
           </mat-card-actions>
         </form>
         <mat-divider></mat-divider>
         <mat-card-footer>
-          <p *ngIf="bookingForm.value.endDate && bookingForm.value.startDate">
+          <p
+            *ngIf="bookingForm.value.endDate && bookingForm.value.startDate"
+            class="total-price"
+          >
             Total price: {{ calculateTotalPrice() | currency }}
           </p>
         </mat-card-footer>

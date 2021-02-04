@@ -6,7 +6,7 @@
   >
   </mat-progress-spinner>
 </div>
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="my-bookings-component">
   <h3>My bookings</h3>
   <div>
     <table
@@ -16,12 +16,46 @@
       multiTemplateDataRows
       class="mat-elevation-z8"
     >
-      <ng-container
-        matColumnDef="{{ column }}"
-        *ngFor="let column of columnsToDisplay"
-      >
-        <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-        <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+      <ng-container matColumnDef="checkInDate">
+        <th mat-header-cell *matHeaderCellDef>Check-in Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.checkInDate | date }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="checkOutDate">
+        <th mat-header-cell *matHeaderCellDef>Check-out Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.checkOutDate | date }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bookingState">
+        <th mat-header-cell *matHeaderCellDef>Booking Stte</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.bookingState }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef>City</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.city }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="pricePerNight">
+        <th mat-header-cell *matHeaderCellDef>Price per night</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.pricePerNight | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalPrice">
+        <th mat-header-cell *matHeaderCellDef>Total price</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.totalPrice | currency }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="expandedDetail">
@@ -69,6 +103,7 @@
             <div class="example-element-diagram">
               <button
                 mat-raised-button
+                style="margin: 10px"
                 color="primary"
                 [routerLink]="['/properties/details', element.propertyId]"
               >
@@ -78,6 +113,7 @@
               <button
                 *ngIf="!element.cancellationDate"
                 mat-raised-button
+                style="margin: 10px"
                 color="warn"
                 (click)="cancelBooking(element.id)"
               >
@@ -87,6 +123,7 @@
               <button
                 *ngIf="element.cancellationDate"
                 mat-raised-button
+                style="margin: 10px"
                 color="warn"
                 disabled
               >

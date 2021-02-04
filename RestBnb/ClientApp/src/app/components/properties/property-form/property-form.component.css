@@ -10,3 +10,11 @@
 .price-input {
   -moz-appearance: textfield;
 }
+
+.property-form-card {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}

@@ -5,12 +5,12 @@ import {
 } from './../../../core/services/bookings.service';
 import { CitiesService } from './../../../core/services/cities.service';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PropertyResponse } from 'src/app/shared/models/propertyResponse';
 import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookingFormModel } from 'src/app/shared/models/bookingFormModel';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-property-details',
@@ -36,7 +36,8 @@ export class PropertyDetailsComponent {
     private fb: FormBuilder,
     private citiesService: CitiesService,
     private bookingsService: BookingsService,
-    private propertyImagesService: PropertyImagesService
+    private propertyImagesService: PropertyImagesService,
+    private router: Router
   ) {
     this.property = this.route.snapshot.data.property;
 
@@ -110,7 +111,10 @@ export class PropertyDetailsComponent {
     model.checkInDate = this.bookingForm.value.startDate;
     model.checkOutDate = this.bookingForm.value.endDate;
     model.propertyId = this.property.id;
-    this.bookingsService.create(model).subscribe((x) => console.log(x));
+    this.bookingsService.create(model).subscribe((x) => {
+      console.log(x);
+      this.router.navigate(['/bookings/my-bookings']);
+    });
   }
 
   public calculateTotalPrice(): number {
