@@ -1,16 +1,14 @@
+import { BookingsListService } from './../../../core/services/bookings-list.service';
 import {
   BookingsService,
-  GetAllBookingsParams,
   UpdateBookingModel,
 } from './../../../core/services/bookings.service';
 import { Component } from '@angular/core';
 import { BookingsListElement } from '../my-bookings/my-bookings.component';
-import {
-  GetAllPropertiesParams,
-  PropertiesService,
-} from 'src/app/core/services/properties.service';
 import { TokenStorageService } from 'src/app/core/services/token-storage.service';
 import { BookingState } from 'src/app/shared/models/bookingResponse';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-my-properties-bookings',
@@ -20,6 +18,11 @@ import { BookingState } from 'src/app/shared/models/bookingResponse';
 export class MyPropertiesBookingsComponent {
   public userId: number;
   public myPropertiesBookings: BookingsListElement[] = [];
+  public isLoading = true;
+
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'determinate';
+  value = 50;
 
   myPropertiesBookingsDisplayedColumns: string[] = [
     'propertyName',
@@ -33,53 +36,15 @@ export class MyPropertiesBookingsComponent {
 
   constructor(
     private bookingsService: BookingsService,
-    private propertiesService: PropertiesService,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private bookingsListService: BookingsListService
   ) {
     this.userId = this.tokenStorageService.getCurrentUserId();
 
-    this.loadMyPropertiesBookings();
-  }
-
-  public loadMyPropertiesBookings() {
-    let getAllPropertiesParams = new GetAllPropertiesParams();
-    getAllPropertiesParams.userId = this.userId;
-
-    this.propertiesService
-      .getAll(getAllPropertiesParams)
-      .subscribe((properties) => {
-        properties.forEach((property) => {
-          let getAllBookingsParams = new GetAllBookingsParams();
-          getAllBookingsParams.propertyId = property.id;
-
-          this.bookingsService
-            .getAll(getAllBookingsParams)
-            .subscribe((bookings) => {
-              bookings.forEach((booking) => {
-                let bookingOfMyPropertyListElement = new BookingsListElement();
-
-                bookingOfMyPropertyListElement.bookingState =
-                  booking.bookingState;
-                bookingOfMyPropertyListElement.checkInDate =
-                  booking.checkInDate;
-                bookingOfMyPropertyListElement.checkOutDate =
-                  booking.checkOutDate;
-                bookingOfMyPropertyListElement.id = booking.id;
-                bookingOfMyPropertyListElement.pricePerNight =
-                  property.pricePerNight;
-                bookingOfMyPropertyListElement.propertyId = property.id;
-                bookingOfMyPropertyListElement.propertyName = property.name;
-                bookingOfMyPropertyListElement.totalPrice = booking.totalPrice;
-                bookingOfMyPropertyListElement.cancellationDate =
-                  booking.cancellationDate;
-
-                this.myPropertiesBookings.push(bookingOfMyPropertyListElement);
-              });
-            });
-        });
-
-        console.log(this.myPropertiesBookings);
-      });
+    this.bookingsListService.getMyPropertiesBookings().subscribe((bookings) => {
+      this.myPropertiesBookings = bookings;
+      this.isLoading = false;
+    });
   }
 
   public cancelBookingAsHost(bookingId: number) {

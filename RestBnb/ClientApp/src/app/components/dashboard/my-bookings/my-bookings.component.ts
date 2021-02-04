@@ -1,8 +1,5 @@
 import { BookingsListService } from './../../../core/services/bookings-list.service';
 import { BookingState } from '../../../shared/models/bookingResponse';
-import { CitiesService } from '../../../core/services/cities.service';
-import { PropertiesService } from '../../../core/services/properties.service';
-import { TokenStorageService } from '../../../core/services/token-storage.service';
 import {
   BookingsService,
   UpdateBookingModel,
@@ -16,6 +13,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-my-bookings',
@@ -37,6 +36,8 @@ export class MyBookingsComponent {
   public data: BookingsListElement[];
   public expandedElement: BookingResponse | null;
   public isLoading = true;
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
   public columnsToDisplay = [
     'checkInDate',
     'checkOutDate',
@@ -51,7 +52,6 @@ export class MyBookingsComponent {
     private bookingsListService: BookingsListService
   ) {
     this.bookingsListService.getMyBookings().subscribe((bookings) => {
-      console.log(bookings);
       bookings.map((booking) => {
         if (booking.imageUrl) {
           booking.imageUrl = 'data:image/jpeg;base64,' + booking.imageUrl;

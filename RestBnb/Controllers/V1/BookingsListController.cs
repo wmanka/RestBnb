@@ -14,7 +14,6 @@ namespace RestBnb.API.Controllers.V1
     public class BookingsListController : BaseController
     {
         private readonly IBookingsService _bookingsService;
-
         private readonly IPropertiesService _propertiesService;
         private readonly IPropertyImagesService _propertyImagesService;
         private readonly ICitiesService _citiesService;
@@ -47,16 +46,6 @@ namespace RestBnb.API.Controllers.V1
                 var city = await _citiesService.GetCityByIdAsync(property.CityId);
                 var propertyImage = await _propertyImagesService.GetAllAsync(property.Id);
 
-                //var byteImage = new byte[64];
-                //Array.Clear(byteImage, 0, byteImage.Length);
-
-                //if (propertyImage.Any())
-                //{
-                //    var image = Encoding.UTF8.GetString(propertyImage.First().Image);
-                //    image = "data:image/jpeg;base64," + image;
-                //    byteImage = Encoding.UTF8.GetBytes(image);
-                //}
-
                 var element = new BookingsListElement
                 {
                     AccommodatesNumber = property.AccommodatesNumber,
@@ -78,6 +67,38 @@ namespace RestBnb.API.Controllers.V1
                 };
                 list.Add(element);
             }
+            return Ok(list);
+        }
+
+        [HttpGet(ApiRoutes.BookingsList.GetMyPropertiesBookings)]
+        public async Task<IActionResult> GetMyPropertiesBookings()
+        {
+            var properties = await _propertiesService.GetAllPropertiesAsync(new GetAllPropertiesFilter { UserId = _userResolverService.GetUserId() });
+
+            var list = new List<BookingsListElement>();
+
+            foreach (var property in properties)
+            {
+                var bookings = await _bookingsService.GetAllBookingsAsync(new GetAllBookingsFilter { PropertyId = property.Id });
+
+                foreach (var booking in bookings)
+                {
+                    var element = new BookingsListElement
+                    {
+                        Id = booking.Id,
+                        BookingState = booking.BookingState,
+                        CancellationDate = booking.CancellationDate,
+                        CheckInDate = booking.CheckInDate,
+                        CheckOutDate = booking.CheckOutDate,
+                        PricePerNight = booking.PricePerNight,
+                        PropertyId = property.Id,
+                        PropertyName = property.Name,
+                        TotalPrice = booking.TotalPrice
+                    };
+                    list.Add(element);
+                }
+            }
+
             return Ok(list);
         }
 

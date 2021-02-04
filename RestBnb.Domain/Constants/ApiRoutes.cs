@@ -41,7 +41,8 @@
 
         public static class BookingsList
         {
-            public const string GetMyBookings = Base + "/bookingsList";
+            public const string GetMyBookings = Base + "/myBookingsList";
+            public const string GetMyPropertiesBookings = Base + "/myPropertiesBookingsList";
         }
 
         public static class Users

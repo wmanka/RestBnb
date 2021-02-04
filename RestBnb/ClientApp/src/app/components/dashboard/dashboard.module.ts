@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [DashboardRoutingModule.components],
@@ -38,6 +39,7 @@ import { MatTableModule } from '@angular/material/table';
     SharedModule,
     MatTabsModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class DashboardModule {}

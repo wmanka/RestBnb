@@ -15,4 +15,9 @@ export class BookingsListService {
       ApiRoutes.BookingsList.GetMyBookings
     );
   }
+  public getMyPropertiesBookings(): Observable<BookingsListElement[]> {
+    return this.http.get<BookingsListElement[]>(
+      ApiRoutes.BookingsList.GetMyPropertiesBookings
+    );
+  }
 }

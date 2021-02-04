@@ -27,10 +27,9 @@ export class ApiRoutes {
   };
 
   static BookingsList = class {
-    public static GetMyBookings = ApiRoutes.ApiBase + '/bookingsList';
-    public static Create = ApiRoutes.ApiBase + '/bookings';
-    public static Put = ApiRoutes.ApiBase + '/bookings/bookingId';
-    public static Get = ApiRoutes.ApiBase + '/bookings/';
+    public static GetMyBookings = ApiRoutes.ApiBase + '/myBookingsList';
+    public static GetMyPropertiesBookings =
+      ApiRoutes.ApiBase + '/myPropertiesBookingsList';
   };
 
   static PropertyImages = class {
