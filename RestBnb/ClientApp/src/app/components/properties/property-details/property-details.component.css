@@ -9,3 +9,14 @@
 .details-card {
   margin: 10px;
 }
+
+.mat-spinner-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 120px);
+}
+.mat-spinner-element {
+  color: white;
+  padding: 12px;
+}
