@@ -23,8 +23,8 @@ namespace RestBnb.API.Validators.Bookings.Commands
                     .NotNull()
                     .GreaterThan(0);
 
-                RuleFor(booking => booking.CheckInDate.Date).GreaterThanOrEqualTo(DateTime.UtcNow.Date);
-                RuleFor(booking => booking.CheckOutDate.Date).GreaterThanOrEqualTo(booking => booking.CheckInDate);
+                //RuleFor(booking => booking.CheckInDate.Date).GreaterThanOrEqualTo(DateTime.UtcNow.Date);
+                //RuleFor(booking => booking.CheckOutDate.Date).GreaterThanOrEqualTo(booking => booking.CheckInDate);
             }
         }
         private class BusinessValidator : AbstractValidator<UpdateBookingCommand>
