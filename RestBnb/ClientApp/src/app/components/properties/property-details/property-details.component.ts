@@ -45,8 +45,9 @@ export class PropertyDetailsComponent {
     private router: Router
   ) {
     this.property = this.route.snapshot.data.property;
-
+    console.log(this.property);
     let params;
+
     this.route.queryParams.subscribe((x) => {
       params = x;
       this.startDate = new Date(params.startDate * 1000);
@@ -55,6 +56,7 @@ export class PropertyDetailsComponent {
 
     this.checkIn = moment(this.property.checkInTime).format('HH:mm');
     this.checkOut = moment(this.property.checkOutTime).format('HH:mm');
+
     this.citiesService
       .get(this.property.cityId)
       .subscribe((x) => (this.cityName = x.name));
