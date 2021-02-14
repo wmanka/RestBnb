@@ -39,7 +39,6 @@ export class PropertiesListComponent {
 
     this.propertiesService.getAll(params).subscribe((properties) => {
       this.properties = properties.map((x) => new PropertyListItem(x));
-
       this.properties.forEach((property) => {
         this.propertyImagesService
           .getAll(property.id)

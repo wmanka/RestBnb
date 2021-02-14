@@ -122,7 +122,7 @@ export class PropertyFormComponent {
       this.propertiesService
         .update(this.property.id, propertyFormModel)
         .subscribe((property: PropertyResponse) =>
-          this.router.navigate(['/properties/details/' + property.id])
+          this.router.navigate(['dashboard/my-properties/'])
         );
     } else {
       this.propertiesService
@@ -133,7 +133,7 @@ export class PropertyFormComponent {
           )
         )
         .subscribe((property: PropertyResponse) => {
-          this.router.navigate(['/properties/details/' + property.id]);
+          this.router.navigate(['dashboard/my-properties/']);
         });
     }
   }

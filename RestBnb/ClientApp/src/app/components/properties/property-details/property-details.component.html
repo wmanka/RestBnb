@@ -1,14 +1,12 @@
-<div
-  *ngIf="
-    property &&
-    checkIn &&
-    checkOut &&
-    cityName &&
-    startDate &&
-    endDate &&
-    propertyImages
-  "
->
+<div *ngIf="isLoading" class="mat-spinner-wrapper">
+  <mat-progress-spinner
+    class="mat-spinner-element"
+    [color]="color"
+    [mode]="mode"
+  >
+  </mat-progress-spinner>
+</div>
+<div *ngIf="!isLoading">
   <mat-carousel
     timings="250ms ease-in"
     [autoplay]="true"
@@ -87,12 +85,13 @@
             </button>
           </mat-card-actions>
         </form>
-        <mat-divider></mat-divider>
-        <mat-card-footer>
-          <p
-            *ngIf="bookingForm.value.endDate && bookingForm.value.startDate"
-            class="total-price"
-          >
+        <mat-divider
+          *ngIf="bookingForm.value.endDate <= bookingForm.value.startDate"
+        ></mat-divider>
+        <mat-card-footer
+          *ngIf="bookingForm.value.endDate <= bookingForm.value.startDate"
+        >
+          <p class="total-price">
             Total price: {{ calculateTotalPrice() | currency }}
           </p>
         </mat-card-footer>

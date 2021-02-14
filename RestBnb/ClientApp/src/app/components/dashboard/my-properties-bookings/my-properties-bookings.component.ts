@@ -69,6 +69,7 @@ export class MyPropertiesBookingsComponent {
     updateModel.BookingState = BookingState.Accepted;
     updateModel.checkInDate = booking.checkInDate;
     updateModel.checkOutDate = booking.checkOutDate;
+    updateModel.cancellationDate = null;
 
     this.bookingsService.put(bookingId, updateModel).subscribe((xx) => {
       let i = this.myPropertiesBookings.findIndex((b) => b.id === bookingId);

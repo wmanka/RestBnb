@@ -4,7 +4,7 @@ import {
   BookingsService,
   UpdateBookingModel,
 } from '../../../core/services/bookings.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BookingResponse } from 'src/app/shared/models/bookingResponse';
 import {
   animate,
@@ -31,7 +31,7 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
     ]),
   ],
 })
-export class MyBookingsComponent {
+export class MyBookingsComponent implements OnInit {
   public userId: number;
   public data: BookingsListElement[];
   public expandedElement: BookingResponse | null;
@@ -50,7 +50,9 @@ export class MyBookingsComponent {
   constructor(
     private bookingsService: BookingsService,
     private bookingsListService: BookingsListService
-  ) {
+  ) {}
+
+  public ngOnInit(): void {
     this.bookingsListService.getMyBookings().subscribe((bookings) => {
       bookings.map((booking) => {
         if (booking.imageUrl) {

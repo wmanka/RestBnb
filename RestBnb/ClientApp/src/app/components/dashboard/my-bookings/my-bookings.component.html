@@ -8,9 +8,10 @@
 </div>
 <div *ngIf="!isLoading" class="my-bookings-component">
   <h3>My bookings</h3>
+  <p *ngIf="data && data.length == 0">You don't have any bookings.</p>
   <div>
     <table
-      *ngIf="data"
+      *ngIf="data && data.length > 0"
       mat-table
       [dataSource]="data"
       multiTemplateDataRows

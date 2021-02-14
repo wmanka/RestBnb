@@ -13,7 +13,7 @@ import { TokenStorageService } from 'src/app/core/services/token-storage.service
 })
 export class MyPropertiesComponent {
   public userId: number;
-  public myProperties: PropertyResponse[] = [];
+  public myProperties: PropertyResponse[] = new Array<PropertyResponse>();
   public isLoading = true;
 
   color: ThemePalette = 'primary';
@@ -36,6 +36,7 @@ export class MyPropertiesComponent {
 
     let params = new GetAllPropertiesParams();
     params.userId = this.userId;
+
     this.propertiesService.getAll(params).subscribe((properties) => {
       this.myProperties = properties;
       this.isLoading = false;

@@ -1,3 +1,4 @@
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SharedModule } from './../../shared/shared.module';
 import { PropertiesRoutingModule } from './properties-routing.module';
 import { NgModule } from '@angular/core';
@@ -38,6 +39,7 @@ import { MatCarouselModule } from '@ngbmodule/material-carousel';
     MatIconModule,
     MatDividerModule,
     SharedModule,
+    MatProgressSpinnerModule,
     MatCarouselModule.forRoot(),
   ],
 })

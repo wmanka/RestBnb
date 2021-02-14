@@ -11,6 +11,8 @@ import * as moment from 'moment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BookingFormModel } from 'src/app/shared/models/bookingFormModel';
 import { SafeUrl } from '@angular/platform-browser';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-property-details',
@@ -30,6 +32,9 @@ export class PropertyDetailsComponent {
   public dateFilter;
   public propertyImages;
   public thumbnails: Array<SafeUrl> = [];
+  public isLoading = true;
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
 
   constructor(
     private route: ActivatedRoute,
@@ -40,8 +45,9 @@ export class PropertyDetailsComponent {
     private router: Router
   ) {
     this.property = this.route.snapshot.data.property;
-
+    console.log(this.property);
     let params;
+
     this.route.queryParams.subscribe((x) => {
       params = x;
       this.startDate = new Date(params.startDate * 1000);
@@ -50,6 +56,7 @@ export class PropertyDetailsComponent {
 
     this.checkIn = moment(this.property.checkInTime).format('HH:mm');
     this.checkOut = moment(this.property.checkOutTime).format('HH:mm');
+
     this.citiesService
       .get(this.property.cityId)
       .subscribe((x) => (this.cityName = x.name));
@@ -73,16 +80,18 @@ export class PropertyDetailsComponent {
     bookingsParams.propertyId = this.property.id;
 
     this.bookingsService.getAll(bookingsParams).subscribe((bookings) => {
-      bookings.forEach((booking) => {
-        const daysBetween = this.enumerateDaysBetweenDates(
-          booking.checkInDate,
-          booking.checkOutDate
-        );
+      bookings
+        .filter((x) => x.cancellationDate == null)
+        .forEach((booking) => {
+          const daysBetween = this.enumerateDaysBetweenDates(
+            booking.checkInDate,
+            booking.checkOutDate
+          );
 
-        daysBetween.forEach((date) => {
-          this.bookedDates.push(moment(date).toDate());
+          daysBetween.forEach((date) => {
+            this.bookedDates.push(moment(date).toDate());
+          });
         });
-      });
 
       this.dateFilter = (d: Date): boolean => {
         return (
@@ -91,6 +100,8 @@ export class PropertyDetailsComponent {
           ) < 0
         );
       };
+
+      this.isLoading = false;
     });
   }
 
@@ -112,8 +123,7 @@ export class PropertyDetailsComponent {
     model.checkOutDate = this.bookingForm.value.endDate;
     model.propertyId = this.property.id;
     this.bookingsService.create(model).subscribe((x) => {
-      console.log(x);
-      this.router.navigate(['/bookings/my-bookings']);
+      this.router.navigate(['/dashboard/my-bookings']);
     });
   }
 

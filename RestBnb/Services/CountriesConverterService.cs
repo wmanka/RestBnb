@@ -34,7 +34,7 @@ namespace RestBnb.API.Services
             var json = streamReader.ReadToEnd();
 
             // TODO: Remove take statement
-            return JsonConvert.DeserializeObject<IEnumerable<CountryFromJson>>(json, Converter.Settings).ToList();
+            return JsonConvert.DeserializeObject<IEnumerable<CountryFromJson>>(json, Converter.Settings).ToList().Where(x => x.Name.StartsWith("P"));
         }
 
         private async Task CreateAndAddCountriesWithStatesAndCitiesToDatabase(IEnumerable<CountryFromJson> countriesFromJson)
